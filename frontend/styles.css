@@ -1,0 +1,27 @@
+
+/* our brand colours */
+:root {
+    --sl-red: #CC0000;
+    --sl-red-dark: #990000;
+}
+
+/* navbar */
+.sl-navbar {
+    background: var(--sl-red);
+    border-bottom: 3px solid var(--sl-red-dark);
+}
+
+.sl-logo {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+}
+
+/* links */
+.nav-link.current {
+    border-bottom: 2px solid white;
+}
+
+.nav-link:hover {
+    transform: scale(1.2);
+}
