@@ -57,3 +57,68 @@
 .sl-follow-label {
     font-size: .7rem;
 }
+
+
+/* Post cards */
+.sl-post-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.sl-avatar-player {
+    background: #fababa;
+}
+
+.sl-badge-player {
+    background: #fababa;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Video block */
+.sl-video-block {
+    background: #F7F6F3;
+    border: 1px solid #E2E0DA;
+    border-radius: 6px;
+}
+
+.sl-video-block:hover {
+    border-color: var(--sl-red);
+}
+
+.sl-play-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--sl-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sl-post-card {
+    transition: box-shadow 0.2s;
+
+}
+
+.sl-post-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+/* This is so the left and right side bar stay static */
+
+.sl-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
