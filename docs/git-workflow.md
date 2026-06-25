@@ -62,8 +62,8 @@ git --version
 ### 2. Clone the repo
 This downloads the project to your computer:
 ```bash
-git clone https://github.com/aria880/CS-476
-cd CS-476
+git clone https://github.com/CS-476-sportslink/sportslink
+cd sportslink
 ```
 
 ### 4, Confirm you can see the Branches
