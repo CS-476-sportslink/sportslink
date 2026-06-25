@@ -122,3 +122,14 @@
     height: 100vh;
     overflow-y: auto;
 }
+
+
+/*Right sidebar*/
+.sl-sidebar-header {
+    background: var(--sl-red);
+    color: white;
+    font-size: .76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
