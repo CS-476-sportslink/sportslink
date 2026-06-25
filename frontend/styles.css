@@ -114,14 +114,6 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
 }
 
-/* This is so the left and right side bar stay static */
-
-.sl-sidebar {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
-}
 
 
 /*Right sidebar*/
