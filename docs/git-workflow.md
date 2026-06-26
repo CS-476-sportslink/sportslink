@@ -4,6 +4,8 @@
 ### Nobody Commits to directly to main. EVER.
 All work happens on a branch and gets merged through a pull request. This protects everyone from broken code affecting the whole team.
 
+---
+
 ## Key Concepts
 ### Repository(repo) 
 the project folder that git is tracking
@@ -18,12 +20,17 @@ downloading the latest changes from GitHub to your machine.
 ### Pull Request(PR)
 asking to merge your branch into another branch. This is where teammates review your code before it goes in.
 
+---
+
 ## Our Branches
 | Branch | Purpose |
 | :---:  | :---: |
 | main | Always working, always deployable, never touch directly |
 | dev | Where all features get merged first. Branch off this |
 | feature/... | Your personal branch for a feature you are building |
+
+
+---
 
 ## Branch Naming
 
@@ -34,6 +41,9 @@ Format: `type/short-description`
 | fix/ | Fixing a bug |
 | chore/ | Setup, config, dependencies |
 | docs/ | README, documentation |
+
+
+---
 
 ### Rules:
  - All lowercase
@@ -51,6 +61,7 @@ fix/login-redirect
 chore/docker-setup
 docs/readme
 ```
+---
 
 ## First Time Setup
 Do this once when you first join the project
@@ -71,6 +82,8 @@ cd CS-476
 git branch -a
 ```
 you should see `main` and `dev`
+
+---
 
 ## Every Day Workflow — Step by Step
 
