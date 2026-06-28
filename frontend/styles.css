@@ -125,3 +125,28 @@
     text-transform: uppercase;
     letter-spacing: .5px;
 }
+
+
+/*Search bar*/
+.sl-search {
+    background: #f6f6f6;
+    width: 100%;
+    transition: box-shadow 0.25s;
+}
+
+.sl-search:focus-within {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.75)
+}
+
+.sl-search-input {
+    font-size: 16px;
+    color: #333333;
+    outline: none;
+    border: none;
+    background: transparent;
+}
+
+
+.sl-search-input::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
