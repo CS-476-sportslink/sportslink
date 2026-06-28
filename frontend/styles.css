@@ -69,6 +69,7 @@
     justify-content: center;
     font-weight: 700;
     flex-shrink: 0;
+    color:black;
 }
 
 .sl-avatar-player {
