@@ -60,13 +60,17 @@
                             <i class="bi bi-person me-2"></i>View Profile
                         </a>
                     </li>
-                    <li><hr class=dropdown-divider></li>
+                    <li>
+                        <hr class=dropdown-divider>
+                    </li>
                     <li>
                         <a class="dropdown-item" href="#">
                             <i class="bi bi-gear me-2"></i>Settings
                         </a>
                     </li>
-                    <li><hr class=dropdown-divider></li>
+                    <li>
+                        <hr class=dropdown-divider>
+                    </li>
                     <li>
                         <a class="dropdown-item text-danger" href="#">
                             <i class="bi bi-box-arrow-right me-2"></i>Logout
@@ -108,7 +112,7 @@
             <div class="col-lg-6">
 
                 <!--Create post-->
-                <a href="#" class="text-decoration-none">
+                <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#postBox">
                     <div class="card d-flex flex-row align-items-center gap-2 mb-3 p-3 shadow-sm">
                         <div class="sl-post-avatar sl-avatar-player">BS</div>
                         <div class="form-control rounded-pill border-1 bg-light text-muted">Create a post</div>
@@ -164,7 +168,9 @@
                                 </div>
                                 <div class="text-muted small ms-auto">8h</div>
                             </div>
-                            <p class="small mb-2">The season has sadly come to an end. I am going to miss playing with all my friends. All the memories this season has brought me I am so grateful we got to experience it together. Thank you Cougars!</p>
+                            <p class="small mb-2">The season has sadly come to an end. I am going to miss playing with
+                                all my friends. All the memories this season has brought me I am so grateful we got to
+                                experience it together. Thank you Cougars!</p>
                             <div class="d-flex align-items-center gap-2 p-2 mb-2 sl-video-block">
                                 <div class="sl-play-btn">
                                     <i class="bi bi-play-fill text-white"></i>
@@ -196,7 +202,9 @@
                                 </div>
                                 <div class="text-muted small ms-auto">8h</div>
                             </div>
-                            <p class="small mb-2">The season has sadly come to an end. I am going to miss playing with all my friends. All the memories this season has brought me I am so grateful we got to experience it together. Thank you Cougars!</p>
+                            <p class="small mb-2">The season has sadly come to an end. I am going to miss playing with
+                                all my friends. All the memories this season has brought me I am so grateful we got to
+                                experience it together. Thank you Cougars!</p>
                             <div class="d-flex align-items-center gap-2 p-2 mb-2 sl-video-block">
                                 <div class="sl-play-btn">
                                     <i class="bi bi-play-fill text-white"></i>
@@ -228,7 +236,9 @@
                                 </div>
                                 <div class="text-muted small ms-auto">8h</div>
                             </div>
-                            <p class="small mb-2">The season has sadly come to an end. I am going to miss playing with all my friends. All the memories this season has brought me I am so grateful we got to experience it together. Thank you Cougars!</p>
+                            <p class="small mb-2">The season has sadly come to an end. I am going to miss playing with
+                                all my friends. All the memories this season has brought me I am so grateful we got to
+                                experience it together. Thank you Cougars!</p>
                             <div class="d-flex align-items-center gap-2 p-2 mb-2 sl-video-block">
                                 <div class="sl-play-btn">
                                     <i class="bi bi-play-fill text-white"></i>
@@ -260,7 +270,9 @@
                                 </div>
                                 <div class="text-muted small ms-auto">8h</div>
                             </div>
-                            <p class="small mb-2">The season has sadly come to an end. I am going to miss playing with all my friends. All the memories this season has brought me I am so grateful we got to experience it together. Thank you Cougars!</p>
+                            <p class="small mb-2">The season has sadly come to an end. I am going to miss playing with
+                                all my friends. All the memories this season has brought me I am so grateful we got to
+                                experience it together. Thank you Cougars!</p>
                             <div class="d-flex align-items-center gap-2 p-2 mb-2 sl-video-block">
                                 <div class="sl-play-btn">
                                     <i class="bi bi-play-fill text-white"></i>
@@ -317,7 +329,7 @@
                         </div>
                     </div>
 
-    
+
                 </div>
                 <!--Tryout posts-->
                 <div class="card shadow-sm">
@@ -350,10 +362,61 @@
                     </div>
                 </div>
 
-                
+
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="postBox" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header border-0">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="sl-post-avatar sl-avatar-player">BS</div>
+                        <div class="fw-semibold">Brendan Stevenson</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#social">Social</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tryout">Tryout</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <!-- Social post -->
+                        <div class="tab-pane fade show active" id="social">
+                            <textarea class="form-control border-0" rows="6"
+                                placeholder="Start typing here..."></textarea>
+                        </div>
+
+                        <!-- Tryout post -->
+                        <div class="tab-pane fade" id="tryout">
+                            <input type="text" class="form-control mb-2" placeholder="Team or School Name">
+                            <input type="text" class="form-control mb-2" placeholder="Sport">
+                            <input type="date" class="form-control mb-2">
+                            <input type="text" class="form-control mb-2" placeholder="Location">
+                            <textarea class="form-control mb-2" rows="3"
+                                placeholder="Details about the tryout"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0 justify-content-between">
+                    <input type="text" class="form-control w-50" placeholder="Add a video link (optional)">
+                    <button type="button" class="btn btn-danger px-4">Post</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
 
 </body>

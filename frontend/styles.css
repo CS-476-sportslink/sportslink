@@ -151,3 +151,22 @@
 .sl-search-input::placeholder {
     color: rgba(0, 0, 0, 0.5);
 }
+
+/*Modal tabs*/
+
+.nav-tabs .nav-link {
+    color: black;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--sl-red);
+    border-color: transparent;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--sl-red);
+    border-bottom: 2px solid var(--sl-red);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
