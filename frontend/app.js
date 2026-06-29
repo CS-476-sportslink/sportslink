@@ -10,6 +10,7 @@ document.querySelectorAll('.sl-post-card').forEach(function(card) {
 document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
         e.stopPropagation();
+        e.preventDefault();
 
         const icon = this.querySelector('i');
         const likeCount = this.querySelector('.sl-like-count');
@@ -36,6 +37,7 @@ document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
 document.querySelectorAll('.sl-save-btn').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
         e.stopPropagation();
+        e.preventDefault();
 
         const icon = this.querySelector('i');
         const label = this.querySelector('.sl-save-label');
