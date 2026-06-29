@@ -108,6 +108,7 @@
 
 .sl-post-card {
     transition: box-shadow 0.2s;
+    cursor: pointer;
 
 }
 
@@ -169,4 +170,10 @@
     border-top: none;
     border-left: none;
     border-right: none;
+}
+
+/*like button*/
+
+.sl-like-btn.liked {
+    color: var(--sl-red) !important;
 }
