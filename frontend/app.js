@@ -1,9 +1,3 @@
-//post page when card is clicked
-document.querySelectorAll('.sl-post-card').forEach(function(card) {
-    card.addEventListener('click', function() {
-        window.location = 'post.html';
-    });
-});
 
 
 //like button change class and increment like count
@@ -55,6 +49,28 @@ document.querySelectorAll('.sl-save-btn').forEach(function(btn) {
             icon.classList.remove('bi-bookmark');
             icon.classList.add('bi-bookmark-fill');
             label.textContent = 'Saved';
+        }
+    });
+});
+
+
+/*Follow button functionality*/
+
+document.querySelectorAll('.sl-follow-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (this.classList.contains('following')) {
+            this.classList.remove('following');
+            this.classList.remove('btn-danger');
+            this.classList.add('btn-outline-danger');
+            this.textContent = 'Follow';
+        } else {
+            this.classList.add('following');
+            this.classList.remove('btn-outline-danger');
+            this.classList.add('btn-danger');
+            this.textContent = 'Following';
         }
     });
 });
