@@ -177,3 +177,8 @@
 .sl-like-btn.liked {
     color: var(--sl-red) !important;
 }
+
+/*Save button*/
+.sl-save-btn.saved {
+    color: var(--sl-red) !important;
+}

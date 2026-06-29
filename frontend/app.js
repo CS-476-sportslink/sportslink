@@ -30,3 +30,29 @@ document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
         }
     });
 });
+
+
+//Save button similar to like button
+document.querySelectorAll('.sl-save-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+
+        const icon = this.querySelector('i');
+        const label = this.querySelector('.sl-save-label');
+
+        
+        if (this.classList.contains('saved')) {
+            this.classList.remove('saved');
+            this.classList.add('text-muted');
+            icon.classList.remove('bi-bookmark-fill');
+            icon.classList.add('bi-bookmark')
+            label.textContent = 'Save';
+        } else {
+            this.classList.add('saved');
+            this.classList.remove('text-muted');
+            icon.classList.remove('bi-bookmark');
+            icon.classList.add('bi-bookmark-fill');
+            label.textContent = 'Saved';
+        }
+    });
+});
