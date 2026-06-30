@@ -61,16 +61,21 @@ document.querySelectorAll('.sl-follow-btn').forEach(function(btn) {
         e.stopPropagation();
         e.preventDefault();
 
+        const followingCount = document.querySelector('.sl-following-count');
+        let count = parseInt(followingCount.textContent);
+
         if (this.classList.contains('following')) {
             this.classList.remove('following');
             this.classList.remove('btn-danger');
             this.classList.add('btn-outline-danger');
             this.textContent = 'Follow';
+            followingCount.textContent = count - 1;
         } else {
             this.classList.add('following');
             this.classList.remove('btn-outline-danger');
             this.classList.add('btn-danger');
             this.textContent = 'Following';
+            followingCount.textContent = count + 1;
         }
     });
 });
