@@ -96,3 +96,11 @@ if (readAllBtn) {
         });
     });
 };
+
+//Resize comment area on post.html
+document.querySelectorAll('textarea').forEach(function(textarea) {
+    textarea.addEventListener('input', function(e) {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+});
