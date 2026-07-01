@@ -210,3 +210,8 @@
     background-color: transparent;
     color: black;
 }
+
+.sl-notification-unread {
+    background: #FFF0F0;
+    border-left: 3px solid var(--sl-red);
+}
