@@ -181,3 +181,32 @@
 .sl-save-btn.saved {
     color: var(--sl-red) !important;
 }
+
+/*Notification dropdown*/
+
+.sl-notification-dropdown {
+    width: 300px;
+}
+
+.sl-notification-dropdown .dropdown-item {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.sl-notification-time {
+    font-size: .75rem;
+}
+
+.sl-notification-badge {
+    font-size: .7rem;
+    padding: 2px 5px;
+    background: white;
+    color: var(--sl-red);
+    border: 1px solid black;
+}
+
+
+.dropdown-item:active {
+    background-color: transparent;
+    color: black;
+}
