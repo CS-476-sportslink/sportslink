@@ -81,14 +81,18 @@ document.querySelectorAll('.sl-follow-btn').forEach(function(btn) {
 });
 
 //Notifications
-document.querySelector('.sl-read-all-btn').addEventListener('click', function(e) {
-    e.stopPropagation();
+const readAllBtn = document.querySelector('.sl-read-all-btn');
+if (readAllBtn) {
+    readAllBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
 
-    const badge = document.querySelector('.sl-notification-badge');
-    badge.style.display = 'none'
+        const badge = document.querySelector('.sl-notification-badge');
+        if (badge) {
+            badge.style.display = 'none';
+        }
 
-    document.querySelectorAll('.sl-notification-unread').forEach(function(notification) {
-        notification.classList.remove('sl-notification-unread');
+        document.querySelectorAll('.sl-notification-unread').forEach(function(notification) {
+            notification.classList.remove('sl-notification-unread');
+        });
     });
-
-});
+};
