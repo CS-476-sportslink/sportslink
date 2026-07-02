@@ -1,0 +1,217 @@
+
+/* our brand colours */
+:root {
+    --sl-red: #CC0000;
+    --sl-red-dark: #990000;
+}
+
+/* navbar */
+.sl-navbar {
+    background: var(--sl-red);
+    border-bottom: 3px solid var(--sl-red-dark);
+}
+
+.sl-logo {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+}
+
+/* links */
+.nav-link.current {
+    border-bottom: 2px solid white;
+}
+
+.nav-link:hover {
+    transform: scale(1.2);
+}
+
+
+/* left sidebar */
+
+/* this will need to be changed once a user is able to upload their own banner or keep it red whatever we decide to do.*/
+
+.sl-card-banner {
+    height: 60px;
+    background: var(--sl-red);
+    border-radius: .5rem .5rem 0 0;
+}
+
+
+/* this will need to be changed once a user is able to upload their own picture.*/
+.sl-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #fababa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 28px;
+    border: 3px solid white;
+    margin-top: -27px;
+}
+
+
+.sl-follow-label {
+    font-size: .7rem;
+}
+
+
+/* Post cards */
+.sl-post-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+    color:black;
+}
+
+.sl-avatar-player {
+    background: #fababa;
+}
+
+.sl-badge-player {
+    background: #fababa;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Video block */
+.sl-video-block {
+    background: #F7F6F3;
+    border: 1px solid #E2E0DA;
+    border-radius: 6px;
+}
+
+.sl-video-block:hover {
+    border-color: var(--sl-red);
+}
+
+.sl-play-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--sl-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sl-post-card {
+    transition: box-shadow 0.2s;
+
+}
+
+.sl-post-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+
+
+/*Right sidebar*/
+.sl-sidebar-header {
+    background: var(--sl-red);
+    color: white;
+    font-size: .76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+
+/*Search bar*/
+.sl-search {
+    background: #f6f6f6;
+    width: 100%;
+    transition: box-shadow 0.25s;
+}
+
+.sl-search:focus-within {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.75)
+}
+
+.sl-search-input {
+    font-size: 16px;
+    color: #333333;
+    outline: none;
+    border: none;
+    background: transparent;
+}
+
+
+.sl-search-input::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+/*Modal tabs*/
+
+.nav-tabs .nav-link {
+    color: black;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--sl-red);
+    border-color: transparent;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--sl-red);
+    border-bottom: 2px solid var(--sl-red);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+/*like button*/
+
+.sl-like-btn.liked {
+    color: var(--sl-red) !important;
+}
+
+/*Save button*/
+.sl-save-btn.saved {
+    color: var(--sl-red) !important;
+}
+
+/*Notification dropdown*/
+
+.sl-notification-dropdown {
+    width: 300px;
+}
+
+.sl-notification-dropdown .dropdown-item {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.sl-notification-time {
+    font-size: .75rem;
+}
+
+.sl-notification-badge {
+    font-size: .7rem;
+    padding: 2px 5px;
+    background: white;
+    color: var(--sl-red);
+    border: 1px solid black;
+}
+
+
+.dropdown-item:active {
+    background-color: transparent;
+    color: black;
+}
+
+.sl-notification-unread {
+    background: #FFF0F0;
+    border-left: 3px solid var(--sl-red);
+}
