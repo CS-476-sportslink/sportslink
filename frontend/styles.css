@@ -227,3 +227,14 @@
 textarea {
     resize: none;
 }
+
+.sl-comment-inner-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+}
+
+.sl-reply {
+    border-left: 3px solid #E2E0DA;
+    padding-left: 16px;
+}
