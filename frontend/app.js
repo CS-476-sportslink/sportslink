@@ -104,3 +104,11 @@ document.querySelectorAll('textarea').forEach(function(textarea) {
         this.style.height = this.scrollHeight + 'px';
     });
 });
+
+//Post replies
+document.querySelectorAll('.sl-reply-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        const replyBox = this.closest('.card-body').querySelector('.sl-reply-box');
+        replyBox.classList.toggle('d-none');
+    });
+});
