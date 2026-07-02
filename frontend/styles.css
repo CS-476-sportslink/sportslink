@@ -238,3 +238,11 @@ textarea {
     border-left: 3px solid #E2E0DA;
     padding-left: 16px;
 }
+
+.sl-back-btn {
+    width: fit-content;
+}
+
+.sl-back-btn:hover {
+    color: var(--sl-red);
+}
