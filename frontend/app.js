@@ -69,13 +69,17 @@ document.querySelectorAll('.sl-follow-btn').forEach(function(btn) {
             this.classList.remove('btn-danger');
             this.classList.add('btn-outline-danger');
             this.textContent = 'Follow';
-            followingCount.textContent = count - 1;
+            if (followingCount) {
+                followingCount.textContent = count - 1;
+            }
         } else {
             this.classList.add('following');
             this.classList.remove('btn-outline-danger');
             this.classList.add('btn-danger');
             this.textContent = 'Following';
-            followingCount.textContent = count + 1;
+            if (followingCount) {
+                followingCount.textContent = count + 1;
+            }
         }
     });
 });
