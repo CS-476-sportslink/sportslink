@@ -62,7 +62,6 @@ document.querySelectorAll('.sl-follow-btn').forEach(function(btn) {
         e.preventDefault();
 
         const followingCount = document.querySelector('.sl-following-count');
-        let count = parseInt(followingCount.textContent);
 
         if (this.classList.contains('following')) {
             this.classList.remove('following');
@@ -70,7 +69,7 @@ document.querySelectorAll('.sl-follow-btn').forEach(function(btn) {
             this.classList.add('btn-outline-danger');
             this.textContent = 'Follow';
             if (followingCount) {
-                followingCount.textContent = count - 1;
+                followingCount.textContent = parseInt(followingCount.textContent) - 1;
             }
         } else {
             this.classList.add('following');
@@ -78,7 +77,7 @@ document.querySelectorAll('.sl-follow-btn').forEach(function(btn) {
             this.classList.add('btn-danger');
             this.textContent = 'Following';
             if (followingCount) {
-                followingCount.textContent = count + 1;
+                followingCount.textContent = parseInt(followingCount.textContent) + 1;
             }
         }
     });
