@@ -215,3 +215,11 @@
     background: #FFF0F0;
     border-left: 3px solid var(--sl-red);
 }
+
+
+/*Comments/Replies*/
+
+.sl-mention {
+    color: var(--sl-red);
+    font-weight: 600;
+}
