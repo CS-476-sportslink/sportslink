@@ -99,3 +99,19 @@ if (readAllBtn) {
         });
     });
 };
+
+//Resize comment area on post.html
+document.querySelectorAll('textarea').forEach(function(textarea) {
+    textarea.addEventListener('input', function(e) {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+});
+
+//Post replies
+document.querySelectorAll('.sl-reply-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        const replyBox = this.closest('.card-body').querySelector('.sl-reply-box');
+        replyBox.classList.toggle('d-none');
+    });
+});

@@ -215,3 +215,34 @@
     background: #FFF0F0;
     border-left: 3px solid var(--sl-red);
 }
+
+
+/*Comments/Replies*/
+
+.sl-mention {
+    color: var(--sl-red);
+    font-weight: 600;
+}
+
+textarea {
+    resize: none;
+}
+
+.sl-comment-inner-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+}
+
+.sl-reply {
+    border-left: 3px solid #E2E0DA;
+    padding-left: 16px;
+}
+
+.sl-back-btn {
+    width: fit-content;
+}
+
+.sl-back-btn:hover {
+    color: var(--sl-red);
+}
