@@ -246,3 +246,15 @@ textarea {
 .sl-back-btn:hover {
     color: var(--sl-red);
 }
+
+/*Settings page*/
+
+.sl-settings-nav .nav-link{
+    transform: none;
+}
+
+.sl-settings-nav .nav-link.active {
+    background-color: #FFE5E5;
+    color: var(--sl-red);
+    font-weight: 600;
+}
