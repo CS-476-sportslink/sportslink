@@ -22,7 +22,7 @@ class AthleteProfile(models.Model):
     highlight_url = models.URLField(blank=True)
     interest_level = models.JSONField(default=list)
     stats = models.JSONField(default=dict)
-    profile_views = models.IntegerField(default=0)
+    profile_views = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
