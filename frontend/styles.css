@@ -251,6 +251,7 @@ textarea {
 
 .sl-settings-nav .nav-link{
     transform: none;
+    color: black;
 }
 
 .sl-settings-nav .nav-link.active {
