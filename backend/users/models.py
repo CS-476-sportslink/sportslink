@@ -19,5 +19,10 @@ class User(AbstractUser):
     province = models.CharField(max_length=100, blank=True)
     bio = models.TextField(blank=True)
 
+    def get_full_name(self):
+        if self.first_name and self.last_name:
+            return f'{self.first_name} {self.last_name}'
+        return self.email
+
     def __str__(self):
         return f'{self.email} ({self.role})'
