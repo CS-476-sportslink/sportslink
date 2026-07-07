@@ -259,3 +259,16 @@ textarea {
     color: var(--sl-red);
     font-weight: 600;
 }
+
+.sl-section-title {
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .75px;
+    color: #888;
+}
+
+.sl-setting-row {
+    padding: 14px 0;
+    border-bottom: 1px solid #F0EEE9;
+}
