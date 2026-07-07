@@ -5,6 +5,10 @@
     --sl-red-dark: #990000;
 }
 
+.sl-hidden {
+    display: none;
+}
+
 /* navbar */
 .sl-navbar {
     background: var(--sl-red);
