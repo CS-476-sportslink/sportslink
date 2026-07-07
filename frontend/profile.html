@@ -38,7 +38,7 @@
         <!-- nav links with boostrap icons -->
         <ul class="navbar-nav ms-auto d-flex flex-row gap-2">
             <li class="nav-item">
-                <a class="nav-link text-white current" href="#" title="Home">
+                <a class="nav-link text-white" href="home.html" title="Home">
                     <i class="bi bi-house-fill fs-5"></i>
                 </a>
             </li>
@@ -47,15 +47,67 @@
                     <i class="bi bi-chat-fill fs-5"></i>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="#" title="Notifications">
-                    <i class="bi bi-bell-fill fs-5"></i>
+             <li class="nav-item dropdown">
+                <a class="nav-link text-white" href="#" data-bs-toggle="dropdown" title="Notifications">
+                    <span class="position-relative">
+                        <i class="bi bi-bell-fill fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill sl-notification-badge">
+                            3
+                        </span>
+                    </span>
                 </a>
+                <ul class="dropdown-menu dropdown-menu-end sl-notification-dropdown">
+                    <li class="px-3 py-2 border-bottom">
+                        <div class="small fw-semibold">Notifications</div>
+                        <button class="btn btn-sm text-danger p-0 sl-read-all-btn align-items-center">Mark all as read</button>
+                    </li>
+                    <li>
+                        <a class="dropdown-item py-2 sl-notification-unread" href="#">
+                            <div class="small fw-semibold">Coach Mike Jones followed you</div>
+                            <div class="text-muted sl-notification-time">2h ago</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item py-2 sl-notification-unread" href="#">
+                            <div class="small fw-semibold">Jon Jones liked your post</div>
+                            <div class="text-muted sl-notification-time">3h ago</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item py-2 sl-notification-unread" href="#">
+                            <div class="small fw-semibold">Mike Tyson commented on your post.</div>
+                            <div class="text-muted sl-notification-time">4h ago</div>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="#" title="Profile">
+            <li class="nav-item dropdown">
+                <a class="nav-link text-white dropdown-toggle current" href="#" data-bs-toggle="dropdown" title="Profile">
                     <i class="bi bi-person-circle fs-5"></i>
                 </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="profile.html">
+                            <i class="bi bi-person me-2"></i>View Profile
+                        </a>
+                    </li>
+                    <li>
+                        <hr class=dropdown-divider>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-gear me-2"></i>Settings
+                        </a>
+                    </li>
+                    <li>
+                        <hr class=dropdown-divider>
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="#">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                        </a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </nav>
@@ -341,7 +393,7 @@
         </div>
     </div>
 
-
+<script src="app.js"></script>
 </body>
 
 </html>
