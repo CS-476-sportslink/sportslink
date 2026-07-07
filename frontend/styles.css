@@ -266,6 +266,7 @@ textarea {
     text-transform: uppercase;
     letter-spacing: .75px;
     color: #888;
+    border-bottom: 1px solid #E2E0DA;
 }
 
 .sl-setting-row {
