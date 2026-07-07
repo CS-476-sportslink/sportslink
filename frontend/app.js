@@ -115,3 +115,20 @@ document.querySelectorAll('.sl-reply-btn').forEach(function(btn) {
         replyBox.classList.toggle('sl-hidden');
     });
 });
+
+// Hide and display content on settings tabs
+document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+
+        document.querySelectorAll('.sl-settings-section').forEach(function(s) {
+            s.classList.remove('active');
+        });
+        document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function(l) {
+            l.classList.remove('active');
+        });
+
+        const section = this.getAttribute('data-section');
+        document.getElementById('section-' + section).classList.add('active');
+        this.classList.add('active');
+    });
+});

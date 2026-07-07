@@ -277,3 +277,11 @@ textarea {
     padding: 14px 0;
     border-bottom: 1px solid #F0EEE9;
 }
+
+.sl-settings-section {
+    display: none;
+}
+
+.sl-settings-section.active {
+    display: block;
+}
