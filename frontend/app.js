@@ -91,7 +91,7 @@ if (readAllBtn) {
 
         const badge = document.querySelector('.sl-notification-badge');
         if (badge) {
-            badge.style.display = 'none';
+            badge.classList.add('sl-hidden');
         }
 
         document.querySelectorAll('.sl-notification-unread').forEach(function(notification) {
@@ -112,6 +112,23 @@ document.querySelectorAll('textarea').forEach(function(textarea) {
 document.querySelectorAll('.sl-reply-btn').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
         const replyBox = this.closest('.card-body').querySelector('.sl-reply-box');
-        replyBox.classList.toggle('d-none');
+        replyBox.classList.toggle('sl-hidden');
+    });
+});
+
+// Hide and display content on settings tabs
+document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+
+        document.querySelectorAll('.sl-settings-section').forEach(function(s) {
+            s.classList.remove('active');
+        });
+        document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function(l) {
+            l.classList.remove('active');
+        });
+
+        const section = this.getAttribute('data-section');
+        document.getElementById('section-' + section).classList.add('active');
+        this.classList.add('active');
     });
 });
