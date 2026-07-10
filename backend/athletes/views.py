@@ -30,3 +30,18 @@ def create_profile(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+#GET /api/atheles/:id/
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile(request, pk):
+    try:
+        profile = AthleteProfile.objects.get(pk=pk)
+        # Log the profile view 
+        if request.user != profile.user:
+            ProfileView.objects.get_or_create(viewer=request.user, viewed=profile.user)
+            AthleteProfile.objects.filter(pk=pk).update(profile_views=profile.profile_views + 1)
+            serializer = AthleteProfileSerializer(profile)
+            return Response(serializer.data)
+    except AthleteProfile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
