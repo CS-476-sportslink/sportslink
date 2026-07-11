@@ -45,3 +45,19 @@ def get_profile(request, pk):
             return Response(serializer.data)
     except AthleteProfile.DoesNotExist:
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+#PUT /api/athletes/:id/
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_profile(request, pk):
+    try:
+        profile = AthleteProfile.objects.get(pk=pk)
+        if profile.user != request.user:
+            return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+        serializer = AthleteProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except AthleteProfile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
