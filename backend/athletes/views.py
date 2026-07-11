@@ -85,3 +85,12 @@ def get_profile_views(request, pk):
         return Response(data)
     except AthleteProfile.DoesNotExist:
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+#GET /api/athletes/sport-config/
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_sport_config(request):
+    return Response({
+        'stat_fields': STAT_FIELDS_BY_POSITION,
+        'interest_levels': INTEREST_LEVELS_BY_SPORT,
+    })
