@@ -30,4 +30,7 @@ urlpatterns = [
 
     #allauth - https://docs.allauth.org/en/latest/installation/quickstart.html
     path('accounts/', include('allauth.urls')),
+
+    path('api/auth/', include('users.urls')),
+
 ]
