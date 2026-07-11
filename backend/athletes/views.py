@@ -61,3 +61,27 @@ def update_profile(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except AthleteProfile.DoesNotExist:
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+#GET /api/athletes/:id/views/
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile_views(request, pk):
+    try:
+        profile = AthleteProfile.objects.get(pk=pk)
+        if profile.user != request.user:
+            return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+        views = ProfileView.objects.filter(viewed=profile.user).order_by('-viewed_at')[:10]
+        data = {
+            'total_views': profile.profile_views,
+            'recent_viewers': [
+                {
+                    'id': str(v.viewer.id),
+                    'name': v.viewer.get_full_name(),
+                    'viewed_at': v.viewed_at,
+                }
+                for v in views
+            ]
+        }
+        return Response(data)
+    except AthleteProfile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
