@@ -34,5 +34,6 @@ urlpatterns = [
 
     path('api/athletes/', include('athletes.urls')),
     path('api/auth/', include('users.urls')),
+    path('api/posts/', include('posts.urls')),
 
 ]
