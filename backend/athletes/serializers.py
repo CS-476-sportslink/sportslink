@@ -19,7 +19,7 @@ class AthleteProfileSerializer(serializers.ModelSerializer):
         if sport and interest_level:
             valid_levels = [key for key, value in INTEREST_LEVELS_BY_SPORT.get(sport,[])]
             for level in interest_level:
-                if level in valid_levels:
+                if level not in valid_levels:
                     raise serializers.ValidationError(f'"{level}" is not a valid interest level for {sport}.')
 
 #make sure stats are valid for the sport and position
