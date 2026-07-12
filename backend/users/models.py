@@ -19,6 +19,9 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    email = models.EmailField(unique=True)
+
+
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, null=True, blank=True)
     profile_photo = models.URLField(blank=True)
     city = models.CharField(max_length=100, blank=True)
