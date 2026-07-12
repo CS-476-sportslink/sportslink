@@ -16,3 +16,14 @@ def get_my_profile(request):
     except CoachProfile.DoesNotExist:
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
 
+#POST /api/coaches/
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_profile(request):
+    if hasattr(request.user, 'coach_profile'):
+        return Response({'error': 'Profile already exists'}, status=status.HTTP_400_BAD_REQUEST)
+    serializer = CoachProfileSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
