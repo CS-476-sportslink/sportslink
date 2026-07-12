@@ -5,6 +5,7 @@ from posts.models import Post
 from posts.serializers import PostSerializer
 
 # https://www.django-rest-framework.org/api-guide/generic-views/#listcreateapiview
+# https://www.django-rest-framework.org/api-guide/generic-views/v
 class PostListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
