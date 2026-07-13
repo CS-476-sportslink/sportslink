@@ -1,0 +1,64 @@
+<!---Longin Page-->
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewpoint" content="width=device-width, initial-scale=1">
+    <title>Sportslink Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"defer></script>
+    </head>
+    <body>
+            
+                <!---Navigation Bar--->
+                <nav class="navbar navbar-expand-lg px-3 py-2 sl-navbar">
+                    <a class="navbar-brand fw-bold text-white d-flex align-items-center" href="#">
+                    <img src="images/white-maple-leaf.png" alt="maple leaf" class="sl-logo">Sportslink
+                    </a>
+                    <a class="nav-link text-white d-flex align-items-end" href="#">Home</a>
+                </nav>
+
+                    <!---Main page-->
+                    <div class="container-fluid">               
+                        <div class="row">
+
+                            <!---sidebar-->
+                            <div class="col-2 sidebar">
+                            </div>
+
+                            <!---Form Content-->
+                            <div class="col-10 pt-5 align-items-center">
+
+                                <div class="d-flex justify-content-center">
+                                    <h1 class=" h1 fw-bold text-dark mt-5 mb-3 ">Login</h1>
+                                </div>
+
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <form action="" method="POST" class="Lform border-2 rounded">
+
+                                        <div class="mt-2">
+                                        <label for="uname" class="form-label"> Username: </label>
+                                        <input type="text" class="form-control" id="uname" placeholder="Enter Username" required auto>
+
+                                        <label for="pswd" class="form-label"> Password: </label>
+                                        <input type="password" class="form-control" id="pswd" placeholder="Enter Password" required auto>
+                                        </div>
+                                        <div class="checkbox mt-1">
+                                            <label>
+                                                <input type="checkbox" value="remember-me">Remember me
+                                            </label>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn-login text-center mt-2 text-white"><b>Login</b></button>
+                                        </div>    
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+    </body>
+</html>
