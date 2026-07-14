@@ -1,4 +1,7 @@
-
+//Redirect to login if not logged in
+if (!localStorage.getItem('access_token') && window.location.pathname.includes('home.html')) {
+    window.location.href = '../Loginandsignup/login.html';
+}
 
 //like button change class and increment like count
 document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
