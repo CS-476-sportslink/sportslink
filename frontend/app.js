@@ -256,6 +256,12 @@ if (token) {
         document.querySelectorAll('.sl-current-user-name').forEach(function(name) {
             name.textContent = user.first_name + ' ' + user.last_name;
         });
+
+        //Profile card 
+        const userInfo = document.querySelector('#sl-current-user-info');
+        if (userInfo) {
+            userInfo.textContent = user.role === 'athlete' ? 'Athlete' : 'Coach'
+        }
     });
 }
 
