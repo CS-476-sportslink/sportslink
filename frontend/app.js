@@ -258,3 +258,31 @@ if (token) {
         });
     });
 }
+
+// Logout
+const logoutBtn = document.querySelector('#sl-logout-btn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const accessToken = localStorage.getItem('access_token');
+        const refreshToken = localStorage.getItem('refresh_token');
+
+        fetch('http://127.0.0.1:8000/api/auth/logout/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessToken
+            },
+            body: JSON.stringify({ refresh: refreshToken })
+        })
+        .then(function() {
+            localStorage.clear();
+            window.location.href = '../Loginandsignup/login.html';
+        })
+        .catch(function() {
+            localStorage.clear();
+            window.location.href = '../Loginandsignup/login.html';
+        });
+    });
+}
