@@ -170,6 +170,15 @@ if (postFeed) {
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
                             </div>
                             <p class="small mb-2">${post.body}</p>
+                            ${post.media_url ? `
+                            <div class="d-flex align-items-center gap-2 p-2 mb-2 sl-video-block">
+                                <div class="sl-play-btn">
+                                    <i class="bi bi-play-fill text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="small fw-semibold"><a href="${post.media_url}" target="_blank" class="text-decoration-none text-dark">Watch video</a></div>
+                                </div>
+                            </div>` : ''}
                             <div class="d-flex gap-1 pt-2">
                                 <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
                                 <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
@@ -184,5 +193,68 @@ if (postFeed) {
     })
     .catch(function(error) {
         postFeed.innerHTML = '<p class="text-muted text-center">Failed to load posts.</p>';
+    });
+}
+
+// Create post
+const createPostBtn = document.querySelector('#sl-create-post-btn');
+if (createPostBtn) {
+    createPostBtn.addEventListener('click', function() {
+        const body = document.querySelector('.sl-post-body').value.trim();
+        const mediaUrl = document.querySelector('.sl-post-media-url').value.trim();
+        const token = localStorage.getItem('access_token');
+
+        if (!body) {
+            alert('Please write something before posting');
+            return;
+        }
+
+        fetch('http://127.0.0.1:8000/api/posts/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                body: body,
+                media_url: mediaUrl,
+                media_type: mediaUrl ? 'video' : ''
+            })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.id) {
+                window.location.reload();
+            } else {
+                alert('Failed to create post');
+            }
+        })
+        .catch(function(error) {
+            alert('Something went wrong, please try again');
+        });
+    });
+}
+
+// Fetch logged in user and update UI
+const token = localStorage.getItem('access_token');
+if (token) {
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        const initials = (user.first_name && user.last_name)
+            ? user.first_name[0] + user.last_name[0]
+            : user.email[0].toUpperCase();
+
+        document.querySelectorAll('.sl-current-user-avatar').forEach(function(avatar) {
+            avatar.textContent = initials;
+        });
+
+        document.querySelectorAll('.sl-current-user-name').forEach(function(name) {
+            name.textContent = user.first_name + ' ' + user.last_name;
+        });
     });
 }

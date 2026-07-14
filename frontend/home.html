@@ -160,7 +160,7 @@
                 <!--Create post-->
                 <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#postBox">
                     <div class="card d-flex flex-row align-items-center gap-2 mb-3 p-3 shadow-sm">
-                        <div class="sl-post-avatar sl-avatar-player">BS</div>
+                        <div class="sl-post-avatar sl-avatar-player sl-current-user-avatar"></div>
                         <div class="form-control rounded-pill border-1 bg-light text-muted">Create a post</div>
                     </div>
                 </a>
@@ -248,8 +248,8 @@
 
                 <div class="modal-header border-0">
                     <div class="d-flex align-items-center gap-2">
-                        <div class="sl-post-avatar sl-avatar-player">BS</div>
-                        <div class="fw-semibold">Brendan Stevenson</div>
+                        <div class="sl-post-avatar sl-avatar-player sl-current-user-avatar"></div>
+                        <div class="fw-semibold sl-current-user-name"></div>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -267,11 +267,10 @@
                     <div class="tab-content">
                         <!-- Social post -->
                         <div class="tab-pane fade show active" id="social">
-                            <textarea class="form-control border-0" rows="6"
-                                placeholder="Start typing here..."></textarea>
+                            <textarea class="form-control border-0 sl-post-body" rows="6" placeholder="Start typing here..."></textarea>
                             <div class="d-flex justify-content-between align-items-center flex-nowrap mt-3">
-                                <input type="text" class="form-control w-50" placeholder="Add a video link (optional)">
-                                <button type="button" class="btn btn-danger px-4 ms-2">Post</button>
+                                <input type="text" class="form-control w-50 sl-post-media-url" placeholder="Add a video link (optional)">
+                                <button type="button" class="btn btn-danger px-4 ms-2" id="sl-create-post-btn">Post</button>
                             </div>
                         </div>
 
