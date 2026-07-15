@@ -27,3 +27,15 @@ def create_profile(request):
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#GET /api/coaches/:id/
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile(request, pk):
+    try:
+        profile = CoachProfile.objects.get(pk=pk)
+        serializer = CoachProfileSerializer(profile)
+        return Response(serializer.data)
+    except CoachProfile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
