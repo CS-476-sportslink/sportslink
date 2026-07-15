@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from posts.models import Post
-from posts.serializers import PostSerializer
+from posts.models import Post, Comment
+from posts.serializers import PostSerializer, CommentSerializer
 
 # https://www.django-rest-framework.org/api-guide/generic-views/#listcreateapiview
 # https://www.django-rest-framework.org/api-guide/generic-views/v
@@ -21,3 +21,16 @@ class PostDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+
+class CommentListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        post_id = self.kwargs['post_id']
+        return Comment.objects.filter(post=post_id)
+
+    def perform_create(self, serializer):
+        post_id = self.kwargs['post_id']
+        post = Post.objects.get(pk=post_id)
+        serializer.save(user=self.request.user, post=post)
