@@ -61,3 +61,26 @@ def send_connection(request):
     serializer = ConnectionSerializer(connection)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+#PUT /api/connections/:id/
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def respond_to_connection(request, pk):
+    try:
+        connection = Connection.objects.get(pk=pk)
+    except Connection.DoesNotExist:
+        return Response({'error': 'Connection not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Only the receiver can accept or decline
+    if connection.receiver != request.user:
+        return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+
+    new_status = request.data.get('status')
+    if new_status not in [Connection.STATUS_ACCEPTED, Connection.STATUS_DECLINED]:
+        return Response({'error': 'Status must be accepted or declined'}, status=status.HTTP_400_BAD_REQUEST)
+
+    connection.status = new_status
+    connection.save()
+
+    serializer = ConnectionSerializer(connection)
+    return Response(serializer.data)
