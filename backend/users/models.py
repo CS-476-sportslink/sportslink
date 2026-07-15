@@ -13,6 +13,15 @@ class User(AbstractUser):
         (ROLE_COACH, 'Coach'),
     ]
 
+
+    #Use email as login field instead of username
+    #We need this for JWT auth and allauth to work with email login
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    email = models.EmailField(unique=True)
+
+
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, null=True, blank=True)
     profile_photo = models.URLField(blank=True)
     city = models.CharField(max_length=100, blank=True)
