@@ -422,3 +422,51 @@ if (postCommentBtn) {
         });
     });
 }
+
+// Save profile settings
+const saveProfileBtn = document.querySelector('#sl-save-profile-btn');
+if (saveProfileBtn) {
+    const token = localStorage.getItem('access_token');
+
+    // Populate fields on page load
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        const nameField = document.querySelector('#sl-profile-name');
+        const bioField = document.querySelector('#sl-profile-bio');
+        if (nameField) nameField.value = user.first_name + ' ' + user.last_name;
+        if (bioField) bioField.value = user.bio || '';
+    });
+
+    saveProfileBtn.addEventListener('click', function() {
+        const name = document.querySelector('#sl-profile-name').value.trim().split(' ');
+        const firstName = name[0];
+        const lastName = name.slice(1).join(' ');
+
+        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                first_name: firstName,
+                last_name: lastName,
+                bio: document.querySelector('#sl-profile-bio').value.trim(),
+            })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.id) {
+                alert('Profile updated successfully!');
+            } else {
+                alert('Failed to update profile');
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong, please try again');
+        });
+    });
+}

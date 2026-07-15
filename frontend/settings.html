@@ -100,7 +100,7 @@
                         <hr class=dropdown-divider>
                     </li>
                     <li>
-                        <a class="dropdown-item text-danger" href="#">
+                        <a class="dropdown-item text-danger" href="#" id="sl-logout-btn">
                             <i class="bi bi-box-arrow-right me-2"></i>Logout
                         </a>
                     </li>
@@ -188,26 +188,26 @@
                             <div class="sl-section-title mb-2">Profile</div>
                             <div class="mb-3">
                                 <label class="form-label small fw-semibold">Display Name</label>
-                                <input type="text" class="form-control" value="Brendan Stevenson">
+                                <input type="text" class="form-control" id="sl-profile-name" value="Brendan Stevenson">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label small fw-semibold">Bio</label>
-                                <textarea class="form-control" rows="3" placeholder="Tell coaches about yourself...">Hockey Forward looking for a Usports team to play for in the next winter semester.</textarea>
+                                <textarea class="form-control" id="sl-profile-bio" rows="3" placeholder="Tell coaches about yourself...">Hockey Forward looking for a Usports team to play for in the next winter semester.</textarea>
                             </div>
                             <div class="row g-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label small fw-semibold">Sport</label>
-                                    <input type="text" class="form-control" value="Hockey">
+                                    <input type="text" class="form-control" id="sl-profile-sport" value="Hockey">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-semibold">Position</label>
-                                    <input type="text" class="form-control" value="Forward">
+                                    <input type="text" class="form-control" id="sl-profile-position" value="Forward">
                                 </div>
                             </div>
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
                                     <label class="form-label small fw-semibold">Province</label>
-                                    <select class="form-select">
+                                    <select class="form-select" id="sl-profile-province">
                                         <option>AB</option>
                                         <option>BC</option>
                                         <option>MB</option>
@@ -225,10 +225,10 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-semibold">Current team</label>
-                                    <input type="text" class="form-control" value="Saskatoon Bulldogs">
+                                    <input type="text" class="form-control" id="sl-profile-team" value="Saskatoon Bulldogs">
                                 </div>
                             </div>
-                            <button class="btn btn-danger btn-sm px-4">Save changes</button>
+                            <button class="btn btn-danger btn-sm px-4" id="sl-save-profile-btn">Save changes</button>
                         </div>
                     </div>
 
