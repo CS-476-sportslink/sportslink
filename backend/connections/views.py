@@ -25,3 +25,39 @@ def list_connections(request):
     serializer = ConnectionSerializer(connections, many=True)
     return Response(serializer.data)
 
+#POST /api/connections/
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_connection(request):
+    receiver_id = request.data.get('receiver_id')
+
+    if not receiver_id:
+        return Response({'error': 'receiver_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if str(request.user.id) == str(receiver_id):
+        return Response({'error': 'You cannot connect with yourself'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        receiver = User.objects.get(pk=receiver_id)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Check if connection already exists in either direction
+    existing = Connection.objects.filter(
+        initiator=request.user, receiver=receiver
+    ) | Connection.objects.filter(
+        initiator=receiver, receiver=request.user
+    )
+
+    if existing.exists():
+        return Response({'error': 'Connection already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+    connection = Connection.objects.create(
+        initiator=request.user,
+        receiver=receiver,
+        status=Connection.STATUS_PENDING
+    )
+
+    serializer = ConnectionSerializer(connection)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
