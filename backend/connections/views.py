@@ -84,3 +84,22 @@ def respond_to_connection(request, pk):
 
     serializer = ConnectionSerializer(connection)
     return Response(serializer.data)
+
+#DELETE /api/connections/:id/
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def withdraw_connection(request, pk):
+    try:
+        connection = Connection.objects.get(pk=pk)
+    except Connection.DoesNotExist:
+        return Response({'error': 'Connection not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Only the initiator can withdraw
+    if connection.initiator != request.user:
+        return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+
+    if connection.status != Connection.STATUS_PENDING:
+        return Response({'error': 'Can only withdraw pending requests'}, status=status.HTTP_400_BAD_REQUEST)
+
+    connection.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
