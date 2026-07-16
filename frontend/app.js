@@ -271,6 +271,18 @@ if (token) {
         if (profileBio) {
             profileBio.textContent = user.bio || 'No bio yet.';
         }
+
+        // Get the users profile links
+        const profileLinks = document.querySelector('#sl-profile-links');
+        if (profileLinks) {
+            if (user.links && user.links.length > 0) {
+                user.links.forEach(function(link) {
+                    profileLinks.innerHTML += `<p class="text-muted small mb-2"><a href="${link.url}" class="text-decoration-none" target="_blank">${link.name}</a></p>`;
+                });
+            } else {
+                profileLinks.innerHTML = '<p class="text-muted small">No links added yet.</p>';
+            }
+        }
     });
 }
 
@@ -709,6 +721,75 @@ if (editProfilePostFeed) {
                         </div>
                     </div>
                 </a>`;
+        });
+    });
+}
+
+// Edit profile links
+const saveLinksBtn = document.querySelector('#sl-save-links-btn');
+if (saveLinksBtn) {
+    const token = localStorage.getItem('access_token');
+
+    // Populate links on page load
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        const links = user.links || [];
+        if (links[0]) {
+            document.querySelector('#sl-link-1-url').value = links[0].url || '';
+            document.querySelector('#sl-link-1-name').value = links[0].name || '';
+        }
+        if (links[1]) {
+            document.querySelector('#sl-link-2-url').value = links[1].url || '';
+            document.querySelector('#sl-link-2-name').value = links[1].name || '';
+        }
+        if (links[2]) {
+            document.querySelector('#sl-link-3-url').value = links[2].url || '';
+            document.querySelector('#sl-link-3-name').value = links[2].name || '';
+        }
+
+        //Show the links
+        const editProfileLinks = document.querySelector('#sl-edit-profile-links');
+        if (editProfileLinks && user.links && user.links.length > 0) {
+            user.links.forEach(function(link) {
+                editProfileLinks.innerHTML += `<p class="text-muted small mb-2"><a href="${link.url}" class="text-decoration-none" target="_blank">${link.name}</a></p>`;
+            });
+        } else if (editProfileLinks) {
+            editProfileLinks.innerHTML = '<p class="text-muted small">No links added yet.</p>';
+        }
+    });
+
+    // Save links
+    saveLinksBtn.addEventListener('click', function() {
+        const links = [
+            { url: document.querySelector('#sl-link-1-url').value.trim(), name: document.querySelector('#sl-link-1-name').value.trim() },
+            { url: document.querySelector('#sl-link-2-url').value.trim(), name: document.querySelector('#sl-link-2-name').value.trim() },
+            { url: document.querySelector('#sl-link-3-url').value.trim(), name: document.querySelector('#sl-link-3-name').value.trim() }
+        ].filter(function(link) { return link.url; }).map(function(link) {
+            if (!link.url.startsWith('http')) {
+                link.url = 'https://' + link.url;
+            }
+            return link;
+        });
+
+        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ links: links })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.id) {
+                alert('Links saved!');
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong');
         });
     });
 }
