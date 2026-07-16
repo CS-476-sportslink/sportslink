@@ -167,7 +167,7 @@ if (postFeed) {
                                         <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
                                     </div>
                                     <div class="text-muted small">
-                                        <span class="sl-badge-player me-1">Athlete</span>
+                                        <span class="sl-badge-player me-1">${post.user.role === 'athlete' ? 'Athlete' : 'Coach'}</span>
                                     </div>
                                 </div>
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
@@ -615,6 +615,50 @@ if (profilePostFeed) {
                         </div>
                     </div>
                 </a>`;
+        });
+    });
+}
+
+// Edit profile page - populate bio
+const editBioDisplay = document.querySelector('#sl-edit-bio-display');
+const editBioTextarea = document.querySelector('#sl-edit-bio-textarea');
+if (editBioDisplay || editBioTextarea) {
+    const token = localStorage.getItem('access_token');
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        if (editBioDisplay) editBioDisplay.textContent = user.bio || 'No bio yet.';
+        if (editBioTextarea) editBioTextarea.value = user.bio || '';
+    });
+}
+
+// Save bio from edit profile page
+const saveBioBtn = document.querySelector('#sl-save-bio-btn');
+if (saveBioBtn) {
+    saveBioBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const token = localStorage.getItem('access_token');
+        const bio = document.querySelector('#sl-edit-bio-textarea').value.trim();
+
+        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ bio: bio })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.id) {
+                document.querySelector('#sl-edit-bio-display').textContent = bio;
+                alert('Bio updated!');
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong');
         });
     });
 }
