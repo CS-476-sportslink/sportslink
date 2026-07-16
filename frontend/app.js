@@ -1,3 +1,7 @@
+//Redirect to login if not logged in
+if (!localStorage.getItem('access_token') && window.location.pathname.includes('home.html')) {
+    window.location.href = '../Loginandsignup/login.html';
+}
 //firebase auth
 // Import the functions you need from the SDKs you need
 import * as firebase from 'https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js';
