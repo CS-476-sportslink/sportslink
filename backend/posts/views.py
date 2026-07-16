@@ -11,6 +11,9 @@ class PostListCreateView(generics.ListCreateAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
+        user_id = self.request.query_params.get('user')
+        if user_id:
+            return Post.objects.filter(user=user_id)
         return Post.objects.all()
 
     def perform_create(self, serializer):
