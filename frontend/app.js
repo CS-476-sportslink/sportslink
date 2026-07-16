@@ -265,6 +265,12 @@ if (token) {
         if (userInfo) {
             userInfo.textContent = user.role === 'athlete' ? 'Athlete' : 'Coach'
         }
+
+        // About me bio
+        const profileBio = document.querySelector('#sl-profile-bio');
+        if (profileBio) {
+            profileBio.textContent = user.bio || 'No bio yet.';
+        }
     });
 }
 
