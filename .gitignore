@@ -216,5 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+.DS_Store
 frontend/firebase-tools-instant-win.exe
 firebase-tools-instant-win.exe

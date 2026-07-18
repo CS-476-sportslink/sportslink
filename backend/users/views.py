@@ -8,6 +8,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from users.serializers import RegisterSerializer, UserSerializer
 from users.models import User
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import update_session_auth_hash
+
 
 # https://www.django-rest-framework.org/api-guide/generic-views/#createapiview
 # https://www.django-rest-framework.org/api-guide/permissions/#allowany
@@ -40,3 +42,25 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class UpdateMeView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+
+        if not request.user.check_password(current_password):
+            return Response({'error': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+        request.user.set_password(new_password)
+        request.user.save()
+        return Response({'message': 'Password updated successfully'}, status=status.HTTP_200_OK)

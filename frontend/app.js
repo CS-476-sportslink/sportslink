@@ -166,7 +166,7 @@ if (postFeed) {
                                         <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
                                     </div>
                                     <div class="text-muted small">
-                                        <span class="sl-badge-player me-1">Athlete</span>
+                                        <span class="sl-badge-player me-1">${post.user.role === 'athlete' ? 'Athlete' : 'Coach'}</span>
                                     </div>
                                 </div>
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
@@ -263,6 +263,24 @@ if (token) {
         const userInfo = document.querySelector('#sl-current-user-info');
         if (userInfo) {
             userInfo.textContent = user.role === 'athlete' ? 'Athlete' : 'Coach'
+        }
+
+        // About me bio
+        const profileBio = document.querySelector('#sl-profile-bio');
+        if (profileBio) {
+            profileBio.textContent = user.bio || 'No bio yet.';
+        }
+
+        // Get the users profile links
+        const profileLinks = document.querySelector('#sl-profile-links');
+        if (profileLinks) {
+            if (user.links && user.links.length > 0) {
+                user.links.forEach(function(link) {
+                    profileLinks.innerHTML += `<p class="text-muted small mb-2"><a href="${link.url}" class="text-decoration-none" target="_blank">${link.name}</a></p>`;
+                });
+            } else {
+                profileLinks.innerHTML = '<p class="text-muted small">No links added yet.</p>';
+            }
         }
     });
 }
@@ -418,6 +436,359 @@ if (postCommentBtn) {
         })
         .catch(function(error) {
             alert('Something went wrong, please try again');
+        });
+    });
+}
+
+// Save profile settings
+const saveProfileBtn = document.querySelector('#sl-save-profile-btn');
+if (saveProfileBtn) {
+    const token = localStorage.getItem('access_token');
+
+    // Populate fields on page load
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        const nameField = document.querySelector('#sl-profile-name');
+        const bioField = document.querySelector('#sl-profile-bio');
+        if (nameField) nameField.value = user.first_name + ' ' + user.last_name;
+        if (bioField) bioField.value = user.bio || '';
+    });
+
+    saveProfileBtn.addEventListener('click', function() {
+        const name = document.querySelector('#sl-profile-name').value.trim().split(' ');
+        const firstName = name[0];
+        const lastName = name.slice(1).join(' ');
+
+        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                first_name: firstName,
+                last_name: lastName,
+                bio: document.querySelector('#sl-profile-bio').value.trim(),
+            })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.id) {
+                alert('Profile updated successfully!');
+            } else {
+                alert('Failed to update profile');
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong, please try again');
+        });
+    });
+}
+
+// Populate current email on settings page
+const currentEmail = document.querySelector('#sl-current-email');
+if (currentEmail) {
+    const token = localStorage.getItem('access_token');
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        currentEmail.textContent = user.email;
+    });
+}
+
+// Save email settings page
+const saveEmailBtn = document.querySelector('#sl-save-email-btn');
+if (saveEmailBtn) {
+    saveEmailBtn.addEventListener('click', function() {
+        const newEmail = document.querySelector('#sl-new-email').value.trim();
+        const token = localStorage.getItem('access_token');
+
+        if (!newEmail) {
+            alert('Please enter a new email');
+            return;
+        }
+
+        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ email: newEmail })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.id) {
+                alert('Email updated successfully!');
+                document.querySelector('#sl-current-email').textContent = newEmail;
+            } else {
+                alert('Failed to update email');
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong, please try again');
+        });
+    });
+}
+
+// Change password
+const savePasswordBtn = document.querySelector('#sl-save-password-btn');
+if (savePasswordBtn) {
+    savePasswordBtn.addEventListener('click', function() {
+        const currentPassword = document.querySelector('#sl-current-password').value.trim();
+        const newPassword = document.querySelector('#sl-new-password').value.trim();
+        const confirmPassword = document.querySelector('#sl-confirm-new-password').value.trim();
+        const token = localStorage.getItem('access_token');
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            alert('New passwords do not match');
+            return;
+        }
+
+        fetch('http://127.0.0.1:8000/api/auth/change-password/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                current_password: currentPassword,
+                new_password: newPassword
+            })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.message) {
+                alert('Password updated successfully!');
+            } else {
+                alert(data.error || 'Failed to update password');
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong, please try again');
+        });
+    });
+}
+
+// Load profile page posts
+const profilePostFeed = document.querySelector('#sl-profile-post-feed');
+if (profilePostFeed) {
+    const token = localStorage.getItem('access_token');
+
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        return fetch(`http://127.0.0.1:8000/api/posts/?user=${user.id}`, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(posts) {
+        if (posts.length === 0) {
+            profilePostFeed.innerHTML = '<p class="text-muted text-center">No posts yet.</p>';
+            return;
+        }
+        posts.forEach(function(post) {
+            const initials = post.user.first_name[0] + post.user.last_name[0];
+            profilePostFeed.innerHTML += `
+                <a href="post.html?id=${post.id}" class="text-decoration-none text-dark">
+                    <div class="card shadow-sm mb-4 sl-post-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="sl-post-avatar sl-avatar-player">${initials}</div>
+                                <div>
+                                    <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
+                                    <div class="text-muted small">
+                                        <span class="sl-badge-player me-1">${post.user.role === 'athlete' ? 'Athlete' : 'Coach'}</span>
+                                    </div>
+                                </div>
+                                <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
+                            </div>
+                            <p class="small mb-2">${post.body}</p>
+                            <div class="d-flex gap-1 pt-2">
+                                <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
+                                <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
+                                <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
+                                <button class="btn btn-sm text-muted sl-save-btn"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </a>`;
+        });
+    });
+}
+
+// Edit profile page - populate bio
+const editBioDisplay = document.querySelector('#sl-edit-bio-display');
+const editBioTextarea = document.querySelector('#sl-edit-bio-textarea');
+if (editBioDisplay || editBioTextarea) {
+    const token = localStorage.getItem('access_token');
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        if (editBioDisplay) editBioDisplay.textContent = user.bio || 'No bio yet.';
+        if (editBioTextarea) editBioTextarea.value = user.bio || '';
+    });
+}
+
+// Save bio from edit profile page
+const saveBioBtn = document.querySelector('#sl-save-bio-btn');
+if (saveBioBtn) {
+    saveBioBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const token = localStorage.getItem('access_token');
+        const bio = document.querySelector('#sl-edit-bio-textarea').value.trim();
+
+        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ bio: bio })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.id) {
+                document.querySelector('#sl-edit-bio-display').textContent = bio;
+                alert('Bio updated!');
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong');
+        });
+    });
+}
+
+// Edit profile page posts
+const editProfilePostFeed = document.querySelector('#sl-edit-profile-post-feed');
+if (editProfilePostFeed) {
+    const token = localStorage.getItem('access_token');
+
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        return fetch(`http://127.0.0.1:8000/api/posts/?user=${user.id}`, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(posts) {
+        if (posts.length === 0) {
+            editProfilePostFeed.innerHTML = '<p class="text-muted text-center">No posts yet.</p>';
+            return;
+        }
+        posts.forEach(function(post) {
+            const initials = post.user.first_name[0] + post.user.last_name[0];
+            editProfilePostFeed.innerHTML += `
+                <a href="post.html?id=${post.id}" class="text-decoration-none text-dark">
+                    <div class="card shadow-sm mb-4 sl-post-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="sl-post-avatar sl-avatar-player">${initials}</div>
+                                <div>
+                                    <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
+                                    <div class="text-muted small">
+                                        <span class="sl-badge-player me-1">${post.user.role === 'athlete' ? 'Athlete' : 'Coach'}</span>
+                                    </div>
+                                </div>
+                                <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
+                            </div>
+                            <p class="small mb-2">${post.body}</p>
+                            <div class="d-flex gap-1 pt-2">
+                                <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
+                                <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
+                                <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
+                                <button class="btn btn-sm text-muted sl-save-btn"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </a>`;
+        });
+    });
+}
+
+// Edit profile links
+const saveLinksBtn = document.querySelector('#sl-save-links-btn');
+if (saveLinksBtn) {
+    const token = localStorage.getItem('access_token');
+
+    // Populate links on page load
+    fetch('http://127.0.0.1:8000/api/auth/me/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(user) {
+        const links = user.links || [];
+        if (links[0]) {
+            document.querySelector('#sl-link-1-url').value = links[0].url || '';
+            document.querySelector('#sl-link-1-name').value = links[0].name || '';
+        }
+        if (links[1]) {
+            document.querySelector('#sl-link-2-url').value = links[1].url || '';
+            document.querySelector('#sl-link-2-name').value = links[1].name || '';
+        }
+        if (links[2]) {
+            document.querySelector('#sl-link-3-url').value = links[2].url || '';
+            document.querySelector('#sl-link-3-name').value = links[2].name || '';
+        }
+
+        //Show the links
+        const editProfileLinks = document.querySelector('#sl-edit-profile-links');
+        if (editProfileLinks && user.links && user.links.length > 0) {
+            user.links.forEach(function(link) {
+                editProfileLinks.innerHTML += `<p class="text-muted small mb-2"><a href="${link.url}" class="text-decoration-none" target="_blank">${link.name}</a></p>`;
+            });
+        } else if (editProfileLinks) {
+            editProfileLinks.innerHTML = '<p class="text-muted small">No links added yet.</p>';
+        }
+    });
+
+    // Save links
+    saveLinksBtn.addEventListener('click', function() {
+        const links = [
+            { url: document.querySelector('#sl-link-1-url').value.trim(), name: document.querySelector('#sl-link-1-name').value.trim() },
+            { url: document.querySelector('#sl-link-2-url').value.trim(), name: document.querySelector('#sl-link-2-name').value.trim() },
+            { url: document.querySelector('#sl-link-3-url').value.trim(), name: document.querySelector('#sl-link-3-name').value.trim() }
+        ].filter(function(link) { return link.url; }).map(function(link) {
+            if (!link.url.startsWith('http')) {
+                link.url = 'https://' + link.url;
+            }
+            return link;
+        });
+
+        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ links: links })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.id) {
+                alert('Links saved!');
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong');
         });
     });
 }
