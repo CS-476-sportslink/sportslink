@@ -1,5 +1,9 @@
 //Redirect to login if not logged in
-if (!localStorage.getItem('access_token') && window.location.pathname.includes('home.html')) {
+if (!localStorage.getItem('access_token') && window.location.pathname.includes('home.html') || 
+    window.location.pathname.includes('post.html') || 
+    window.location.pathname.includes('profile.html') || 
+    window.location.pathname.includes('editprofile.html') || 
+    window.location.pathname.includes('settings.html')) {
     window.location.href = '../Loginandsignup/login.html';
 }
 //like button change class and increment like count
