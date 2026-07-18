@@ -12,19 +12,18 @@ document.querySelectorAll('.sl-like-btn').forEach(function (btn) {
         e.stopPropagation();
         e.preventDefault();
 
-        const icon = this.querySelector('i');
-        const likeCount = this.querySelector('.sl-like-count');
+        const icon = btn.querySelector('i');
+        const likeCount = btn.querySelector('.sl-like-count');
         let count = parseInt(likeCount.textContent);
-
-        if (this.classList.contains('liked')) {
-            this.classList.remove('liked');
-            this.classList.add('text-muted');
+        if (btn.classList.contains('liked')) {
+            btn.classList.remove('liked');
+            btn.classList.add('text-muted');
             icon.classList.remove('bi-heart-fill');
             icon.classList.add('bi-heart');
             likeCount.textContent = count - 1;
         } else {
-            this.classList.add('liked');
-            this.classList.remove('text-muted');
+            btn.classList.add('liked');
+            btn.classList.remove('text-muted');
             icon.classList.remove('bi-heart');
             icon.classList.add('bi-heart-fill');
             likeCount.textContent = count + 1;
@@ -39,19 +38,17 @@ document.querySelectorAll('.sl-save-btn').forEach(function (btn) {
         e.stopPropagation();
         e.preventDefault();
 
-        const icon = this.querySelector('i');
-        const label = this.querySelector('.sl-save-label');
-
-
-        if (this.classList.contains('saved')) {
-            this.classList.remove('saved');
-            this.classList.add('text-muted');
+        const icon = btn.querySelector('i');
+        const label = btn.querySelector('.sl-save-label');
+        if (btn.classList.contains('saved')) {
+            btn.classList.remove('saved');
+            btn.classList.add('text-muted');
             icon.classList.remove('bi-bookmark-fill');
             icon.classList.add('bi-bookmark')
             label.textContent = 'Save';
         } else {
-            this.classList.add('saved');
-            this.classList.remove('text-muted');
+            btn.classList.add('saved');
+            btn.classList.remove('text-muted');
             icon.classList.remove('bi-bookmark');
             icon.classList.add('bi-bookmark-fill');
             label.textContent = 'Saved';
@@ -66,22 +63,20 @@ document.querySelectorAll('.sl-follow-btn').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
         e.stopPropagation();
         e.preventDefault();
-
         const followingCount = document.querySelector('.sl-following-count');
-
-        if (this.classList.contains('following')) {
-            this.classList.remove('following');
-            this.classList.remove('btn-danger');
-            this.classList.add('btn-outline-danger');
-            this.textContent = 'Follow';
+        if (btn.classList.contains('following')) {
+            btn.classList.remove('following');
+            btn.classList.remove('btn-danger');
+            btn.classList.add('btn-outline-danger');
+            btn.textContent = 'Follow';
             if (followingCount) {
                 followingCount.textContent = parseInt(followingCount.textContent) - 1;
             }
         } else {
-            this.classList.add('following');
-            this.classList.remove('btn-outline-danger');
-            this.classList.add('btn-danger');
-            this.textContent = 'Following';
+            btn.classList.add('following');
+            btn.classList.remove('btn-outline-danger');
+            btn.classList.add('btn-danger');
+            btn.textContent = 'Following';
             if (followingCount) {
                 followingCount.textContent = parseInt(followingCount.textContent) + 1;
             }
@@ -94,12 +89,10 @@ const readAllBtn = document.querySelector('.sl-read-all-btn');
 if (readAllBtn) {
     readAllBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-
         const badge = document.querySelector('.sl-notification-badge');
         if (badge) {
             badge.classList.add('sl-hidden');
         }
-
         document.querySelectorAll('.sl-notification-unread').forEach(function (notification) {
             notification.classList.remove('sl-notification-unread');
         });
@@ -109,15 +102,15 @@ if (readAllBtn) {
 //Resize comment area on post.html
 document.querySelectorAll('textarea').forEach(function (textarea) {
     textarea.addEventListener('input', function (e) {
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
     });
 });
 
 //Post replies
 document.querySelectorAll('.sl-reply-btn').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
-        const replyBox = this.closest('.card-body').querySelector('.sl-reply-box');
+        const replyBox = btn.closest('.card-body').querySelector('.sl-reply-box');
         replyBox.classList.toggle('sl-hidden');
     });
 });
@@ -125,17 +118,16 @@ document.querySelectorAll('.sl-reply-btn').forEach(function (btn) {
 // Hide and display content on settings tabs
 document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function (link) {
     link.addEventListener('click', function (e) {
-
-        document.querySelectorAll('.sl-settings-section').forEach(function (s) {
-            s.classList.remove('active');
+        document.querySelectorAll('.sl-settings-section').forEach(function (section) {
+            section.classList.remove('active');
         });
-        document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function (l) {
-            l.classList.remove('active');
+        document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function (navLink) {
+            navLink.classList.remove('active');
         });
 
-        const section = this.getAttribute('data-section');
+        const section = link.getAttribute('data-section');
         document.getElementById('section-' + section).classList.add('active');
-        this.classList.add('active');
+        link.classList.add('active');
     });
 });
 
