@@ -2,10 +2,9 @@
 if (!localStorage.getItem('access_token') && window.location.pathname.includes('home.html')) {
     window.location.href = '../Loginandsignup/login.html';
 }
-
 //like button change class and increment like count
-document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
+document.querySelectorAll('.sl-like-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
         e.stopPropagation();
         e.preventDefault();
 
@@ -15,7 +14,7 @@ document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
 
         if (this.classList.contains('liked')) {
             this.classList.remove('liked');
-            this.classList.add('text-muted');   
+            this.classList.add('text-muted');
             icon.classList.remove('bi-heart-fill');
             icon.classList.add('bi-heart');
             likeCount.textContent = count - 1;
@@ -31,15 +30,15 @@ document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
 
 
 //Save button similar to like button
-document.querySelectorAll('.sl-save-btn').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
+document.querySelectorAll('.sl-save-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
         e.stopPropagation();
         e.preventDefault();
 
         const icon = this.querySelector('i');
         const label = this.querySelector('.sl-save-label');
 
-        
+
         if (this.classList.contains('saved')) {
             this.classList.remove('saved');
             this.classList.add('text-muted');
@@ -59,8 +58,8 @@ document.querySelectorAll('.sl-save-btn').forEach(function(btn) {
 
 /*Follow button functionality*/
 
-document.querySelectorAll('.sl-follow-btn').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
+document.querySelectorAll('.sl-follow-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
         e.stopPropagation();
         e.preventDefault();
 
@@ -89,7 +88,7 @@ document.querySelectorAll('.sl-follow-btn').forEach(function(btn) {
 //Notifications
 const readAllBtn = document.querySelector('.sl-read-all-btn');
 if (readAllBtn) {
-    readAllBtn.addEventListener('click', function(e) {
+    readAllBtn.addEventListener('click', function (e) {
         e.stopPropagation();
 
         const badge = document.querySelector('.sl-notification-badge');
@@ -97,36 +96,36 @@ if (readAllBtn) {
             badge.classList.add('sl-hidden');
         }
 
-        document.querySelectorAll('.sl-notification-unread').forEach(function(notification) {
+        document.querySelectorAll('.sl-notification-unread').forEach(function (notification) {
             notification.classList.remove('sl-notification-unread');
         });
     });
 };
 
 //Resize comment area on post.html
-document.querySelectorAll('textarea').forEach(function(textarea) {
-    textarea.addEventListener('input', function(e) {
+document.querySelectorAll('textarea').forEach(function (textarea) {
+    textarea.addEventListener('input', function (e) {
         this.style.height = 'auto';
         this.style.height = this.scrollHeight + 'px';
     });
 });
 
 //Post replies
-document.querySelectorAll('.sl-reply-btn').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
+document.querySelectorAll('.sl-reply-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
         const replyBox = this.closest('.card-body').querySelector('.sl-reply-box');
         replyBox.classList.toggle('sl-hidden');
     });
 });
 
 // Hide and display content on settings tabs
-document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function(link) {
-    link.addEventListener('click', function(e) {
+document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function (link) {
+    link.addEventListener('click', function (e) {
 
-        document.querySelectorAll('.sl-settings-section').forEach(function(s) {
+        document.querySelectorAll('.sl-settings-section').forEach(function (s) {
             s.classList.remove('active');
         });
-        document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function(l) {
+        document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function (l) {
             l.classList.remove('active');
         });
 
