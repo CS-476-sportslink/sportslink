@@ -1,20 +1,27 @@
 
-//Post page show post details
+/* This is for showing specific posts when a post is clicked on. 
+We are grabbing the post id from the url and fetching that post to display
+on the post page. */
 const postDetail = document.querySelector('#sl-post-detail');
+//null check to avoid crashing
 if (postDetail) {
     const token = localStorage.getItem('access_token');
-    const params = new URLSearchParams(window.location.search);
-    const postId = params.get('id');
+    const params = new URLSearchParams(window.location.search); //read everything in the URL after the ? and gives us a way to access each value
+    const postId = params.get('id'); // from the URLSearchParams we can get the post id
 
+    // Quick check to see if someone actually clicked on a post card. If they didnt and navigated to the post.html page with no id present just reroute them to home page.
     if (!postId) {
         window.location.href = 'home.html';
     }
 
+    // Send a request to get that specific post from the backend using the postID
+    // Django will route this to PostDetailView which queries PostgreSQL for the post with the same ID
     fetch(`http://127.0.0.1:8000/api/posts/${postId}/`, {
         headers: {
             'Authorization': 'Bearer ' + token
         }
     })
+    // get the response and turn it into a javascript object
     .then(function(response) { return response.json(); })
     .then(function(post) {
         const initials = post.user.first_name[0] + post.user.last_name[0];
@@ -51,23 +58,25 @@ if (postDetail) {
                     </div>
                 </div>
             </div>`;
-        // Load comments
+        // send request to backend to retrieve comments tied to this specific post id
+        // Django will route this to CommentListCreateView which will query PostgreSQL for the comments tied to this postid
         fetch(`http://127.0.0.1:8000/api/posts/${postId}/comments/`, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
         })
+        //turn the response into a javascript object
         .then(function(response) { return response.json(); })
         .then(function(comments) {
             const commentSection = document.querySelector('#sl-comments');
-            if (!commentSection) return;
-
+            //if theres no comments returned in our query then just write there are no comments yet.
             if (comments.length === 0) {
                 commentSection.innerHTML = '<p class="text-muted small">No comments yet.</p>';
                 return;
             }
-
+            //when comments are returned in our query loop through each of them and display them on the page with same style we set the static comments up as
             comments.forEach(function(comment) {
+                // grabs the initials to  use for the profile picture
                 const initials = comment.user.first_name[0] + comment.user.last_name[0];
                 commentSection.innerHTML += `
                     <div class="d-flex gap-3 mb-3 mt-3">
@@ -90,6 +99,7 @@ if (postDetail) {
             });
         });
     })
+    //if any of the above fails just send user to home page instead of continuing on the broken page.
     .catch(function() {
         window.location.href = 'home.html';
     });
@@ -97,29 +107,36 @@ if (postDetail) {
 
 
 // Create comment
+/* Read what the user typed into the comment box so we can send to the backend
+to be saved as a comment tied to the spciefic post id.*/
 const postCommentBtn = document.querySelector('#sl-post-comment-btn');
+//null check to avoid crashing
 if (postCommentBtn) {
     postCommentBtn.addEventListener('click', function() {
         const body = document.querySelector('.sl-comment-body').value.trim();
         const params = new URLSearchParams(window.location.search);
         const postId = params.get('id');
 
+        //if nothing was typed into the box dont submit.
         if (!body) return;
 
+        //send a request to the backend of type POST because we want to create a new comment at the specific postid.
         fetch(`http://127.0.0.1:8000/api/posts/${postId}/comments/`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Content-Type': 'application/json', //sending json text
+                'Authorization': 'Bearer ' + token //who am i
             },
-            body: JSON.stringify({ body: body })
+            body: JSON.stringify({ body: body }) //convert javacscript object into json string  so the backend cna read it
         })
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-            if (data.id) {
+        .then(function(response) { return response.json(); }) //convert response into javascript object
+        .then(function(comment) {
+            // if the backend returned an ID it means the comment was created successfully so reload the page so the user can see the comment
+            if (comment.id) {
                 window.location.reload();
             }
         })
+        //if any of the above fails send an error message.
         .catch(function(error) {
             alert('Something went wrong, please try again');
         });
