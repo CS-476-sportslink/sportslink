@@ -1,18 +1,26 @@
 // Load profile page posts
+/* get the logged in users own post and display them on the profile.html.
+this may need to be altered after thinking about it the profile page shouldnt
+only show the logged in users. Anyone should be able to navigate to a users profile.
+*/
 const profilePostFeed = document.querySelector('#sl-profile-post-feed');
+//null check to avoid crashing
 if (profilePostFeed) {
     const token = localStorage.getItem('access_token');
 
+    //fetch request to the backend to get the currently logged in user
     fetch('http://127.0.0.1:8000/api/auth/me/', {
         headers: { 'Authorization': 'Bearer ' + token }
     })
-    .then(function(response) { return response.json(); })
+    .then(function(response) { return response.json(); }) //turn response into javascript object
+    //now that we have the user send a request to the backend to get all the posts made by the user using their id.
     .then(function(user) {
         return fetch(`http://127.0.0.1:8000/api/posts/?user=${user.id}`, {
             headers: { 'Authorization': 'Bearer ' + token }
         });
     })
-    .then(function(response) { return response.json(); })
+    .then(function(response) { return response.json(); }) //turn response into javascript object
+    //if we get posts back loop through them and display them, if none come back display no posts yet.
     .then(function(posts) {
         if (posts.length === 0) {
             profilePostFeed.innerHTML = '<p class="text-muted text-center">No posts yet.</p>';
@@ -49,14 +57,19 @@ if (profilePostFeed) {
 }
 
 // Edit profile page populate bio
+/* When the edit profile page loads we need to get the users current bio and put it into the display and textarea so the user can see what they have before
+they chage it. */
 const editBioDisplay = document.querySelector('#sl-edit-bio-display');
 const editBioTextarea = document.querySelector('#sl-edit-bio-textarea');
+//null check to avoid crashing
 if (editBioDisplay || editBioTextarea) {
     const token = localStorage.getItem('access_token');
+    //fetch the currently logged on user
     fetch('http://127.0.0.1:8000/api/auth/me/', {
         headers: { 'Authorization': 'Bearer ' + token }
     })
-    .then(function(response) { return response.json(); })
+    .then(function(response) { return response.json(); }) //turn response into javascript object
+    //if the user has a bio then display it else show no bio yet and leave the text area blank
     .then(function(user) {
         if (editBioDisplay) editBioDisplay.textContent = user.bio || 'No bio yet.';
         if (editBioTextarea) editBioTextarea.value = user.bio || '';
@@ -64,28 +77,35 @@ if (editBioDisplay || editBioTextarea) {
 }
 
 // Save bio from edit profile page
+/* When a user types in a new bio and clicks on the save button we need to send it to the backend
+so that it can be saved properly as the users bio.  */
 const saveBioBtn = document.querySelector('#sl-save-bio-btn');
+//null check to avoid crashing
 if (saveBioBtn) {
-    saveBioBtn.addEventListener('click', function(e) {
+    saveBioBtn.addEventListener('click', function(e) { //wait for user to click on the save button
         e.preventDefault();
         const token = localStorage.getItem('access_token');
         const bio = document.querySelector('#sl-edit-bio-textarea').value.trim();
 
+        //send a PATCH request to the backend to only update the bio field for the user that is logged on
+        //PATCH method is uesd to update specific fields only
         fetch('http://127.0.0.1:8000/api/auth/me/update/', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + token
             },
-            body: JSON.stringify({ bio: bio })
+            body: JSON.stringify({ bio: bio }) //convert bio into json so backend can read it
         })
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-            if (data.id) {
-                document.querySelector('#sl-edit-bio-display').textContent = bio;
+        .then(function(response) { return response.json(); }) //get response and turn it into javavscript object
+        // if we get back a user.id we know the backend succesfully saved the update
+        .then(function(user) {
+            if (user.id) {
+                document.querySelector('#sl-edit-bio-display').textContent = bio; //show the new bio
                 alert('Bio updated!');
             }
         })
+        //if something went wrong show an error message
         .catch(function() {
             alert('Something went wrong');
         });
@@ -93,20 +113,25 @@ if (saveBioBtn) {
 }
 
 // Edit profile page posts
+/* This is the exact same as the profile page posts but for the editprofile page.
+We grab the logged in users posts but this time its just on a different page.  */
 const editProfilePostFeed = document.querySelector('#sl-edit-profile-post-feed');
+//null check to avoid crashing
 if (editProfilePostFeed) {
     const token = localStorage.getItem('access_token');
-
+    //fetch request to the backend to get the currently logged in user
     fetch('http://127.0.0.1:8000/api/auth/me/', {
         headers: { 'Authorization': 'Bearer ' + token }
     })
-    .then(function(response) { return response.json(); })
+    .then(function(response) { return response.json(); }) //convert resposne into javascript object
+     //now that we have the user send a request to the backend to get all the posts made by the user using their id.
     .then(function(user) {
         return fetch(`http://127.0.0.1:8000/api/posts/?user=${user.id}`, {
             headers: { 'Authorization': 'Bearer ' + token }
         });
     })
-    .then(function(response) { return response.json(); })
+    .then(function(response) { return response.json(); }) //convert response into javascript object
+    //if we get posts back loop through them and display them, if none come back display no posts yet.
     .then(function(posts) {
         if (posts.length === 0) {
             editProfilePostFeed.innerHTML = '<p class="text-muted text-center">No posts yet.</p>';
@@ -143,17 +168,24 @@ if (editProfilePostFeed) {
 }
 
 // Edit profile links
+/* This is for the my links section on the edit profile page.
+At this time we are only allowing max 3 links to be displayed could be looked into for more or less in the future
+When the new links are saved we want to send to the backend to save properly and display them on page. */
 const saveLinksBtn = document.querySelector('#sl-save-links-btn');
+//null check to avoid crashing
 if (saveLinksBtn) {
     const token = localStorage.getItem('access_token');
 
-    // Populate links on page load
+    // get the currently logged in user
     fetch('http://127.0.0.1:8000/api/auth/me/', {
         headers: { 'Authorization': 'Bearer ' + token }
     })
-    .then(function(response) { return response.json(); })
+    .then(function(response) { return response.json(); }) //convert response into javascript object
     .then(function(user) {
+        // if there are links already on the user model store it in links else it becomes an empty array.
         const links = user.links || [];
+        //for each of the links in the links array, if there exists any we display them, if not it becomes an empty string
+        //These are displayed only on the input boxes, we display them properly after this has happened.
         if (links[0]) {
             document.querySelector('#sl-link-1-url').value = links[0].url || '';
             document.querySelector('#sl-link-1-name').value = links[0].name || '';
@@ -169,42 +201,49 @@ if (saveLinksBtn) {
 
         //Show the links
         const editProfileLinks = document.querySelector('#sl-edit-profile-links');
-        if (editProfileLinks && user.links && user.links.length > 0) {
+        //null check and check to see if div exists and there are actually links available to display.
+        if (editProfileLinks && user.links.length > 0) {
+            //loop through each available link and display them
             user.links.forEach(function(link) {
                 editProfileLinks.innerHTML += `<p class="text-muted small mb-2"><a href="${link.url}" class="text-decoration-none" target="_blank">${link.name}</a></p>`;
             });
+            //if there are no links then just say no links added yet.
         } else if (editProfileLinks) {
             editProfileLinks.innerHTML = '<p class="text-muted small">No links added yet.</p>';
         }
     });
 
     // Save links
-    saveLinksBtn.addEventListener('click', function() {
+    // Read the values from the input boxes and store them into an array
+    // Map() functionality https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+    saveLinksBtn.addEventListener('click', function() { //click listener waits for user to click on save
         const links = [
             { url: document.querySelector('#sl-link-1-url').value.trim(), name: document.querySelector('#sl-link-1-name').value.trim() },
             { url: document.querySelector('#sl-link-2-url').value.trim(), name: document.querySelector('#sl-link-2-name').value.trim() },
             { url: document.querySelector('#sl-link-3-url').value.trim(), name: document.querySelector('#sl-link-3-name').value.trim() }
-        ].filter(function(link) { return link.url; }).map(function(link) {
+        ].map(function(link) { //loop through the array, if the link entered does not start with http then add it. If we dont it will try to open from a file and it will fail, it needs http to go to an external site.
             if (!link.url.startsWith('http')) {
                 link.url = 'https://' + link.url;
             }
-            return link;
+            return link; //return updated link back into the array. If we dont return it map() will throw the modified version away.
         });
 
+        // send request to backend to save links array on the logged in users account
         fetch('http://127.0.0.1:8000/api/auth/me/update/', {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Content-Type': 'application/json', //sending json
+                'Authorization': 'Bearer ' + token //who am i
             },
-            body: JSON.stringify({ links: links })
+            body: JSON.stringify({ links: links }) //convert into json string so backend can read it
         })
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-            if (data.id) {
+        .then(function(response) { return response.json(); }) //convert response into javascript object
+        .then(function(user) {
+            if (user.id) { //if we are provided the id that means request to backend was succesfull so show message stating it worked
                 alert('Links saved!');
             }
         })
+        // if anything goes wrong show an error message
         .catch(function() {
             alert('Something went wrong');
         });
