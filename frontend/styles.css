@@ -285,3 +285,7 @@ textarea {
 .sl-settings-section.active {
     display: block;
 }
+
+.sl-profile-links a {
+    color: var(--sl-red);
+}
