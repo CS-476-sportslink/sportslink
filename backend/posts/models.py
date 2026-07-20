@@ -51,3 +51,15 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.user.email} commented on {self.post.id}'
+
+class SavedPost(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_posts')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='saved_posts')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post') #prevents duplicates from being saved
+    
+    def __str__(self):
+        return f'{self.user.email} saved {self.post.id}' #how it shows up in django admin
