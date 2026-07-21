@@ -57,7 +57,7 @@ if (postFeed) {
                                 <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
                                 <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
                                 <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
-                                <button class="btn btn-sm text-muted sl-save-btn"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
+                                <button class="btn btn-sm text-muted sl-save-btn" data-post-id="${post.id}"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
                             </div>
                         </div>
                     </div>
