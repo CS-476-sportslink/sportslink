@@ -60,4 +60,4 @@ class SavedPostView(APIView):
 
     def delete(self, request, post_id):
         SavedPost.objects.filter(user=request.user, post=post_id).delete()
-        return Response({'message': 'Post unsaved'}, status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
