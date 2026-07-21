@@ -141,9 +141,19 @@ document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function (link) 
 Once we get it we use it to update the page with their name, initials, role, bio. links, whatever is available and present on the current page.
  */
 const token = localStorage.getItem('access_token'); //gets the auth token from local storage
+//check if there is an id in the search bar. if not the userId is null and we fetch logged in user.
+const params = new URLSearchParams(window.location.search);
+const userId = params.get('id');
+
+//if user id in the url then we fetch that user. If there userId is null then there is no id in the search bar and we fetch the logged in user instead
+let profileUrl = 'http://127.0.0.1:8000/api/auth/me/'; //fetch logged in user
+//the null check to see if theres an id in search bar and make sure we are on profile page.
+if (userId && window.location.pathname.includes('profile.html')) {
+    profileUrl = `http://127.0.0.1:8000/api/auth/users/${userId}/`; //fetch the user using the user id instead of logged in user
+}
 //null check to prevent crashing
 if (token) {
-    fetch('http://127.0.0.1:8000/api/auth/me/', { //send an http request to the backend. At the specified URL, computer, PORT, endpoint that returns information
+    fetch(profileUrl, { //send an http request to the backend. At the specified endpoint that returns information
         headers: {
             'Authorization': 'Bearer ' + token //this proves to the backend who we are
         }

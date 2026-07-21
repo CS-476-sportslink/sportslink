@@ -32,8 +32,8 @@ if (postDetail) {
                         <div class="sl-post-avatar sl-avatar-player">${initials}</div>
                         <div>
                             <div class="d-flex align-items-center gap-3">
-                                <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
-                                <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
+                            <a href="profile.html?id=${post.user.id}" class="fw-semibold text-dark text-decoration-none">${post.user.first_name} ${post.user.last_name}</a>                                
+                            <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
                             </div>
                             <div class="text-muted small">
                                 <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
@@ -85,8 +85,7 @@ if (postDetail) {
                                 <div class="d-flex align-items-center gap-2 mb-2">
                                     <div class="sl-post-avatar sl-avatar-player sl-comment-inner-avatar">${initials}</div>
                                     <div>
-                                        <div class="fw-semibold small">${comment.user.first_name} ${comment.user.last_name}</div>
-                                        <div class="text-muted small"><span class="sl-badge-player me-1">${comment.user.role.charAt(0).toUpperCase() + comment.user.role.slice(1)}</span></div>
+                                    <a href="profile.html?id=${comment.user.id}" class="fw-semibold text-dark text-decoration-none">${comment.user.first_name} ${comment.user.last_name}</a>                                        <div class="text-muted small"><span class="sl-badge-player me-1">${comment.user.role.charAt(0).toUpperCase() + comment.user.role.slice(1)}</span></div>
                                     </div>
                                     <div class="text-muted small ms-auto">${new Date(comment.created_at).toLocaleDateString()}</div>
                                 </div>

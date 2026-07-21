@@ -3,13 +3,23 @@
 this may need to be altered after thinking about it the profile page shouldnt
 only show the logged in users. Anyone should be able to navigate to a users profile.
 */
+
+//This checks if there is a userid present in the search bar. If there is that means we are viewing someone elses profile
+//If there is no userid present then it means we are viewing our own profile
 const profilePostFeed = document.querySelector('#sl-profile-post-feed');
 //null check to avoid crashing
 if (profilePostFeed) {
     const token = localStorage.getItem('access_token');
 
+    //if user id in the url then we fetch that user. If there userId is null then there is no id in the search bar and we fetch the logged in user instead
+    let profileUrl = 'http://127.0.0.1:8000/api/auth/me/'; //fetch logged in user
+    //the null check to see if theres an id in search bar.
+    if (userId) { //we get this userId from the app.js file
+        profileUrl = `http://127.0.0.1:8000/api/auth/users/${userId}/`; //fetch the user using the user id instead of logged in user
+    }
+
     //fetch request to the backend to get the currently logged in user
-    fetch('http://127.0.0.1:8000/api/auth/me/', {
+    fetch(profileUrl, {
         headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(function(response) { return response.json(); }) //turn response into javascript object
