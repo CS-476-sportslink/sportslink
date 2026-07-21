@@ -120,8 +120,7 @@ if (postDetail) {
     })
     //if any of the above fails just send user to home page instead of continuing on the broken page.
     .catch(function() {
-        //window.location.href = 'home.html';
-
+        window.location.href = 'home.html';
     });
 }
 
