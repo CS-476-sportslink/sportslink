@@ -60,7 +60,7 @@ if (postFeed) {
                                         <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
                                     </div>
                                     <div class="text-muted small">
-                                        <span class="sl-badge-player me-1">${post.user.role === 'athlete' ? 'Athlete' : 'Coach'}</span>
+                                        <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
                                     </div>
                                 </div>
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
