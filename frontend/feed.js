@@ -53,6 +53,7 @@ if (postFeed) {
                                     <div class="small fw-semibold"><a href="${post.media_url}" target="_blank" class="text-decoration-none text-dark">Watch video</a></div>
                                 </div>
                             </div>` : ''}
+                            </a>
                             <div class="d-flex gap-1 pt-2">
                                 <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
                                 <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
@@ -60,10 +61,10 @@ if (postFeed) {
                                 <button class="btn btn-sm text-muted sl-save-btn" data-post-id="${post.id}"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
                             </div>
                         </div>
-                    </div>
-                </a>`;
+                    </div>`;
             postFeed.innerHTML += postHTML; //add postHTML to whatever is already in postFeed. Could be nothing but could be posts that have already been created.
         });
+        saveListeners();
     })
     //if any of the above breaks we display an error message, rather then jsut not doing anytihng
     .catch(function(error) {
@@ -118,4 +119,58 @@ if (createPostBtn) {
             alert('Something went wrong, please try again');
         });
     });
+}
+
+//we need to create a function so that we attatch the save post button listeners AFTER all the posts have been loaded, it is not working when they run at the same time
+/* Tried to call this function right below it and it didnt work. I moved the call to this function after we load in all the posts on line 67. Now works. */
+/* Save and unsave a post. When the save button is clicked we need to save it to our saved posts page.
+If the save button has already been clicked and we click it again we need to delete the post from the saved posts page
+Update the icon so it shows a saved state. */
+function saveListeners() {
+    console.log('saveListeners called');
+    console.log('save buttons found:',document.querySelectorAll('.sl-save-btn').length);
+    document.querySelectorAll('.sl-save-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) { //add click listener to the save icon
+            const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
+            const token = localStorage.getItem('access_token');
+            const icon = btn.querySelector('i');
+            const label = btn.querySelector('.sl-save-label') // Saved and saved text
+            if (btn.classList.contains('saved')) {
+                //this is for when a post is already saved. If clicked again we need to send delete request to backend to remove it from saved posts page.
+                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token } // who am i
+                })
+                .then(function() {
+                    //change the button so it doesnt show saved state anymore
+                    btn.classList.remove('saved');
+                    icon.classList.remove('bi-bookmark-fill');
+                    icon.classList.add('bi-bookmark');
+                    label.textContent = 'Save';
+                })
+                .catch(function() {
+                    alert('Failed to unsave post');
+                });
+            } else {
+                //when the post is not saved, send request to backend to save post.
+                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token } // who am i
+                })
+                .then(function(response) { return response.json(); }) //convert response into javascript object
+                .then(function(result) {
+                    if (result.message) {
+                        //show button is in saved state
+                        btn.classList.add('saved');
+                        icon.classList.remove('bi-bookmark');
+                        icon.classList.add('bi-bookmark-fill');
+                        label.textContent = 'Saved';
+                    }
+                })
+                .catch(function() {
+                    alert('Failed to save post');
+                });
+            }
+        });
+    });    
 }

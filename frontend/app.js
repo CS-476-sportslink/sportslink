@@ -45,29 +45,6 @@ document.querySelectorAll('.sl-like-btn').forEach(function (btn) {
 we look for all the save buttons present on the page.
 We listen for a click and once we recieve it we change the icon style
 to match what we are wanting */
-document.querySelectorAll('.sl-save-btn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-
-        const icon = btn.querySelector('i');
-        const label = btn.querySelector('.sl-save-label');
-        if (btn.classList.contains('saved')) {
-            btn.classList.remove('saved');
-            btn.classList.add('text-muted');
-            icon.classList.remove('bi-bookmark-fill');
-            icon.classList.add('bi-bookmark')
-            label.textContent = 'Save';
-        } else {
-            btn.classList.add('saved');
-            btn.classList.remove('text-muted');
-            icon.classList.remove('bi-bookmark');
-            icon.classList.add('bi-bookmark-fill');
-            label.textContent = 'Saved';
-        }
-    });
-});
-
 
 //Follow button functionality
 /* Same concept as both buttons above, we find each follow button, wait for a click through the event listener

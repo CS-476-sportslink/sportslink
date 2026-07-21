@@ -9,51 +9,62 @@ Frontend:
     - on the html page fetch and display all saved posts
     - put the functionality to make the save icon change when a user clicks on the save button */
 
-/* Save and unsave a post. When the save button is clicked we need to save it to our saved posts page.
-If the save button has already been clicked and we click it again we need to delete the post from the saved posts page
-Update the icon so it shows a saved state. */
-document.querySelectorAll('sl-save-btn').forEach(function(btn) {
-    btn.addEventListener('click', function(e) { //add click listener to the save icon
-        e.stopPropagation(); //stops the click from going up to the <a> tag and going into the post.
-        const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
-        const token = localStorage.getItem('access_token');
-        const icon = btn.querySelector('i');
-        const label = btn.querySelector('sl-save-label') // Saved and saved text
-        if (btn.classList.contains('saved')) {
-            //this is for when a post is already saved. If clicked again we need to send delete request to backend to remove it from saved posts page.
-            fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
-                method: 'DELETE',
-                headers: { 'Authorization': 'Bearer ' + token } // who am i
-            })
-            .then(function() {
-                //change the button so it doesnt show saved state anymore
-                btn.classList.remove('saved');
-                icon.classList.remove('bi-bookmark-fill');
-                icon.classList.add('bi-bookmark');
-                label.textContent = 'Save';
-            })
-            .catch(function() {
-                alert('Failed to unsave post');
-            });
-        } else {
-            //when the post is not saved, send request to backend to save post.
-            fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
-                method: 'POST',
-                headers: { 'Authorization': 'Bearer ' + token } // who am i
-            })
-            .then(function(response) { return response.json(); }) //convert response into javascript object
-            .then(function(result) {
-                if (result.message) {
-                    //show button is in saved state
-                    btn.classList.add('saved');
-                    icon.classList.remove('bi-bookmark');
-                    icon.classList.add('bi-bookmark-fill');
-                    label.textContent = 'Saved';
-                }
-            })
-            .catch(function() {
-                alert('Failed to save post');
-            });
+/* Display the saved posts. Very very similar to the feed in home.html, we just need to get the saved posts, and display
+them in a feed style. */
+const savedPosts = document.querySelector('#sl-saved-posts');
+if(savedPosts) {
+    const token = localStorage.getItem('access_token');
+    //request the backend to send us all posts logged in user has saved
+    fetch('http://127.0.0.1:8000/api/posts/saved/', {
+        headers: { 'Authorization': 'Bearer ' + token } // who am i
+    })
+    .then(function(response) { return response.json(); }) //convert backend response into javascript object
+    .then(function(posts) { 
+        //if there are no saved posts just show the user there is no saved posts
+        if (posts.length === 0) {
+            savedPosts.innerHTML = '<p class="text-muted text-center mt-4">No saved posts.</p>';
+            return; //do not continue as theres nothing to display
         }
+        //if there are posts, loop through all of them and display them on the page
+        posts.forEach(function(savedPost) {
+            const post = savedPost.post; //store the post details
+            const initials = post.user.first_name[0] + post.user.last_name[0];
+            savedPosts.innerHTML += `
+                <div class="card shadow-sm mb-4 sl-post-card">
+                    <a href="post.html?id=${post.id}" class="text-decoration-none text-dark">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <div class="sl-post-avatar sl-avatar-player">${initials}</div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
+                                        <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
+                                    </div>
+                                    <div class="text-muted small">
+                                        <span class="sl-badge-player me-1">${post.user.role === 'athlete' ? 'Athlete' : 'Coach'}</span>
+                                    </div>
+                                </div>
+                                <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
+                            </div>
+                            <p class="small mb-2">${post.body}</p>
+                            ${post.media_url ? `
+                            <div class="d-flex align-items-center gap-2 p-2 mb-2 sl-video-block">
+                                <div class="sl-play-btn">
+                                    <i class="bi bi-play-fill text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="small fw-semibold"><a href="${post.media_url}" target="_blank" class="text-decoration-none text-dark">Watch video</a></div>
+                                </div>
+                            </div>` : ''}
+                        </div>
+                    </a>
+                    <div class="d-flex gap-1 px-3 pb-2">
+                        <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
+                        <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
+                        <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
+                        <button class="btn btn-sm text-muted sl-save-btn" data-post-id="${post.id}"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
+                    </div>
+                </div>`;
+        });
     });
-});
+}
