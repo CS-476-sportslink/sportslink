@@ -36,7 +36,7 @@ if (postDetail) {
                                 <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
                             </div>
                             <div class="text-muted small">
-                                <span class="sl-badge-player me-1">${post.user.role === 'athlete' ? 'Athlete' : 'Coach'}</span>
+                                <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
                             </div>
                         </div>
                         <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
@@ -86,7 +86,7 @@ if (postDetail) {
                                     <div class="sl-post-avatar sl-avatar-player sl-comment-inner-avatar">${initials}</div>
                                     <div>
                                         <div class="fw-semibold small">${comment.user.first_name} ${comment.user.last_name}</div>
-                                        <div class="text-muted small"><span class="sl-badge-player me-1">${comment.user.role === 'athlete' ? 'Athlete' : 'Coach'}</span></div>
+                                        <div class="text-muted small"><span class="sl-badge-player me-1">${comment.user.role.charAt(0).toUpperCase() + comment.user.role.slice(1)}</span></div>
                                     </div>
                                     <div class="text-muted small ms-auto">${new Date(comment.created_at).toLocaleDateString()}</div>
                                 </div>

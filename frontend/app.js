@@ -167,7 +167,7 @@ if (token) {
         const userInfo = document.querySelector('#sl-current-user-info');
         //null check, if userInfo does not exist and crashes then this whole script crashes
         if (userInfo) {
-            userInfo.textContent = user.role === 'athlete' ? 'Athlete' : 'Coach' //If the users role is athlete then show Athlete else show Coach, will update when we implement School as an option for an account.
+            userInfo.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1); //Removed the ternery operator here, we need to show it this way as our way before only handled two roles. This way we can show whatever role is saved. We make the firs char uppercase and the slice joins everything from index 1 onwards.
         }
 
         // About me bio on the profile page
