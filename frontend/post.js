@@ -13,17 +13,35 @@ if (postDetail) {
     if (!postId) {
         window.location.href = 'home.html';
     }
+    // need to run the same checks as we did in app.js to see if the post is in saved state already or not
+    const savedPostIds = [];
+
+    //send request to backend to get saved post Ids so we can show them as saved on load or reload
+    //this fetch needs to be done first, we need to fill the array before we display the posts so we can show the proper saved state
+    fetch('http://127.0.0.1:8000/api/posts/saved/', {
+        headers: {
+            'Authorization': 'Bearer ' + token //who am i
+        }
+    })
+    .then(function(response) { return response.json(); }) //convert response into javascript object
+    .then(function(postsSaved) {
+        postsSaved.forEach(function(saved) {
+            savedPostIds.push(saved.post.id); //push id into array
+        });
 
     // Send a request to get that specific post from the backend using the postID
     // Django will route this to PostDetailView which queries PostgreSQL for the post with the same ID
-    fetch(`http://127.0.0.1:8000/api/posts/${postId}/`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
+        return fetch(`http://127.0.0.1:8000/api/posts/${postId}/`, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
     })
     // get the response and turn it into a javascript object
+    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
     .then(function(response) { return response.json(); })
     .then(function(post) {
+        const isSaved = savedPostIds.includes(post.id); // check if the post id is in the array
         const initials = post.user.first_name[0] + post.user.last_name[0];
         postDetail.innerHTML = `
             <div class="card shadow-sm mb-4">
@@ -53,11 +71,13 @@ if (postDetail) {
                     </div>` : ''}
                     <div class="d-flex gap-1 pt-2">
                         <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
-                        <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
-                        <button class="btn btn-sm text-muted sl-save-btn"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
+                        <button class="btn btn-sm text-muted sl-share-btn" data-post-id="${post.id}"><i class="bi bi-share p-1"></i>Share</button>
+                        <button class="btn btn-sm text-muted sl-save-btn ${isSaved ? 'saved' : ''}" data-post-id="${post.id}"><i class="bi ${isSaved ? 'bi-bookmark-fill' : 'bi-bookmark'} p-1"></i><span class="sl-save-label">${isSaved ? 'Saved' : 'Save'}</span></button>
                     </div>
                 </div>
             </div>`;
+            saveListeners();
+            shareListeners();
         // send request to backend to retrieve comments tied to this specific post id
         // Django will route this to CommentListCreateView which will query PostgreSQL for the comments tied to this postid
         fetch(`http://127.0.0.1:8000/api/posts/${postId}/comments/`, {
@@ -100,7 +120,8 @@ if (postDetail) {
     })
     //if any of the above fails just send user to home page instead of continuing on the broken page.
     .catch(function() {
-        window.location.href = 'home.html';
+        //window.location.href = 'home.html';
+
     });
 }
 
