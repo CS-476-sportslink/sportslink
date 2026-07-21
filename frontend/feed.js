@@ -79,13 +79,15 @@ if (postFeed) {
                             <div class="d-flex gap-1 pt-2">
                                 <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
                                 <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
-                                <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
+                                <button class="btn btn-sm text-muted sl-share-btn" data-post-id="${post.id}"><i class="bi bi-share p-1"></i>Share</button>
                                 <button class="btn btn-sm text-muted sl-save-btn ${isSaved ? 'saved' : ''}" data-post-id="${post.id}"><i class="bi ${isSaved ? 'bi-bookmark-fill' : 'bi-bookmark'} p-1"></i><span class="sl-save-label">${isSaved ? 'Saved' : 'Save'}</span></button>
                             </div>
                         </div>
                     </div>`;
         });
+        //listener functions to attatch btn listeners after posts have loaded
         saveListeners();
+        shareListeners();
     })
     //if any of the above breaks we display an error message, rather then jsut not doing anytihng
     .catch(function(error) {
@@ -149,7 +151,7 @@ If the save button has already been clicked and we click it again we need to del
 Update the icon so it shows a saved state. */
 function saveListeners() {
     document.querySelectorAll('.sl-save-btn').forEach(function(btn) {
-        btn.addEventListener('click', function(e) { //add click listener to the save icon
+        btn.addEventListener('click', function() { //add click listener to the save icon
             const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
             const token = localStorage.getItem('access_token');
             const icon = btn.querySelector('i');
@@ -196,4 +198,29 @@ function saveListeners() {
             }
         });
     });    
+}
+
+/* Now we need to create a function that pretty much does the exact same thing as the saveListeners function.
+We need to make a function for the share button and then attatch them after all the posts have already been loaded onto the page.
+ */
+function shareListeners() {
+    //find every share button that was created by the post cards
+    document.querySelectorAll('.sl-share-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
+            const postUrl = window.location.origin + '/post.html?id=' + postId; //get full url to post
+
+            // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText
+            //writeText's result gets given to .then() same concept as fetch.
+            navigator.clipboard.writeText(postUrl) //copy the url to users clipboard
+            //once has copied to clipboard let user know
+            .then(function() {
+                alert('Link copied to clipboard.');
+            })
+            //if something fails tell the user and give the link so they can copy manually
+            .catch(function(){
+                alert('Could not copy link, please copy it manually: ' + postUrl);
+            });
+        });
+    });
 }
