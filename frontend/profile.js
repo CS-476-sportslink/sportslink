@@ -25,6 +25,38 @@ if (profilePostFeed) {
     .then(function(response) { return response.json(); }) //turn response into javascript object
     //now that we have the user send a request to the backend to get all the posts made by the user using their id.
     .then(function(user) {
+        const contact = document.querySelector('#sl-contact-btn');
+        if (contact) {
+            // if there is no userId we are on our own profile so we dont need to see the contact button
+            if (!userId) {
+                contact.style.display = 'none';
+            } else {
+                // this runs when we are on someone elses profile. We need to fetch logged in user so we can check their role
+                fetch('http://127.0.0.1:8000/api/auth/me/', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                })
+                .then(function(response) { return response.json(); }) //convert response to javascript object
+                .then(function(me) { // now we can access logged in users information
+                    // if our id matches the users id we dont need to show the contact button because it is us.
+                    //Also only show the button if the logged in user is a coach or a school.
+                    // we need to check our own id because if we navigate to our own profile by going to our post and clicking a name our id shows up in the url.
+                    if (me.id !== user.id && (me.role === 'coach' || me.role === 'school')) {
+                        contact.setAttribute('href', 'mailto:' + user.email);
+                        contact.style.display = 'inline-block';
+                    } else {
+                        contact.style.display = 'none'; //hide button for athletes.
+                    }
+                    const editProfileBtn = document.querySelector('#sl-edit-profile-btn');
+                    if(editProfileBtn) {
+                        if (me.id !== user.id) { //same check as before, if we are not on our own profile we do not want to see the edit profile button
+                            editProfileBtn.style.display = 'none';
+                        } else {
+                            editProfileBtn.style.display = 'inline-block'
+                        }
+                    }
+                });
+            }
+        }
         return fetch(`http://127.0.0.1:8000/api/posts/?user=${user.id}`, {
             headers: { 'Authorization': 'Bearer ' + token }
         });

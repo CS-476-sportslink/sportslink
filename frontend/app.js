@@ -160,6 +160,12 @@ if (token) {
     })
     .then(function(response) { return response.json(); })
     .then(function(user) {
+        // to avoid issues in the future regarding id showing or not showing in url depending on how you accessed the profile.
+        // set the id in our own profile url
+        const profileURL = document.querySelector('#sl-my-profile');
+        if (profileURL) {
+            profileURL.setAttribute('href', 'profile.html?id=' + user.id); //find href and change the value
+        }
         // gets the users initials by taking index 0 of their first and last name
         const initials = user.first_name[0] + user.last_name[0]
 
