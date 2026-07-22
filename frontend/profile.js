@@ -40,9 +40,6 @@ if (profilePostFeed) {
                     // if our id matches the users id we dont need to show the contact button because it is us.
                     //Also only show the button if the logged in user is a coach or a school.
                     // we need to check our own id because if we navigate to our own profile by going to our post and clicking a name our id shows up in the url.
-                    console.log('me.id:', me.id);
-                    console.log('user.id:', user.id);
-                    console.log('are they equal:', me.id === user.id);
                     if (me.id !== user.id && (me.role === 'coach' || me.role === 'school')) {
                         contact.setAttribute('href', 'mailto:' + user.email);
                         contact.style.display = 'inline-block';
