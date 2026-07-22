@@ -5,7 +5,7 @@ if (loginForm) {
     loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        const email = document.querySelector('#uname').value;
+        const email = document.querySelector('#email').value;
         const password = document.querySelector('#pswd').value;
 
         fetch('http://127.0.0.1:8000/api/token/', {
