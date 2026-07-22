@@ -8,9 +8,11 @@ class User(AbstractUser):
 
     ROLE_ATHLETE = 'athlete'
     ROLE_COACH = 'coach'
+    ROLE_SCHOOL = 'school'
     ROLE_CHOICES = [
         (ROLE_ATHLETE, 'Athlete'),
         (ROLE_COACH, 'Coach'),
+        (ROLE_SCHOOL, 'School'),
     ]
 
 

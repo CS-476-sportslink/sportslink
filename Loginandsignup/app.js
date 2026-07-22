@@ -81,6 +81,7 @@ if (roleForm) {
         })
         .then(function(response) { return response.json(); })
         .then(function(data) {
+            console.log(data);
             if (data.email) {
                 return fetch('http://127.0.0.1:8000/api/token/', {
                     method: 'POST',
