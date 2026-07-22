@@ -14,11 +14,10 @@
     </head>
     <body>
         <!--navbar-->
-        <nav class="navbar navbar-expand-lg px-3 py-2 sl-navbar">
+        <nav class="navbar navbar-expand-lg w-100 py-2 sl-navbar">
             <a class="navbar-brand fw-bold text-white d-flex align-items-center" href="#">
                 <img src="images/white-maple-leaf.png" alt="maple leaf" class="sl-logo">Sportslink
             </a>
-            <a class="nav-link text-white d-flex align-items-end" href="#">Home</a>
         </nav>
 
         <!--main page-->
@@ -26,39 +25,81 @@
             <div class="row">
             
                 <!--Left Sidebar-->
-                <div class="col-2 sidebar">
+                <div class="col-lg-6 d-none d-md-block p-0">
+                    <!--Image on the leftside of the column-->
+                    <img src="img/sports.jpg" class="vh-100 w-100" alt="Sports image ">
                 </div>                
 
                 <!--Signup Form-->
-                <div class="col-10 pt-4 align-items-center ">
+                <div class="col-lg-6 mt-5 align-items-center ">
                     
-                    <div class="d-flex justify-content-center">
-                        <h1 class=" h1 fw-bold text-dark">Signup</h1>
-                    </div>
                         <div class="d-flex justify-content-center">
-                            <form action="" method="POST" class="Sform border-2 rounded">
+                            <form action="role.html" method="POST" class="needs-validation" novalidate >
                                 <div class="text-center mb-3">
-                                <h2 class="fs-1">Create your acount</h2>
+                                <!--Create your acount header-->
+                                <h1 class="fs-1">Create your acount</h1>
                                 </div>    
+                                <!--create another row inside the form to place two inputs horizontally-->
+                                  <div class="row">
+                                    <!--split the row in half-->
+                                    <div class="col-6 my-2">
+                                        <!--Firstname input-->
+                                        <label for="fname" class="form-label">Firstname: </label>
+                                        <input type="text" class="form-control" id="fname" placeholder="Enter Firstname" required autofocus>
+                                        <div class="invalid-feedback">
+                                            Please enter your firstname
+                                        </div>
+                                    </div>
 
-                                <div class="mb-2 ">
-                                     <label for="fname" class="form-label">Firstname: </label>
-                                    <input type="fname" class="form-control" id="fname" placeholder="Enter Firstname" required autofocus>
-                                
-                                    <label for="lname" class="form-label">Lastname: </label>
-                                    <input type="lname" class="form-control" id="lname" placeholder="Enter Lastname" required autofocus>
-
+                                    <div class="col-6 my-2">
+                                        <!--Lastname input-->
+                                        <label for="lname" class="form-label">Lastname: </label>
+                                        <input type="text" class="form-control" id="lname" placeholder="Enter Lastname" required autofocus>
+                                        <div class="invalid-feedback">
+                                            Please enter your lastname
+                                        </div>
+                                    </div> 
+                                  </div>
+                                  
+                                  
+                                <div class="my-2">
+                                    <!--Email Address input-->
                                     <label for="exampleEmail" class="form-label">Email address: </label>
                                     <input type="email" class="form-control" id="exampleEmail" placeholder="Enter Email address" required autofocus>
-
+                                    <div class="invalid-feedback">
+                                        Please enter your email address
+                                    </div>
+                                </div>
+                                <div class="my-2">
+                                    <!--Password input-->
                                     <label for="inputPswd" class="form-label">Password: </label>
-                                    <input type="password" class="form-control" id="inputPswd" placeholder="Password" autofocus>
+                                    <input type="password" class="form-control" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\w\s]).{8,}$"  id="inputPswd" placeholder="Password (8 characters minimum)" autofocus>
+                                    <div class="invalid-feedback">
+                                        Please enter your password
+                                    </div>
                                 </div>
 
-                                    <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn-signup text-center mt-2 text-white" href="#">Sign In </button>
+                                    
+                                    <div class="d-flex justify-content-end mt-3">
+                                    <!--Submit Button-->
+                                    <button type="submit" class="btn-signup text-center mt-4 text-white border-1 rounded-2" href="#">Create account </button>
                                     </div>
-                                
+
+                                    <p class="text-center my-1">or</p>
+
+                                    <!--Signup with google-->
+                                    <div class="d-flex justify-content-center align-items-center text-center">
+                                            <button class="google-btn btn-outline-secondary border-1 rounded-2 mt-1 pt-1 bg-white " id="btn-google">
+                                                <img src="img/google.png" class="img-thumbnail border-0 img" alt="Google Logo">
+                                                <span>Continue with Google</span>
+                                            </button>
+                                    </div>
+                                    
+                                    <!--link to login page-->
+                                    <p class="text-center mt-3">
+                                        Already have an account?
+                                        <a href="login.html" class="">Sign in</a>
+                                    </p>
 
                         </form>
         

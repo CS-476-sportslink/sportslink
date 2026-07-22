@@ -18,7 +18,6 @@
                     <a class="navbar-brand fw-bold text-white d-flex align-items-center" href="#">
                     <img src="images/white-maple-leaf.png" alt="maple leaf" class="sl-logo">Sportslink
                     </a>
-                    <a class="nav-link text-white d-flex align-items-end" href="#">Home</a>
                 </nav>
 
                     <!---Main page-->
@@ -26,35 +25,74 @@
                         <div class="row">
 
                             <!---sidebar-->
-                            <div class="col-2 sidebar">
+                            <div class="col-1 sidebar">
                             </div>
 
                             <!---Form Content-->
-                            <div class="col-10 pt-5 align-items-center">
+                            <div class="col-11 pt-5 align-items-center">
 
-                                <div class="d-flex justify-content-center">
-                                    <h1 class=" h1 fw-bold text-dark mt-5 mb-3 ">Login</h1>
-                                </div>
+            
 
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <form action="" method="POST" class="Lform border-2 rounded">
+                                    <form action="" method="POST" class="needs-validation" novalidate>
+                                        
+                                        
+                                        <h1 class=" h1 fw-bold text-dark mt-1 mb-3 text-center">Welcome Back</h1>
+                                        <p class="my-1 text-body-secondary">Please enter your details</p>
+                                        <div class="mb-3">
+                                            <!--Email input-->
+                                            <label for="email" class="form-label visually-hidden"> Email: </label>
+                                            <input type="text" class="form-control mt-4" id="email" placeholder="Enter email" required auto>
+                                            <div class="invalid-feedback">
+                                                Please enter your email address
+                                            </div>
+                                        </div>
 
                                         <div class="mt-2">
-                                        <label for="uname" class="form-label"> Username: </label>
-                                        <input type="text" class="form-control" id="uname" placeholder="Enter Username" required auto>
-
-                                        <label for="pswd" class="form-label"> Password: </label>
-                                        <input type="password" class="form-control" id="pswd" placeholder="Enter Password" required auto>
-                                        </div>
-                                        <div class="checkbox mt-1">
-                                            <label>
-                                                <input type="checkbox" value="remember-me">Remember me
-                                            </label>
+                                            <!--Password input-->
+                                            <label for="pswd" class="form-label visually-hidden"> Password: </label>
+                                            <input type="password" class="form-control" id="pswd" placeholder="Enter Password" required auto>
+                                            <div class="invalid-feedback">
+                                                Please enter your password
+                                            </div>
                                         </div>
 
+                                        
+                                               
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                                 <!--remember me checkbox-->
+                                                <label>
+                                                    <input type="checkbox" value="remember-me" class="m-1">Remember me
+                                                </label>
+                                            
+                                                <!--Forget Password link-->
+                                                <div class="float-end">
+                                                    <span class="pwsd"><a href="" class=" text-decoration-none">Forgot Password</a></span>
+                                                </div>
+                                        </div>
+
+                                       
+
+                                        <!--Login Button-->
                                         <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn-login text-center mt-2 text-white"><b>Login</b></button>
-                                        </div>    
+                                        <button type="submit" class="btn-login btn-outline-secondary border-1 rounded-2 mt-4 text-white" href="#">Login</button>
+                                        </div> 
+                                        
+                                        <p class="text-center my-1">or</p>
+
+                                        <!--login with Google Button-->
+                                        <div class="d-flex justify-content-center align-items-center text-center">
+                                            <button class="btn-google btn-outline-secondary border-1 rounded-2 mt-1 pt-1 bg-white " id="btn-google">
+                                                <img src="img/google.png" class="img-thumbnail border-0 img" alt="Google Logo">
+                                                <span>Continue with Google</span>
+                                            </button>
+                                        </div>
+                                        
+                                        <!--link to signup page-->
+                                    <p class="text-center mt-3">
+                                        Dont't have an account?
+                                        <a href="signup.html" class="text-decoration-none">Signup</a>
+                                    </p>
                                     </form>
                                 </div>
                             </div>
