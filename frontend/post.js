@@ -33,7 +33,7 @@ if (postDetail) {
                         <div>
                             <div class="d-flex align-items-center gap-3">
                                 <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
-                                <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
+                                <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn" data-user-id="${post.user.id }">Follow</button>
                             </div>
                             <div class="text-muted small">
                                 <span class="sl-badge-player me-1">${post.user.role === 'athlete' ? 'Athlete' : 'Coach'}</span>
