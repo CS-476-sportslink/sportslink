@@ -25,14 +25,15 @@
                         <div class="row">
 
                             <!---sidebar-->
-                            <div class="col-2 sidebar">
+                            <div class="col-1 sidebar">
                             </div>
+                            
 
                             <!---Main Content-->
-                            <div class="col-10 pt-5 align-items-center">
+                            <div class="col-11 pt-5 align-items-center">
 
                                 <div class="d-flex justify-content-center align-items-center ">
-                                    <div class="Sform border-2 rounded px-5 mt-5">
+                                    <div class=" px-5 pb-5">
 
                                         <!--Upload Profile Picture-->
                                         <div class="text-center mb-3">
@@ -45,80 +46,85 @@
                                         </div>
 
                                         <!--modal trigger button for bio-->
-                                            <div class="d-flex flex-column gap-3 mx-auto mb-3" role="group" >
-                                                <input type="radio" id="bio" class="btn-check" name="writeBio" value="Bio">
-                                                <label class="btn btn-outline-dark rounded-3 py-2 text-center" for="bio" data-bs-toggle="modal" data-bs-target="#bio-modal">Bio</label>
-                                            </div> 
+                                                <button type="button" class="btn d-flex flex-column mb-3 btn-outline-secondary text-dark rounded-3 py-2 w-100 text-center"  data-bs-toggle="modal" data-bs-target="#bioModal">
+                                                Bio
+                                                </button>
                                             
                                             
                                         <!--modal trigger button for Sports-->
-                                             <div class="d-flex flex-column gap-3 mx-auto mb-3" role="group" >
-                                                <input type="radio" id="sport" class="btn-check" name="choose-sports" value="Sports">
-                                                <label class="btn btn-outline-dark rounded-3 py-2 text-center" for="sport" data-bs-toggle="modal" data-bs-target="#sport-modal">Sport</label>
-                                            </div> 
-                                        
-
+                                                <button type="button" class="btn d-flex flex-column mb-3 btn-outline-secondary text-dark rounded-3 py-2 w-100 text-center"  data-bs-toggle="modal" data-bs-target="#sportModal"> 
+                                                Sports
+                                                </button>
+                        
                                             
                                             <!--Submit button-->
                                             <div class="d-flex justify-content-end">
-                                                 <button type="submit" class="btn-signup text-center mt-3 text-white" href="#"><b>Submit</b></button>
+                                                 <button type="submit" class="btn-signup text-center mt-3 py-2 text-white border-1 rounded-2" href="#"><b>Submit</b></button>
                                             </div>
-                                        </form>
+
+                                    </div>
 
                                           
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
                 <!--Modal for bio-->
-                <div class="modal-fade" id="bio-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
-                    <div class="modal-dialog">
+                <div class="modal fade" id="bioModal" tabindex="-1" aria-labelledby="modal-bio" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <!--html wrapper that styles and contain header, body and footer-->
                         <div class="modal-content">
+                            <!--Modal Header-->
                             <div class="modal-header">
                                 <h5 class="modal-title" id="modal-title">Biography</h5>
-                                <button type="button" class="btn-close" data-dismiss="modal"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
+                            <!--Modal Body-->
                             <div class="modal-body">
                                 <form>
                                     <div class="form-group mb-3">
                                         <label for="biography" class="col-form-label">Write about yourself!</label>
-                                        <input type="text" class="form-control" id="biography"> 
+                                        <input type="text" class="form-control text-area" row="3" id="modal-bio" aria-placeholder="Write about yourself!"> 
                                     </div>
                                 </form>
                             </div>
 
+                            <!--Modal Footer-->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-dark text-center rounded-2" data-dismiss="modal">close</button>
+                                <button type="button" class="btn btn-outline-dark text-center rounded-2" data-bs-dismiss="modal">close</button>
                                 <button type="button" class="btn btn-outline-dark text-center rounded-2 mx-3"> Save changes</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
+
                 <!--Modal for sport-->
-                <!--Modal for bio-->
-                <div class="modal-fade" id="sport-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
-                    <div class="modal-dialog">
+                <div class="modal fade" id="sportModal" tabindex="-1" aria-labelledby="modal-sport" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <!--html wrapper that styles and contain header, body and footer-->
                         <div class="modal-content">
+                            <!--Modal Header-->
                             <div class="modal-header">
                                 <h5 class="modal-title" id="modal-title">Sports</h5>
-                                <button type="button" class="btn-close" data-dismiss="modal"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
 
+                            <!--Modal body-->
                             <div class="modal-body">
                                 <form>
                                     <div class="form-group mb-3">
                                         <label for="Sports" class="col-form-label">Which Sports do you play?</label>
-                                        <input type="text" class="form-control" id="Sports"> 
+                                        <input type="text" class="form-control" row="3" id="modal-sport" aria-placeholder="Enter what sports you play"> 
                                     </div>
                                 </form>
                             </div>
 
+                            <!--Modal footer-->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-dark text-center rounded-2" data-dismiss="modal">close</button>
+                                <button type="button" class="btn btn-outline-dark text-center rounded-2" data-bs-dismiss="modal">close</button>
                                 <button type="button" class="btn btn-outline-dark text-center rounded-2 mx-3"> Save changes</button>
                             </div>
                         </div>
