@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from posts.models import Post, Comment, SavedPost
-from posts.serializers import PostSerializer, CommentSerializer, SavedPostSerializer
+from posts.models import Post, Comment, SavedPost, PostLike
+from posts.serializers import PostSerializer, CommentSerializer, SavedPostSerializer, LikedPostSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -61,3 +61,18 @@ class SavedPostView(APIView):
     def delete(self, request, post_id):
         SavedPost.objects.filter(user=request.user, post=post_id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+#
+
+class LikedPostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        liked = PostLike.objects.filter(user=request.user) # find all the saved posts from the logged in user
+        serializer = LikedPostSerializer(liked, many=True) #many lets us return a list instead of one item
+        return Response(serializer.data) # convert posts into json. The other views do this for us but not APIView
+
+    def post(self, request, post_id):
+        post = Post.objects.get(pk=post_id)
+        PostLike.objects.get_or_create(user=request.user, post=post)
+        return Response({'message' : 'Post Liked'}, status=status.HTTP_201_CREATED)

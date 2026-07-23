@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from posts.models import Post, Comment, SavedPost
+from posts.models import Post, Comment, SavedPost, PostLike
 from users.models import User
 
 class PostUserSerializer(serializers.ModelSerializer):
@@ -29,5 +29,13 @@ class SavedPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SavedPost
+        fields = ['id', 'post', 'created_at']
+        read_only_fields = ['id', 'created_at'] #django sets these do not let anything write to them
+
+class LikedPostSerializer(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True) #return all the post details, but dont let anything write to it.
+
+    class Meta:
+        model = PostLike
         fields = ['id', 'post', 'created_at']
         read_only_fields = ['id', 'created_at'] #django sets these do not let anything write to them
