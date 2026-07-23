@@ -14,9 +14,11 @@ if (saveProfileBtn) {
         //grab the location of these input boxes.
         const nameField = document.querySelector('#sl-profile-name');
         const bioField = document.querySelector('#sl-profile-bio');
+        const sportField = document.querySelector('#sl-profile-sport');
         //from information returned from the backend set these input values to the users name and bio if the user has a bio.
         if (nameField) nameField.value = user.first_name + ' ' + user.last_name;
         if (bioField) bioField.value = user.bio || '';
+        if (sportField) sportField.value = user.sport || '';
     });
 
     saveProfileBtn.addEventListener('click', function() { //add a click listener to the save button
@@ -37,6 +39,7 @@ if (saveProfileBtn) {
                 first_name: firstName,
                 last_name: lastName,
                 bio: document.querySelector('#sl-profile-bio').value.trim(),
+                sport: document.querySelector('#sl-profile-sport').value.trim(),
             })
         })
         .then(function(response) { return response.json(); }) //convert response into javascript object
