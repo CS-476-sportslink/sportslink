@@ -8,9 +8,11 @@ class User(AbstractUser):
 
     ROLE_ATHLETE = 'athlete'
     ROLE_COACH = 'coach'
+    ROLE_SCHOOL = 'school'
     ROLE_CHOICES = [
         (ROLE_ATHLETE, 'Athlete'),
         (ROLE_COACH, 'Coach'),
+        (ROLE_SCHOOL, 'School'),
     ]
 
 
@@ -28,6 +30,7 @@ class User(AbstractUser):
     province = models.CharField(max_length=100, blank=True)
     bio = models.TextField(blank=True)
     links = models.JSONField(default=list, blank=True)
+    sport = models.CharField(max_length=100, blank=True)
 
     def get_full_name(self):
         if self.first_name and self.last_name:

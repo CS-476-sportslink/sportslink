@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from posts.models import Post, Comment
+from posts.models import Post, Comment, SavedPost
 from users.models import User
 
 class PostUserSerializer(serializers.ModelSerializer):
@@ -23,3 +23,11 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'user', 'body', 'created_at']
         read_only_fields = ['id', 'user', 'created_at']
+
+class SavedPostSerializer(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True) #return all the post details, but dont let anything write to it.
+
+    class Meta:
+        model = SavedPost
+        fields = ['id', 'post', 'created_at']
+        read_only_fields = ['id', 'created_at'] #django sets these do not let anything write to them

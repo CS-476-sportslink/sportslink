@@ -45,29 +45,6 @@ document.querySelectorAll('.sl-like-btn').forEach(function (btn) {
 we look for all the save buttons present on the page.
 We listen for a click and once we recieve it we change the icon style
 to match what we are wanting */
-document.querySelectorAll('.sl-save-btn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-
-        const icon = btn.querySelector('i');
-        const label = btn.querySelector('.sl-save-label');
-        if (btn.classList.contains('saved')) {
-            btn.classList.remove('saved');
-            btn.classList.add('text-muted');
-            icon.classList.remove('bi-bookmark-fill');
-            icon.classList.add('bi-bookmark')
-            label.textContent = 'Save';
-        } else {
-            btn.classList.add('saved');
-            btn.classList.remove('text-muted');
-            icon.classList.remove('bi-bookmark');
-            icon.classList.add('bi-bookmark-fill');
-            label.textContent = 'Saved';
-        }
-    });
-});
-
 
 //Follow button functionality
 /* Same concept as both buttons above, we find each follow button, wait for a click through the event listener
@@ -215,15 +192,31 @@ document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function (link) 
 Once we get it we use it to update the page with their name, initials, role, bio. links, whatever is available and present on the current page.
  */
 const token = localStorage.getItem('access_token'); //gets the auth token from local storage
+//check if there is an id in the search bar. if not the userId is null and we fetch logged in user.
+const params = new URLSearchParams(window.location.search);
+const userId = params.get('id');
+
+//if user id in the url then we fetch that user. If there userId is null then there is no id in the search bar and we fetch the logged in user instead
+let profileUrl = 'http://127.0.0.1:8000/api/auth/me/'; //fetch logged in user
+//the null check to see if theres an id in search bar and make sure we are on profile page.
+if (userId && window.location.pathname.includes('profile.html')) {
+    profileUrl = `http://127.0.0.1:8000/api/auth/users/${userId}/`; //fetch the user using the user id instead of logged in user
+}
 //null check to prevent crashing
 if (token) {
-    fetch('http://127.0.0.1:8000/api/auth/me/', { //send an http request to the backend. At the specified URL, computer, PORT, endpoint that returns information
+    fetch(profileUrl, { //send an http request to the backend. At the specified endpoint that returns information
         headers: {
             'Authorization': 'Bearer ' + token //this proves to the backend who we are
         }
     })
     .then(function(response) { return response.json(); })
     .then(function(user) {
+        // to avoid issues in the future regarding id showing or not showing in url depending on how you accessed the profile.
+        // set the id in our own profile url
+        const profileURL = document.querySelector('#sl-my-profile');
+        if (profileURL) {
+            profileURL.setAttribute('href', 'profile.html?id=' + user.id); //find href and change the value
+        }
         // gets the users initials by taking index 0 of their first and last name
         const initials = user.first_name[0] + user.last_name[0]
 
@@ -241,7 +234,7 @@ if (token) {
         const userInfo = document.querySelector('#sl-current-user-info');
         //null check, if userInfo does not exist and crashes then this whole script crashes
         if (userInfo) {
-            userInfo.textContent = user.role === 'athlete' ? 'Athlete' : 'Coach' //If the users role is athlete then show Athlete else show Coach, will update when we implement School as an option for an account.
+            userInfo.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1); //Removed the ternery operator here, we need to show it this way as our way before only handled two roles. This way we can show whatever role is saved. We make the firs char uppercase and the slice joins everything from index 1 onwards.
         }
 
         // About me bio on the profile page
@@ -296,6 +289,87 @@ if (logoutBtn) {
         .catch(function() {
             localStorage.clear();
             window.location.href = '../Loginandsignup/login.html';
+        });
+    });
+}
+
+//we need to create a function so that we attatch the save post button listeners AFTER all the posts have been loaded, it is not working when they run at the same time
+/* Tried to call this function right below it and it didnt work. I moved the call to this function after we load in all the posts on line 67. Now works. */
+/* Save and unsave a post. When the save button is clicked we need to save it to our saved posts page.
+If the save button has already been clicked and we click it again we need to delete the post from the saved posts page
+Update the icon so it shows a saved state. */
+function saveListeners() {
+    document.querySelectorAll('.sl-save-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { //add click listener to the save icon
+            const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
+            const token = localStorage.getItem('access_token');
+            const icon = btn.querySelector('i');
+            const label = btn.querySelector('.sl-save-label') // Saved and saved text
+            if (btn.classList.contains('saved')) {
+                //this is for when a post is already saved. If clicked again we need to send delete request to backend to remove it from saved posts page.
+                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                    method: 'DELETE',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token 
+                    } // who am i
+                })
+                .then(function() {
+                    //change the button so it doesnt show saved state anymore
+                    btn.classList.remove('saved');
+                    icon.classList.remove('bi-bookmark-fill');
+                    icon.classList.add('bi-bookmark');
+                    label.textContent = 'Save';
+                })
+                .catch(function() {
+                    alert('Failed to unsave post');
+                });
+            } else {
+                //when the post is not saved, send request to backend to save post.
+                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token 
+                    } // who am i
+                })
+                .then(function(response) { return response.json(); }) //convert response into javascript object
+                .then(function(result) {
+                    if (result.message) {
+                        //show button is in saved state
+                        btn.classList.add('saved');
+                        icon.classList.remove('bi-bookmark');
+                        icon.classList.add('bi-bookmark-fill');
+                        label.textContent = 'Saved';
+                    }
+                })
+                .catch(function() {
+                    alert('Failed to save post');
+                });
+            }
+        });
+    });    
+}
+
+/* Now we need to create a function that pretty much does the exact same thing as the saveListeners function.
+We need to make a function for the share button and then attatch them after all the posts have already been loaded onto the page.
+ */
+function shareListeners() {
+    //find every share button that was created by the post cards
+    document.querySelectorAll('.sl-share-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
+            const postUrl = window.location.origin + '/post.html?id=' + postId; //get full url to post
+
+            // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText
+            //writeText's result gets given to .then() same concept as fetch.
+            navigator.clipboard.writeText(postUrl) //copy the url to users clipboard
+            //once has copied to clipboard let user know
+            .then(function() {
+                alert('Link copied to clipboard.');
+            })
+            //if something fails tell the user and give the link so they can copy manually
+            .catch(function(){
+                alert('Could not copy link, please copy it manually: ' + postUrl);
+            });
         });
     });
 }

@@ -219,3 +219,4 @@ __marimo__/
 .DS_Store
 frontend/firebase-tools-instant-win.exe
 firebase-tools-instant-win.exe
+**/.DS_Store

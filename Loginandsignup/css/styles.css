@@ -17,7 +17,7 @@ body {
 }
 
 /*Navigation bar*/
-.navbar{
+.sl-navbar{
     background: var(--sl-red);
     border-bottom: 3px solid var(--sl-red-dark);
     height:75px;
@@ -37,42 +37,72 @@ body {
     overflow-y: auto;
 }
 
-/*Main login form*/
-.Sform{
-    border: 2px solid black;
-    padding: 24px; 
-    max-width: 500px;
-
-}
-
-.Lform{
-    border: 2px solid black;
-    padding: 24px; 
-    max-width: 500px;
-}
 
 /*Login button*/
 .btn-login{
     background: var(--sl-red);
-    border-color: 1px solid white;
-    border-radius: 8px;
-    padding: 10px 20px;
+    padding: 5px 170px;
+}
+
+.btn-login:hover{
+    background: var(--sl-red-dark);
+    border-color: #d8d5ea;
 }
 
 /*Signup button*/
 .btn-signup{
     background: var(--sl-red);
-    border-color: 1px;
-    border-radius: 8px;
-    padding: 10px 20px;      
+    padding: 5px 170px;      
 }
 
+/*Hover effect for signup button*/
+.btn-signup:hover{
+    background: var(--sl-red-dark);
+    border-color: #d8d5ea;
+}
+
+/*upload image icon*/
 .rounded-circle{
     width: 100px;
     height: 100px;
     background-color: gray;
 
 }
+
+.text-area{
+    min-height: 150px;
+}
+
+/*Login Google button*/
+.btn-google{
+    padding: 0px 95px; 
+
+}
+
+/*Hover effect for login google button*/
+.btn-google:hover{
+    background: lightgrey;
+    border-color: #d8d5ea;
+}
+
+/*Signup Google Button*/
+.google-btn{
+    padding: 0px 130px; 
+    
+}
+
+/*Hover effect for signup google button*/
+.google-btn:hover{
+    background: lightgrey;
+    border-color: #d8d5ea;
+}
+
+/*image*/
+.img{
+    max-width: 30px;
+    max-height: 30px;
+}
+
 
 
 
