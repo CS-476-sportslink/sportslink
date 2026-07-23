@@ -291,8 +291,3 @@ if (saveLinksBtn) {
         });
     });
 }
-
-/* For this to work we need to change the users name div in feed.js to a <a> tag with link containing the user id.
-Then in post.js we need to do the exact same thing so a user can click on the users profile and be taken there properly. On both the posts and the comments.
-In this file we need to read the id from the url, send a fetch request to backend to get the users data. And then populate the profile page with the users information we pulled from the backend. Should be pretty similar to fetching our own
-profile information, just using the users id to get the information instead of the currently logged on user. */
