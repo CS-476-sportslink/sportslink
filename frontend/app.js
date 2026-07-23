@@ -373,3 +373,37 @@ function shareListeners() {
         });
     });
 }
+
+// Load followers count
+const followersCount = document.querySelector('.sl-followers-count');
+if (followersCount) {
+    const token = localStorage.getItem('access_token');
+
+    fetch('http://127.0.0.1:8000/api/connections/?status=accepted', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(connections) {
+        // Get current user id first
+        fetch('http://127.0.0.1:8000/api/auth/me/', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(me) {
+            // Followers are accepted connections where you are the receiver
+            const followers = connections.filter(function(conn) {
+                return conn.receiver.id === me.id;
+            });
+            followersCount.textContent = followers.length;
+
+            // Following are accepted connections where you are the initiator
+            const following = connections.filter(function(conn) {
+                return conn.initiator.id === me.id;
+            });
+            if (followingCount) followingCount.textContent = following.length;
+        });
+    })
+    .catch(function() {
+        followersCount.textContent = '0';
+    });
+}
