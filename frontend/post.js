@@ -60,7 +60,8 @@ if (postDetail) {
                         <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
                     </div>
                     <p class="mb-2">${post.body}</p>
-                    ${post.media_url ? `
+                    ${post.media_url ? (post.post_type === 'tryout' ? `
+                    <a href="${post.media_url}" class="btn btn-outline-danger btn-sm w-100 mb-2" target="_blank">Sign Up</a>` : `
                     <div class="d-flex align-items-center gap-2 p-2 mb-2 sl-video-block">
                         <div class="sl-play-btn">
                             <i class="bi bi-play-fill text-white"></i>
@@ -68,7 +69,7 @@ if (postDetail) {
                         <div>
                             <div class="small fw-semibold"><a href="${post.media_url}" target="_blank" class="text-decoration-none text-dark">Watch video</a></div>
                         </div>
-                    </div>` : ''}
+                    </div>`) : ''}
                     <div class="d-flex gap-1 pt-2">
                         <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
                         <button class="btn btn-sm text-muted sl-share-btn" data-post-id="${post.id}"><i class="bi bi-share p-1"></i>Share</button>
