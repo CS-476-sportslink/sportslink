@@ -80,7 +80,7 @@ document.querySelectorAll('.sl-follow-btn').forEach(function (btn) {
 add eventlistener to listen for a click, once that button is clicked
 change/remove styles to give the notifications a style that makes them feel like they have been read
 also the number for missed notifications disappears once read all is clicked. */
-const readAllBtn = document.querySelector('.sl-read-all-btn');
+/* const readAllBtn = document.querySelector('.sl-read-all-btn');
 if (readAllBtn) {
     readAllBtn.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -92,7 +92,7 @@ if (readAllBtn) {
             notification.classList.remove('sl-notification-unread'); //get rid of the highlighted notification to make it feel like its been read.
         });
     });
-};
+}; */
 
 //Resize comment area on post.html
 /*  */
