@@ -68,11 +68,15 @@ class LikedPostView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        liked = PostLike.objects.filter(user=request.user) # find all the saved posts from the logged in user
-        serializer = LikedPostSerializer(liked, many=True) #many lets us return a list instead of one item
-        return Response(serializer.data) # convert posts into json. The other views do this for us but not APIView
+        liked = PostLike.objects.filter(user=request.user) 
+        serializer = LikedPostSerializer(liked, many=True) 
+        return Response(serializer.data)
 
     def post(self, request, post_id):
         post = Post.objects.get(pk=post_id)
         PostLike.objects.get_or_create(user=request.user, post=post)
         return Response({'message' : 'Post Liked'}, status=status.HTTP_201_CREATED)
+    
+    def delete(self, request, post_id):
+        PostLike.objects.filter(user=request.user, post=post_id).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
