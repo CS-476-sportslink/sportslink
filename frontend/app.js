@@ -331,10 +331,10 @@ function likeListeners() {
             const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
             const token = localStorage.getItem('access_token');
             const icon = btn.querySelector('i');
-            const label = btn.querySelector('.sl-save-label') // Saved and saved text
-            if (btn.classList.contains('saved')) {
+            const label = btn.querySelector('.sl-like-label') // Saved and saved text
+            if (btn.classList.contains('liked')) {
                 //unlike post
-                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {
                     method: 'DELETE',
                     headers: { 
                         'Authorization': 'Bearer ' + token 
@@ -342,17 +342,17 @@ function likeListeners() {
                 })
                 .then(function() {
                     //change the button so it doesnt show saved state anymore
-                    btn.classList.remove('saved');
-                    icon.classList.remove('bi-bookmark-fill');
-                    icon.classList.add('bi-bookmark');
-                    label.textContent = 'Save';
+                    btn.classList.remove('liked');
+                    icon.classList.remove('bi-heart-fill');
+                    icon.classList.add('bi-heart');
+                    label.textContent = 'Like';
                 })
                 .catch(function() {
-                    alert('Failed to unsave post');
+                    alert('Failed to unlike post');
                 });
             } else {
                 //when the post is not saved, send request to backend to save post.
-                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {
                     method: 'POST',
                     headers: { 
                         'Authorization': 'Bearer ' + token 
@@ -362,10 +362,10 @@ function likeListeners() {
                 .then(function(result) {
                     if (result.message) {
                         //show button is in saved state
-                        btn.classList.add('saved');
-                        icon.classList.remove('bi-bookmark');
-                        icon.classList.add('bi-bookmark-fill');
-                        label.textContent = 'Saved';
+                        btn.classList.add('liked');
+                        icon.classList.remove('bi-heart');
+                        icon.classList.add('bi-heart-fill');
+                        label.textContent = 'Liked';
                     }
                 })
                 .catch(function() {
