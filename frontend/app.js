@@ -53,27 +53,78 @@ document.querySelectorAll('.sl-follow-btn').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
         e.stopPropagation();
         e.preventDefault();
+
+        const token = localStorage.getItem('access_token');
+        const receiverId = this.getAttribute('data-user-id');
+
+        if (!receiverId) return;
+
         const followingCount = document.querySelector('.sl-following-count');
-        if (btn.classList.contains('following')) {
-            btn.classList.remove('following');
-            btn.classList.remove('btn-danger');
-            btn.classList.add('btn-outline-danger');
-            btn.textContent = 'Follow';
-            // Since the followers are stored as text, convert that text to a number so we can perform operations using parseInt
-            if (followingCount) {
-                followingCount.textContent = parseInt(followingCount.textContent) - 1;
-            }
+
+        if (this.classList.contains('following')) {
+            // Withdraw connection
+            const connectionId = this.getAttribute('data-connection-id');
+            if (!connectionId) return;
+
+            fetch(`http://127.0.0.1:8000/api/connections/${connectionId}/withdraw/`, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(function(res) {
+                if (res.status === 204) {
+                    btn.classList.remove('following', 'btn-danger');
+                    btn.classList.add('btn-outline-danger');
+                    btn.textContent = 'Follow';
+                    btn.removeAttribute('data-connection-id');
+                    if (followingCount) {
+                        followingCount.textContent = parseInt(followingCount.textContent) - 1;
+                    }
+                }
+            })
+            .catch(function() {
+                alert('Something went wrong');
+            });
+
         } else {
-            btn.classList.add('following');
-            btn.classList.remove('btn-outline-danger');
-            btn.classList.add('btn-danger');
-            btn.textContent = 'Following';
-            if (followingCount) {
-                followingCount.textContent = parseInt(followingCount.textContent) + 1;
-            }
+            // Send connection request
+            fetch('http://127.0.0.1:8000/api/connections/send/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ receiver_id: receiverId })
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.id) {
+                    btn.classList.add('following', 'btn-danger');
+                    btn.classList.remove('btn-outline-danger');
+                    btn.textContent = 'Following';
+                    btn.setAttribute('data-connection-id', data.id);
+                    if (followingCount) {
+                        followingCount.textContent = parseInt(followingCount.textContent) + 1;
+                    }
+                } else {
+                    alert('Could not send connection request');
+                }
+            })
+            .catch(function() {
+                alert('Something went wrong');
+            });
         }
     });
 });
+
+const followCount = document.querySelector('.sl-following-count');
+if (followCount) {
+    const token = localStorage.getItem('access_token');
+    fetch('http://127.0.0.1:8000/api/connections/?status=accepted', {
+	headers: { 'Authorization': 'Bearer ' + token }
+    }).then(function(res) { return res.json(); }).then(function(data) {
+	followCount.textContent = data.length;
+	});
+}
 
 //Notifications
 /* Find the read all button on the notifications tab.
@@ -320,5 +371,39 @@ function shareListeners() {
                 alert('Could not copy link, please copy it manually: ' + postUrl);
             });
         });
+    });
+}
+
+// Load followers count
+const followersCount = document.querySelector('.sl-followers-count');
+if (followersCount) {
+    const token = localStorage.getItem('access_token');
+
+    fetch('http://127.0.0.1:8000/api/connections/?status=accepted', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(connections) {
+        // Get current user id first
+        fetch('http://127.0.0.1:8000/api/auth/me/', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(me) {
+            // Followers are accepted connections where you are the receiver
+            const followers = connections.filter(function(conn) {
+                return conn.receiver.id === me.id;
+            });
+            followersCount.textContent = followers.length;
+
+            // Following are accepted connections where you are the initiator
+            const following = connections.filter(function(conn) {
+                return conn.initiator.id === me.id;
+            });
+            if (followingCount) followingCount.textContent = following.length;
+        });
+    })
+    .catch(function() {
+        followersCount.textContent = '0';
     });
 }

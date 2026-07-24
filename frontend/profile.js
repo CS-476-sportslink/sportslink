@@ -43,9 +43,15 @@ if (profilePostFeed) {
                     if (me.id !== user.id && (me.role === 'coach' || me.role === 'school')) {
                         contact.setAttribute('href', 'mailto:' + user.email);
                         contact.style.display = 'inline-block';
+			if (followBtn) followBtn.style.display = 'inline-block';
                     } else {
                         contact.style.display = 'none'; //hide button for athletes.
                     }
+		    if (followBtn) {
+			if (me.id === user.id) {
+			    followBtn.style.display = 'none';
+			}
+		    }
                     const editProfileBtn = document.querySelector('#sl-edit-profile-btn');
                     if(editProfileBtn) {
                         if (me.id !== user.id) { //same check as before, if we are not on our own profile we do not want to see the edit profile button
@@ -289,5 +295,52 @@ if (saveLinksBtn) {
         .catch(function() {
             alert('Something went wrong');
         });
+    });
+}
+
+/* For this to work we need to change the users name div in feed.js to a <a> tag with link containing the user id.
+Then in post.js we need to do the exact same thing so a user can click on the users profile and be taken there properly. On both the posts and the comments.
+In this file we need to read the id from the url, send a fetch request to backend to get the users data. And then populate the profile page with the users information we pulled from the backend. Should be pretty similar to fetching our own
+profile information, just using the users id to get the information instead of the currently logged on user. */
+
+// Follow button
+const followBtn = document.querySelector('#sl-follow-btn');
+if (followBtn && userId) {
+    const token = localStorage.getItem('access_token');
+
+    // Set the user id on the button
+    followBtn.setAttribute('data-user-id', userId);
+
+    // Check existing connection
+    // by setting conn as a check if the profile you're viewing is involved with a connection with your profile (the logged in user
+    // if it is then it checks the status that is set in the backend and stored in the database as either pending or accepted
+    // then it sets the text to show the correct response such as Requested if pending and Connected if accepted
+    // otherwise it will keep the follow button as it is by default
+    fetch('http://127.0.0.1:8000/api/connections/', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(connections) {
+        const conn = connections.find(function(c) {
+            return c.initiator.id === userId || c.receiver.id === userId;
+        });
+
+        if (conn) {
+            if (conn.status === 'pending') {
+                followBtn.textContent = 'Requested';
+                followBtn.classList.remove('btn-outline-danger');
+                followBtn.classList.add('btn-warning');
+                followBtn.setAttribute('data-state', 'pending');
+                followBtn.setAttribute('data-connection-id', conn.id);
+            } else if (conn.status === 'accepted') {
+                followBtn.textContent = 'Connected';
+                followBtn.classList.remove('btn-outline-danger');
+                followBtn.classList.add('btn-danger');
+                followBtn.setAttribute('data-state', 'accepted');
+                followBtn.setAttribute('data-connection-id', conn.id);
+            }
+        } else {
+            followBtn.setAttribute('data-state', 'none');
+        }
     });
 }
