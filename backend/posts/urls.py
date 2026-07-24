@@ -9,7 +9,6 @@ urlpatterns = [
     path('<uuid:post_id>/comments/', CommentListCreateView.as_view(), name='comment-list-create'),
     path('<uuid:post_id>/save/', SavedPostView.as_view(), name='save-post'),
     path('saved/', SavedPostView.as_view(), name='saved-posts'),
-    #
     path('<uuid:post_id>/like/', LikedPostView.as_view(), name='like-post'),
     path('liked/', LikedPostView.as_view(), name='liked-posts'),
 ]

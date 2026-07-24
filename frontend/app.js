@@ -333,7 +333,8 @@ function likeListeners() {
             const icon = btn.querySelector('i');
             const label = btn.querySelector('.sl-like-label') // Saved and saved text
             if (btn.classList.contains('liked')) {
-                //unlike post
+                
+                                //this is for when a post is already saved. If clicked again we need to send delete request to backend to remove it from saved posts page.
                 fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {
                     method: 'DELETE',
                     headers: { 
@@ -345,13 +346,12 @@ function likeListeners() {
                     btn.classList.remove('liked');
                     icon.classList.remove('bi-heart-fill');
                     icon.classList.add('bi-heart');
-                    label.textContent = 'Like';
                 })
                 .catch(function() {
                     alert('Failed to unlike post');
-                });
+                });//check if post is liked by the user, if it is don't run fetch to like the post
             } else {
-                //when the post is not saved, send request to backend to save post.
+                //when the post is not liked, send request to backend to like post.
                 fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {
                     method: 'POST',
                     headers: { 
@@ -361,15 +361,14 @@ function likeListeners() {
                 .then(function(response) { return response.json(); }) //convert response into javascript object
                 .then(function(result) {
                     if (result.message) {
-                        //show button is in saved state
+                        //show button is in liked state
                         btn.classList.add('liked');
                         icon.classList.remove('bi-heart');
                         icon.classList.add('bi-heart-fill');
-                        label.textContent = 'Liked';
                     }
                 })
                 .catch(function() {
-                    alert('Failed to save post');
+                    alert('Failed to like post');
                 });
             }
         });

@@ -23,10 +23,10 @@ if (postFeed) {
         //When we are not specifying the method like GET, POST, PATCH the default method is GET.
         //call this fetch as a return so we can give its result to the next .then()
         //return fetch('http://127.0.0.1:8000/api/posts/', {
-        //    headers: {
-        //        'Authorization': 'Bearer ' + token //who am i
-        //    }
-        //}); commenting this out, having main fetch for posts later
+            //headers: {
+                //'Authorization': 'Bearer ' + token //who am i
+            //}
+        //});// commenting this out, having main fetch for posts later
     })
 
     //
@@ -49,7 +49,8 @@ if (postFeed) {
             }
         });
     })
-    //
+
+//
 
     .then(function(response) { return response.json(); }) //get response from the backend as json and we use response.json to turn it into a usable JavaScript object
     // once we turned it into a usable javascript object we now have the posts which we can loop through.
@@ -101,7 +102,7 @@ if (postFeed) {
                             </div>` : ''}
                             </a>
                             <div class="d-flex gap-1 pt-2">
-                                <button class="btn btn-sm text-muted sl-like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
+                                <button class="btn btn-sm text-muted sl-like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}"><i class="bi ${isLiked ? 'bi-heart-fill' : 'bi-heart'} p-1"></i><span class="sl-like-count">0</span></button>
                                 <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
                                 <button class="btn btn-sm text-muted sl-share-btn" data-post-id="${post.id}"><i class="bi bi-share p-1"></i>Share</button>
                                 <button class="btn btn-sm text-muted sl-save-btn ${isSaved ? 'saved' : ''}" data-post-id="${post.id}"><i class="bi ${isSaved ? 'bi-bookmark-fill' : 'bi-bookmark'} p-1"></i><span class="sl-save-label">${isSaved ? 'Saved' : 'Save'}</span></button>
