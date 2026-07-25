@@ -80,3 +80,8 @@ class LikedPostView(APIView):
     def delete(self, request, post_id):
         PostLike.objects.filter(user=request.user, post=post_id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def all(self, post_id):#get all likes for one post
+        liked = PostLike.objects.filter(post=post_id)
+        serializer = LikedPostSerializer(liked, many=True)
+        return Response(serializer.data)

@@ -388,16 +388,13 @@ function likeUpdateObserver() {
         btn.addEventListener('notifyObserver', function() {
             const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
             const token = localStorage.getItem('access_token');
-            fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {//will chage this in backend so it is similar to post pull
-                method: 'DELETE',
-                headers: { 
-                    'Authorization': 'Bearer ' + token 
-                } // who am i
+            fetch(`http://127.0.0.1:8000/api/posts/${postId}/likes/`, {//will chage this in backend so it is similar to post pull
+                method: 'ALL'
             })
             .then(function(response) { return response.json(); }) //convert response into javascript object
-            .then(function(postsSaved) {
-                postsSaved.forEach(function(saved) {
-                    likedPostIds.push(saved.post.id); //will change this after changing in backend
+            .then(function(likes) {
+                likes.forEach(function(liked) {
+                    likedPostIds.push(liked.post.id); //will change this after changing in backend
                 });
             })
             .catch(function() {
