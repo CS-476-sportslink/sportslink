@@ -50,11 +50,8 @@ if (postDetail) {
                         <div class="sl-post-avatar sl-avatar-player">${initials}</div>
                         <div>
                             <div class="d-flex align-items-center gap-3">
-<<<<<<< HEAD
-=======
                             <a href="profile.html?id=${post.user.id}" class="fw-semibold text-dark text-decoration-none">${post.user.first_name} ${post.user.last_name}</a>                                
                             <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn" data-user-id="${post.user.id }">Follow</button>
->>>>>>> 4bfb9932112a06c7c854b6f72c1f9d59b932f94b
                             </div>
                             <div class="text-muted small">
                                 <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
