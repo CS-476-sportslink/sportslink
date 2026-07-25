@@ -39,13 +39,6 @@ document.querySelectorAll('.sl-like-btn').forEach(function (btn) {
     });
 });
 
-
-//Save button similar to like button
-/* This is pretty much identical to the like button
-we look for all the save buttons present on the page.
-We listen for a click and once we recieve it we change the icon style
-to match what we are wanting */
-
 //Follow button functionality
 /* Same concept as both buttons above, we find each follow button, wait for a click through the event listener
 and then we change the style of the button accordingly  */
@@ -126,29 +119,11 @@ if (followCount) {
 	});
 }
 
-//Notifications
-/* Find the read all button on the notifications tab.
-add eventlistener to listen for a click, once that button is clicked
-change/remove styles to give the notifications a style that makes them feel like they have been read
-also the number for missed notifications disappears once read all is clicked. */
-/* const readAllBtn = document.querySelector('.sl-read-all-btn');
-if (readAllBtn) {
-    readAllBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        const badge = document.querySelector('.sl-notification-badge');
-        if (badge) {
-            badge.classList.add('sl-hidden'); //gets rid of the missed notification badge/number
-        }
-        document.querySelectorAll('.sl-notification-unread').forEach(function (notification) {
-            notification.classList.remove('sl-notification-unread'); //get rid of the highlighted notification to make it feel like its been read.
-        });
-    });
-}; */
 
 //Resize comment area on post.html
 /*  */
 document.querySelectorAll('textarea').forEach(function (textarea) {
-    textarea.addEventListener('input', function (e) {
+    textarea.addEventListener('input', function () {
         textarea.style.height = 'auto'; // When we delete text from comment box, if we do not have this line the browser keeps the size of the box to what it was set to previously. Need this to resize the box down so when there is no content we dont have a large text box.
         textarea.style.height = textarea.scrollHeight + 'px'; // when text is added into the textbox, make the textbox grow with the text, when the box grows with our text we dont see that ugly scrollbar showup
     });
@@ -157,7 +132,7 @@ document.querySelectorAll('textarea').forEach(function (textarea) {
 //Post replies
 // This may get deleted as we haven't configured the ability to reply to a comment yet.
 document.querySelectorAll('.sl-reply-btn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
+    btn.addEventListener('click', function () {
         const replyBox = btn.closest('.card-body').querySelector('.sl-reply-box'); // search up to the comment card for the reply box thats inside of it. Closest searches up where queryselector searches down
         replyBox.classList.toggle('sl-hidden'); // hide the reply box until it is clicked on. toggle just switches it back and forth between hidden and not hidden.
     });
@@ -169,7 +144,7 @@ we dont want the user seeing all the page information at one time so we hide it 
 that section is clicked on show it and hide the others. */
 //sets up event listeners
 document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function (link) {
-    link.addEventListener('click', function (e) {
+    link.addEventListener('click', function () {
         // hide the content of the tabs/sections
         document.querySelectorAll('.sl-settings-section').forEach(function (section) {
             section.classList.remove('active');
@@ -234,7 +209,8 @@ if (token) {
         const userInfo = document.querySelector('#sl-current-user-info');
         //null check, if userInfo does not exist and crashes then this whole script crashes
         if (userInfo) {
-            userInfo.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1); //Removed the ternery operator here, we need to show it this way as our way before only handled two roles. This way we can show whatever role is saved. We make the firs char uppercase and the slice joins everything from index 1 onwards.
+            userInfo.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1) + (user.sport ? ' • ' + user.sport : ''); //Removed the ternery operator here, we need to show it this way as our way before only handled two roles. This way we can show whatever role is saved. We make the firs char uppercase and the slice joins everything from index 1 onwards.
+
         }
 
         // About me bio on the profile page

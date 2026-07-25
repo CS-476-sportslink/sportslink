@@ -86,6 +86,7 @@ if (profilePostFeed) {
                                     <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
                                     <div class="text-muted small">
                                         <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
+                                        <span class="text-dark">${post.user.sport ? ' • ' + post.user.sport : ''}</span>
                                     </div>
                                 </div>
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
@@ -197,6 +198,7 @@ if (editProfilePostFeed) {
                                     <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
                                     <div class="text-muted small">
                                         <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
+                                        <span class="text-dark">${post.user.sport ? ' • ' + post.user.sport : ''}</span>
                                     </div>
                                 </div>
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>

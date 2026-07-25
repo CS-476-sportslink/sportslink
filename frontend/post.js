@@ -55,6 +55,7 @@ if (postDetail) {
                             </div>
                             <div class="text-muted small">
                                 <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
+                                <span class="text-dark">${post.user.sport ? ' • ' + post.user.sport : ''}</span>
                             </div>
                         </div>
                         <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
@@ -106,7 +107,11 @@ if (postDetail) {
                                 <div class="d-flex align-items-center gap-2 mb-2">
                                     <div class="sl-post-avatar sl-avatar-player sl-comment-inner-avatar">${initials}</div>
                                     <div>
-                                    <a href="profile.html?id=${comment.user.id}" class="fw-semibold text-dark text-decoration-none">${comment.user.first_name} ${comment.user.last_name}</a>                                        <div class="text-muted small"><span class="sl-badge-player me-1">${comment.user.role.charAt(0).toUpperCase() + comment.user.role.slice(1)}</span></div>
+                                    <a href="profile.html?id=${comment.user.id}" class="fw-semibold text-dark text-decoration-none">${comment.user.first_name} ${comment.user.last_name}</a>                                        
+                                    <div class="text-muted small">
+                                        <span class="sl-badge-player me-1">${comment.user.role.charAt(0).toUpperCase() + comment.user.role.slice(1)}</span>
+                                        <span class="text-dark">${comment.user.sport ? ' • ' + comment.user.sport : ''}</span>
+                                    </div>
                                     </div>
                                     <div class="text-muted small ms-auto">${new Date(comment.created_at).toLocaleDateString()}</div>
                                 </div>
