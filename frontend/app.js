@@ -325,6 +325,11 @@ function shareListeners() {
 
 /* creating function for like listeners, will be similar to saving function above*/
 
+const event = new CustomEvent("notifyObserver", {//create custom event to notify observers of updates to likes, contains id of post which has been liked.
+    bubbles: true, //bubbles from within listener (subject) for observer to receive data
+});
+
+
 function likeListeners() {
     document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
         btn.addEventListener('click', function() { //add click listener to the like button
@@ -346,6 +351,7 @@ function likeListeners() {
                     btn.classList.remove('liked');
                     icon.classList.remove('bi-heart-fill');
                     icon.classList.add('bi-heart');
+                    btn.dispatchEvent(notifyObserver);//dispatch event to observer that like count needs to be updated
                 })
                 .catch(function() {
                     alert('Failed to unlike post');
@@ -365,6 +371,7 @@ function likeListeners() {
                         btn.classList.add('liked');
                         icon.classList.remove('bi-heart');
                         icon.classList.add('bi-heart-fill');
+                        btn.dispatchEvent(notifyObserver);//dispatch event to observer that like count needs to be updated
                     }
                 })
                 .catch(function() {
@@ -373,4 +380,30 @@ function likeListeners() {
             }
         });
     });    
+}
+
+
+function likeUpdateObserver() {
+    document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
+        btn.addEventListener('notifyObserver', function() {
+            const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
+            const token = localStorage.getItem('access_token');
+            fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {//will chage this in backend so it is similar to post pull
+                method: 'DELETE',
+                headers: { 
+                    'Authorization': 'Bearer ' + token 
+                } // who am i
+            })
+            .then(function(response) { return response.json(); }) //convert response into javascript object
+            .then(function(postsSaved) {
+                postsSaved.forEach(function(saved) {
+                    likedPostIds.push(saved.post.id); //will change this after changing in backend
+                });
+            })
+            .catch(function() {
+                alert('Failed to unlike post');
+            });//check if post is liked by the user, if it is don't run fetch to like the post
+            btn.likeCount = likedPostIds.filter(x==postId).length;//filter for all liked posts with same post ID to count likes
+            } 
+    )});
 }
