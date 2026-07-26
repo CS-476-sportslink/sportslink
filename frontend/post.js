@@ -15,7 +15,19 @@ if (postDetail) {
     }
     // need to run the same checks as we did in app.js to see if the post is in saved state already or not
     const savedPostIds = [];
+    const likedPostIds = [];//array to check for liked post ids
 
+    fetch('https://127.0.0.1:8000/api/posts/liked',{
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(postsLiked) {
+        postsLiked.foreach(function(liked) {
+            likedPostIds.push(liked.post.id);
+        })
+    })
     //send request to backend to get saved post Ids so we can show them as saved on load or reload
     //this fetch needs to be done first, we need to fill the array before we display the posts so we can show the proper saved state
     fetch('http://127.0.0.1:8000/api/posts/saved/', {
@@ -42,6 +54,7 @@ if (postDetail) {
     .then(function(response) { return response.json(); })
     .then(function(post) {
         const isSaved = savedPostIds.includes(post.id); // check if the post id is in the array
+        const isLiked = likedPostIds.includes(post.id);
         const initials = post.user.first_name[0] + post.user.last_name[0];
         postDetail.innerHTML = `
             <div class="card shadow-sm mb-4">
@@ -71,14 +84,17 @@ if (postDetail) {
                         </div>
                     </div>`) : ''}
                     <div class="d-flex gap-1 pt-2">
-                        <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
+                        <button class="btn btn-sm text-muted sl-like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}"><i class="bi ${isLiked ? 'bi-heart-fill' : 'bi-heart'} p-1"></i><span class="sl-like-count">0</span></button>
                         <button class="btn btn-sm text-muted sl-share-btn" data-post-id="${post.id}"><i class="bi bi-share p-1"></i>Share</button>
                         <button class="btn btn-sm text-muted sl-save-btn ${isSaved ? 'saved' : ''}" data-post-id="${post.id}"><i class="bi ${isSaved ? 'bi-bookmark-fill' : 'bi-bookmark'} p-1"></i><span class="sl-save-label">${isSaved ? 'Saved' : 'Save'}</span></button>
                     </div>
                 </div>
             </div>`;
+
+            likeUpdateObserver();
             saveListeners();
             shareListeners();
+            likeListeners();
         // send request to backend to retrieve comments tied to this specific post id
         // Django will route this to CommentListCreateView which will query PostgreSQL for the comments tied to this postid
         fetch(`http://127.0.0.1:8000/api/posts/${postId}/comments/`, {
