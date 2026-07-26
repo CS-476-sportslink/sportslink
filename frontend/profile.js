@@ -320,11 +320,14 @@ if (followBtn && userId) {
 	        followBtn.classList.remove('btn-outline-danger');
 	        followBtn.classList.add('btn-danger');
 	        followBtn.setAttribute('data-state', 'accepted');
-	        followBtn.setAttribute('data-follow-id', conn.id);
+	        followBtn.setAttribute('data-connection-id', conn.id);
 	    }
 	} else {
 	    followBtn.textContent = 'Follow';
+	    followBtn.classList.add('btn-outline-danger');
+	    followBtn.classList.remove('btn-danger');
 	    followBtn.setAttribute('data-state', 'none');
+	    followBtn.setAttribute('data-connection-id', conn.id);
 	}
     });
 
