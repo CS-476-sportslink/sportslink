@@ -91,6 +91,7 @@ if (postFeed) {
                                 }
         });
         //listener functions to attatch btn listeners after posts have loaded
+        likeUpdateObserver();
         saveListeners();
         likeListeners();
         shareListeners();

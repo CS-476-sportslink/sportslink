@@ -327,8 +327,7 @@ function shareListeners() {
 
 const notifyObserver = new CustomEvent("notifyObserver", {//create custom event to notify observers of updates to likes, contains id of post which has been liked.
     bubbles: true, //bubbles from within listener (subject) for observer to receive data
-}
-);
+});
 
 function likeUpdateObserver() {
     document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
@@ -344,34 +343,24 @@ function likeUpdateObserver() {
             })
             .then(function(response) { return response.json(); }) //convert response into javascript object
             .then(function(likes) {
-                //alert(likes.length);
-                //likes.forEach(function(likes) {
-                //    postLikes.push(likes); //push id into array
-                //    //postLikes++;
-                //});
                 postLikes = likes.length;
-                //alert(postLikes);
                 label.textContent = postLikes;
             })
             .catch(function() {
                 alert('Failed to update like count');
             });
-                //label.textContent = toString(postLikes);//filter for all liked posts with same post ID to count likes
-                //alert(postLikes.length);
             } 
     )});
 }
 
 function likeListeners() {
     document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
+        btn.dispatchEvent(notifyObserver);//dispatch notify observer function to update all like buttons upon loading the page
         btn.addEventListener('click', function() { //add click listener to the like button
             const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
             const token = localStorage.getItem('access_token');
             const icon = btn.querySelector('i');
-
             if (btn.classList.contains('liked')) {
-                
-                                //this is for when a post is already saved. If clicked again we need to send delete request to backend to remove it from saved posts page.
                 fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {
                     method: 'DELETE',
                     headers: { 
@@ -379,7 +368,6 @@ function likeListeners() {
                     } // who am i
                 })
                 .then(function() {
-                    //change the button so it doesnt show saved state anymore
                     btn.classList.remove('liked');
                     icon.classList.remove('bi-heart-fill');
                     icon.classList.add('bi-heart');
@@ -389,8 +377,7 @@ function likeListeners() {
                     alert('Failed to unlike post');
                 });//check if post is liked by the user, if it is don't run fetch to like the post
             } else {
-                //when the post is not liked, send request to backend to like post.
-                fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {
+                fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {//when the post is not liked, send request to backend to like post.
                     method: 'POST',
                     headers: { 
                         'Authorization': 'Bearer ' + token 
