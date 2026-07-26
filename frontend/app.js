@@ -370,6 +370,85 @@ function shareListeners() {
     });
 }
 
+
+
+const notifyObserver = new CustomEvent("notifyObserver", {//custom event to notify observers (like count on post) of change to like count
+    bubbles: true, //bubbles from within listener (subject) for observer to receive data
+});
+
+function likeUpdateObserver() {//function to add event listeners to act as observers to update like count when custome event above is dispatched
+    document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
+        btn.addEventListener('notifyObserver', function() {
+            const postId = btn.getAttribute('data-post-id'); //post id from button to fetch like count
+            const label = btn.querySelector('.sl-like-count');//label for like count tag
+            var postLikes = Number();//number of post likes
+            fetch(`http://127.0.0.1:8000/api/posts/likes/${postId}/`, {
+                method: 'GET',
+                headers: { 
+                    'Authorization': 'Bearer ' + token 
+                }
+            })//fetch all likes on post
+            .then(function(response) { return response.json(); }) //convert response into javascript object
+            .then(function(likes) {
+                postLikes = likes.length;
+                label.textContent = postLikes;//update label
+            })
+            .catch(function() {
+                alert('Failed to update like count');
+            });
+            } 
+    )});
+}
+
+function likeListeners() {
+    document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
+        btn.dispatchEvent(notifyObserver);//dispatch notify observer function to update all like buttons, trigger this first to load counts initially when page loads
+        btn.addEventListener('click', function() { //add click listener to the like button
+            const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
+            const token = localStorage.getItem('access_token');
+            const icon = btn.querySelector('i');
+            if (btn.classList.contains('liked')) {//check if post is already liked by the user
+                fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {
+                    method: 'DELETE',
+                    headers: { //delete call since it's already liked, remove the like
+                        'Authorization': 'Bearer ' + token //user info
+                    }
+                })
+                .then(function() {
+                    btn.classList.remove('liked');
+                    icon.classList.remove('bi-heart-fill');//change tag info
+                    icon.classList.add('bi-heart');
+                    btn.dispatchEvent(notifyObserver);//dispatch event to observer that like count needs to be updated
+                })
+                .catch(function() {
+                    alert('Failed to unlike post');
+                });
+            } else {//if not already liked
+                fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {//when the post is not liked, send request to backend to like post.
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token 
+                    }
+                })
+                .then(function(response) { return response.json(); }) //convert response into javascript object
+                .then(function(result) {
+                    if (result.message) {
+                        //show button is in liked state
+                        btn.classList.add('liked');
+                        icon.classList.remove('bi-heart');
+                        icon.classList.add('bi-heart-fill');
+                        btn.dispatchEvent(notifyObserver);//dispatch event to observer that like count needs to be updated
+                    }
+                })
+                .catch(function() {
+                    alert('Failed to like post');
+                });
+            }
+        });
+    });    
+}
+
+
 // Load followers count
 const followersCount = document.querySelector('.sl-followers-count');
 const followingCount = document.querySelector('.sl-following-count');
