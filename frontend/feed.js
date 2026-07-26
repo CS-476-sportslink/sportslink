@@ -21,7 +21,6 @@ class SocialCardCreator extends PostCardCreator {
                             <div>
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
-                                    <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
                                 </div>
                                 <div class="text-muted small">
                                     <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
@@ -65,7 +64,6 @@ class TryoutCardCreator extends PostCardCreator {
                             <div>
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
-                                    <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
                                 </div>
                                 <div class="text-muted small">
                                     <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>

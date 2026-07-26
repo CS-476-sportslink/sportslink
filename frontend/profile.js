@@ -92,12 +92,6 @@ if (profilePostFeed) {
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
                             </div>
                             <p class="small mb-2">${post.body}</p>
-                            <div class="d-flex gap-1 pt-2">
-                                <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
-                                <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
-                                <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
-                                <button class="btn btn-sm text-muted sl-save-btn"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
-                            </div>
                         </div>
                     </div>
                 </a>`;
@@ -204,12 +198,6 @@ if (editProfilePostFeed) {
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
                             </div>
                             <p class="small mb-2">${post.body}</p>
-                            <div class="d-flex gap-1 pt-2">
-                                <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
-                                <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
-                                <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
-                                <button class="btn btn-sm text-muted sl-save-btn"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
-                            </div>
                         </div>
                     </div>
                 </a>`;
