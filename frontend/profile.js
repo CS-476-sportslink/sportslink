@@ -314,23 +314,18 @@ if (followBtn && userId) {
         const conn = connections.find(function(c) {
             return c.initiator.id === userId || c.receiver.id === userId;
         });
-
-        if (conn) {
-            if (conn.status === 'pending') {
-                followBtn.textContent = 'Requested';
-                followBtn.classList.remove('btn-outline-danger');
-                followBtn.classList.add('btn-warning');
-                followBtn.setAttribute('data-state', 'pending');
-                followBtn.setAttribute('data-connection-id', conn.id);
-            } else if (conn.status === 'accepted') {
-                followBtn.textContent = 'Connected';
-                followBtn.classList.remove('btn-outline-danger');
-                followBtn.classList.add('btn-danger');
-                followBtn.setAttribute('data-state', 'accepted');
-                followBtn.setAttribute('data-connection-id', conn.id);
-            }
-        } else {
-            followBtn.setAttribute('data-state', 'none');
-        }
+	if (conn) {
+	    if (conn.status === 'accepted') {
+	        followBtn.textContent = 'Following';
+	        followBtn.classList.remove('btn-outline-danger');
+	        followBtn.classList.add('btn-danger');
+	        followBtn.setAttribute('data-state', 'accepted');
+	        followBtn.setAttribute('data-follow-id', conn.id);
+	    }
+	} else {
+	    followBtn.textContent = 'Follow';
+	    followBtn.setAttribute('data-state', 'none');
+	}
     });
+
 }

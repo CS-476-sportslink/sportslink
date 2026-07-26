@@ -42,71 +42,82 @@ document.querySelectorAll('.sl-like-btn').forEach(function (btn) {
 //Follow button functionality
 /* Same concept as both buttons above, we find each follow button, wait for a click through the event listener
 and then we change the style of the button accordingly  */
-document.querySelectorAll('.sl-follow-btn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
+document.addEventListener('click', function(e) {
+    //set id for button
+    const btn = e.target.closest('.sl-follow-btn');
+    if (!btn) return;
 
-        const token = localStorage.getItem('access_token');
-        const receiverId = this.getAttribute('data-user-id');
+    e.stopPropagation();
+    e.preventDefault();
 
-        if (!receiverId) return;
+//get token, id of reciever, connection id and the state
+    const token = localStorage.getItem('access_token');
+    const receiverId = btn.getAttribute('data-user-id');
+    const connectionId = btn.getAttribute('data-connection-id');
+    const state = btn.getAttribute('data-state');
 
-        const followingCount = document.querySelector('.sl-following-count');
+    if (!receiverId) return;
 
-        if (this.classList.contains('following')) {
-            // Withdraw connection
-            const connectionId = this.getAttribute('data-connection-id');
-            if (!connectionId) return;
+//set the following count id
+    const followingCount = document.querySelector('.sl-following-count');
 
-            fetch(`http://127.0.0.1:8000/api/connections/${connectionId}/withdraw/`, {
-                method: 'DELETE',
-                headers: { 'Authorization': 'Bearer ' + token }
-            })
-            .then(function(res) {
-                if (res.status === 204) {
-                    btn.classList.remove('following', 'btn-danger');
-                    btn.classList.add('btn-outline-danger');
-                    btn.textContent = 'Follow';
-                    btn.removeAttribute('data-connection-id');
-                    if (followingCount) {
-                        followingCount.textContent = parseInt(followingCount.textContent) - 1;
-                    }
+//check the state and if its empty then POST the follow and set the connection to following then increase the following count 
+    if (state === 'none') {
+        fetch('http://127.0.0.1:8000/api/connections/send/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ receiver_id: receiverId })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.id) {
+                btn.textContent = 'Following';
+                btn.classList.remove('btn-outline-danger');
+                btn.classList.add('btn-danger');
+                btn.setAttribute('data-state', 'accepted');
+                btn.setAttribute('data-connection-id', data.id);
+
+		const followersCount = document.querySelector('.sl-followers-count');
+		if (followersCount) {
+		    followersCount.textContent = parseInt(followersCount.textContent) + 1;
+		}
+                if (followingCount) {
+                    followingCount.textContent = parseInt(followingCount.textContent) + 1;
                 }
-            })
-            .catch(function() {
-                alert('Something went wrong');
-            });
-
-        } else {
-            // Send connection request
-            fetch('http://127.0.0.1:8000/api/connections/send/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                },
-                body: JSON.stringify({ receiver_id: receiverId })
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if (data.id) {
-                    btn.classList.add('following', 'btn-danger');
-                    btn.classList.remove('btn-outline-danger');
-                    btn.textContent = 'Following';
-                    btn.setAttribute('data-connection-id', data.id);
-                    if (followingCount) {
-                        followingCount.textContent = parseInt(followingCount.textContent) + 1;
-                    }
-                } else {
-                    alert('Could not send connection request');
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong');
+        });
+//If the state is already set to following accepted then the click will change it to unfollow and reduce the following count
+    } else if (state === 'accepted') {
+        fetch(`http://127.0.0.1:8000/api/connections/${connectionId}/withdraw/`, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(function(res) {
+            if (res.status === 204) {
+                btn.textContent = 'Follow';
+                btn.classList.remove('btn-danger');
+                btn.classList.add('btn-outline-danger');
+                btn.setAttribute('data-state', 'none');
+                btn.removeAttribute('data-connection-id');
+		const followersCount = document.querySelector('.sl-followers-count');
+		if (followersCount) {
+		    followersCount.textContent = parseInt(followersCount.textContent) - 1;
+		}
+                if (followingCount) {
+                    followingCount.textContent = parseInt(followingCount.textContent) - 1;
                 }
-            })
-            .catch(function() {
-                alert('Something went wrong');
-            });
-        }
-    });
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong');
+        });
+    }
 });
 
 const followCount = document.querySelector('.sl-following-count');
