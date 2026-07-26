@@ -17,19 +17,7 @@ if (postDetail) {
     const savedPostIds = [];
     const likedPostIds = [];//array to check for liked post ids
 
-    fetch('https://127.0.0.1:8000/api/posts/liked',{
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    .then(function(response) { return response.json(); })
-    .then(function(postsLiked) {
-        postsLiked.foreach(function(liked) {
-            likedPostIds.push(liked.post.id);
-        })
-    })
-    //send request to backend to get saved post Ids so we can show them as saved on load or reload
-    //this fetch needs to be done first, we need to fill the array before we display the posts so we can show the proper saved state
+    //
     fetch('http://127.0.0.1:8000/api/posts/saved/', {
         headers: {
             'Authorization': 'Bearer ' + token //who am i
@@ -40,9 +28,20 @@ if (postDetail) {
         postsSaved.forEach(function(saved) {
             savedPostIds.push(saved.post.id); //push id into array
         });
-
-    // Send a request to get that specific post from the backend using the postID
-    // Django will route this to PostDetailView which queries PostgreSQL for the post with the same ID
+    })
+    fetch('http://127.0.0.1:8000/api/posts/liked/', {
+        headers: {
+            'Authorization': 'Bearer ' + token //who am i
+        }
+    })
+    .then(function(response) { return response.json(); }) //convert response into javascript object
+    .then(function(postsLiked) {
+        postsLiked.forEach(function(liked) {
+            likedPostIds.push(liked.post.id); //push id into array
+        });
+        //send request to backend to retrieve posts. Use the auth token so the backend knows who is making the request.
+        //When we are not specifying the method like GET, POST, PATCH the default method is GET.
+        //call this fetch as a return so we can give its result to the next .then()
         return fetch(`http://127.0.0.1:8000/api/posts/${postId}/`, {
             headers: {
                 'Authorization': 'Bearer ' + token
