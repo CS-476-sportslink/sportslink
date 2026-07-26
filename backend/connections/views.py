@@ -55,7 +55,7 @@ def send_connection(request):
     connection = Connection.objects.create(
         initiator=request.user,
         receiver=receiver,
-        status=Connection.STATUS_PENDING
+        status=Connection.STATUS_ACCEPTED
     )
 
     serializer = ConnectionSerializer(connection)
