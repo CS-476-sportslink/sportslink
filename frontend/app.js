@@ -91,7 +91,6 @@ document.addEventListener('click', function(e) {
 		if (followersCount) {
 		    followersCount.textContent = parseInt(followersCount.textContent) + 1;
 		}
-		const followingCount = document.querySelector('.sl-following-count');
                 if (followingCount) {
                     followingCount.textContent = parseInt(followingCount.textContent) + 1;
                 }
