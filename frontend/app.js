@@ -335,7 +335,7 @@ function likeUpdateObserver() {
         btn.addEventListener('notifyObserver', function() {
             const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
             const label = btn.querySelector('.sl-like-count');
-            const postLikes = [];
+            var postLikes = Number();
             fetch(`http://127.0.0.1:8000/api/posts/likes/${postId}/`, {
                 method: 'GET',
                 headers: { 
@@ -344,17 +344,20 @@ function likeUpdateObserver() {
             })
             .then(function(response) { return response.json(); }) //convert response into javascript object
             .then(function(likes) {
-                alert(likes);
-                likes.forEach(function(p) {
-                    postLikes.push(likes); //push id into array
-                    //postLikes++;
-                });
+                //alert(likes.length);
+                //likes.forEach(function(likes) {
+                //    postLikes.push(likes); //push id into array
+                //    //postLikes++;
+                //});
+                postLikes = likes.length;
+                //alert(postLikes);
+                label.textContent = postLikes;
             })
             .catch(function() {
                 alert('Failed to update like count');
             });
-                label.textContent = postLikes.length;//filter for all liked posts with same post ID to count likes
-                alert(postLikes);
+                //label.textContent = toString(postLikes);//filter for all liked posts with same post ID to count likes
+                //alert(postLikes.length);
             } 
     )});
 }
