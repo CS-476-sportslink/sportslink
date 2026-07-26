@@ -114,25 +114,6 @@ document.addEventListener('click', function(e) {
         });
     }
 });
-//Notifications
-/* Find the read all button on the notifications tab.
-add eventlistener to listen for a click, once that button is clicked
-change/remove styles to give the notifications a style that makes them feel like they have been read
-
-also the number for missed notifications disappears once read all is clicked. */
-/* const readAllBtn = document.querySelector('.sl-read-all-btn');
-if (readAllBtn) {
-    readAllBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        const badge = document.querySelector('.sl-notification-badge');
-        if (badge) {
-            badge.classList.add('sl-hidden'); //gets rid of the missed notification badge/number
-        }
-        document.querySelectorAll('.sl-notification-unread').forEach(function (notification) {
-            notification.classList.remove('sl-notification-unread'); //get rid of the highlighted notification to make it feel like its been read.
-        });
-    });
-}; */
 
 //Resize comment area on post.html
 /*  */
