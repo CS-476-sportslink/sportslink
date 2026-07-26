@@ -65,8 +65,6 @@ document.addEventListener('click', function(e) {
 
     if (!receiverId) return;
 
-//set the following count id
-    const followingCount = document.querySelector('.sl-following-count');
 
 //check the state and if its empty then POST the follow and set the connection to following then increase the following count 
     if (state === 'none') {
@@ -86,12 +84,9 @@ document.addEventListener('click', function(e) {
                 btn.classList.add('btn-danger');
                 btn.setAttribute('data-state', 'accepted');
                 btn.setAttribute('data-connection-id', data.id);
-
-		const followersCount = document.querySelector('.sl-followers-count');
 		if (followersCount) {
 		    followersCount.textContent = parseInt(followersCount.textContent) + 1;
 		}
-		const followingCount = document.querySelector('.sl-following-count');
                 if (followingCount) {
                     followingCount.textContent = parseInt(followingCount.textContent) + 1;
                 }
@@ -113,7 +108,6 @@ document.addEventListener('click', function(e) {
                 btn.classList.add('btn-outline-danger');
                 btn.setAttribute('data-state', 'none');
                 btn.removeAttribute('data-connection-id');
-		const followersCount = document.querySelector('.sl-followers-count');
 		if (followersCount) {
 		    followersCount.textContent = parseInt(followersCount.textContent) - 1;
 		}
@@ -131,6 +125,7 @@ document.addEventListener('click', function(e) {
 /* Find the read all button on the notifications tab.
 add eventlistener to listen for a click, once that button is clicked
 change/remove styles to give the notifications a style that makes them feel like they have been read
+
 also the number for missed notifications disappears once read all is clicked. */
 /* const readAllBtn = document.querySelector('.sl-read-all-btn');
 if (readAllBtn) {
@@ -377,7 +372,9 @@ function shareListeners() {
 
 // Load followers count
 const followersCount = document.querySelector('.sl-followers-count');
-if (followersCount) {
+const followingCount = document.querySelector('.sl-following-count');
+
+if (followersCount || followingCount) {
     const token = localStorage.getItem('access_token');
 
     fetch('http://127.0.0.1:8000/api/connections/?status=accepted', {
@@ -395,7 +392,7 @@ if (followersCount) {
             const followers = connections.filter(function(conn) {
                 return conn.receiver.id === me.id;
             });
-            followersCount.textContent = followers.length;
+            if (followersCount) followersCount.textContent = followers.length;
 
             // Following are accepted connections where you are the initiator
             const following = connections.filter(function(conn) {
@@ -405,6 +402,7 @@ if (followersCount) {
         });
     })
     .catch(function() {
-        followersCount.textContent = '0';
+        if (followersCount) followersCount.textContent = '0';
+        if (followingCount) followingCount.textContent = '0';
     });
 }
