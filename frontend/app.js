@@ -84,10 +84,10 @@ document.addEventListener('click', function(e) {
                 btn.classList.add('btn-danger');
                 btn.setAttribute('data-state', 'accepted');
                 btn.setAttribute('data-connection-id', data.id);
-		if (followersCount) {
+		if (userId && followersCount) {
 		    followersCount.textContent = parseInt(followersCount.textContent) + 1;
 		}
-                if (followingCount) {
+                if (!userId && followingCount) {
                     followingCount.textContent = parseInt(followingCount.textContent) + 1;
                 }
             }
@@ -108,10 +108,10 @@ document.addEventListener('click', function(e) {
                 btn.classList.add('btn-outline-danger');
                 btn.setAttribute('data-state', 'none');
                 btn.removeAttribute('data-connection-id');
-		if (followersCount) {
+		if (userId && followersCount) {
 		    followersCount.textContent = parseInt(followersCount.textContent) - 1;
 		}
-                if (followingCount) {
+                if (!userId && followingCount) {
                     followingCount.textContent = parseInt(followingCount.textContent) - 1;
                 }
             }
@@ -388,15 +388,16 @@ if (followersCount || followingCount) {
         })
         .then(function(res) { return res.json(); })
         .then(function(me) {
+	    const profileOwnerId = userId || me.id; //whoever we are looking at
             // Followers are accepted connections where you are the receiver
             const followers = connections.filter(function(conn) {
-                return conn.receiver.id === me.id;
+                return conn.receiver.id === profileOwnerId;
             });
             if (followersCount) followersCount.textContent = followers.length;
 
             // Following are accepted connections where you are the initiator
             const following = connections.filter(function(conn) {
-                return conn.initiator.id === me.id;
+                return conn.initiator.id === profileOwnerId;
             });
             if (followingCount) followingCount.textContent = following.length;
         });
