@@ -8,6 +8,17 @@ if (postFeed) {
     const likedPostIds = [];//array for liked post ids, similar to saved posts
 
     //
+    fetch('http://127.0.0.1:8000/api/posts/saved/', {
+        headers: {
+            'Authorization': 'Bearer ' + token //who am i
+        }
+    })
+    .then(function(response) { return response.json(); }) //convert response into javascript object
+    .then(function(postsSaved) {
+        postsSaved.forEach(function(saved) {
+            savedPostIds.push(saved.post.id); //push id into array
+        });
+    })
     fetch('http://127.0.0.1:8000/api/posts/liked/', {
         headers: {
             'Authorization': 'Bearer ' + token //who am i
@@ -27,9 +38,6 @@ if (postFeed) {
             }
         });
     })
-
-//
-
     .then(function(response) { return response.json(); }) //get response from the backend as json and we use response.json to turn it into a usable JavaScript object
     // once we turned it into a usable javascript object we now have the posts which we can loop through.
     .then(function(posts) {
