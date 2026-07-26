@@ -43,9 +43,12 @@ if (profilePostFeed) {
                     if (me.id !== user.id && (me.role === 'coach' || me.role === 'school')) {
                         contact.setAttribute('href', 'mailto:' + user.email);
                         contact.style.display = 'inline-block';
-			if (followBtn) followBtn.style.display = 'inline-block';
                     } else {
-                        contact.style.display = 'none'; //hide button for athletes.
+                        contact.style.display = 'none';
+                    }
+                    
+                    if (followBtn && me.id !== user.id) {
+                        followBtn.style.display = 'inline-block';
                     }
 		    if (followBtn) {
 			if (me.id === user.id) {

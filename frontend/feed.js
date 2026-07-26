@@ -3,14 +3,14 @@
 In the app we are not making a standard post card, there needs to be a type. It is either a social post taht everyone is free to use, or a tryout post that
 can be used by sschools and coaches to get athletes to apply */
 class PostCardCreator {
-    createCard(post, isSaved) { //there isnt a default post so no default method
+    createCard(post, isSaved, isLiked) { //there isnt a default post so no default method
         throw new Error('createCard() must be implemented by a subclass');
     }
 }
 
 //ConcreteCreator builds the social post card.
 class SocialCardCreator extends PostCardCreator {
-    createCard(post, isSaved) {
+    createCard(post, isSaved, isLiked) {
         const initials = post.user.first_name[0] + post.user.last_name[0];
         return `
             <a href="post.html?id=${post.id}" class="text-decoration-none text-dark"> 
@@ -41,7 +41,7 @@ class SocialCardCreator extends PostCardCreator {
                         </div>` : ''}
                         </a>
                         <div class="d-flex gap-1 pt-2">
-                            <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
+                            <button class="btn btn-sm text-muted sl-like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}"><i class="bi ${isLiked ? 'bi-heart-fill' : 'bi-heart'} p-1"></i><span class="sl-like-count">0</span></button>
                             <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
                             <button class="btn btn-sm text-muted sl-share-btn" data-post-id="${post.id}"><i class="bi bi-share p-1"></i>Share</button>
                             <button class="btn btn-sm text-muted sl-save-btn ${isSaved ? 'saved' : ''}" data-post-id="${post.id}"><i class="bi ${isSaved ? 'bi-bookmark-fill' : 'bi-bookmark'} p-1"></i><span class="sl-save-label">${isSaved ? 'Saved' : 'Save'}</span></button>
@@ -53,7 +53,7 @@ class SocialCardCreator extends PostCardCreator {
 
 //ConcreteCreator builds the tryout post card. got nothing yet as the modal is not yet built
 class TryoutCardCreator extends PostCardCreator {
-    createCard(post, isSaved) {
+    createCard(post, isSaved, isLiked) {
         const initials = post.user.first_name[0] + post.user.last_name[0];
         return `
             <a href="post.html?id=${post.id}" class="text-decoration-none text-dark"> 
@@ -77,7 +77,7 @@ class TryoutCardCreator extends PostCardCreator {
                         <a href="${post.media_url}" class="btn btn-outline-danger btn-sm w-100 mb-2" target="_blank">Sign Up</a>` : ''}
                         </a>
                         <div class="d-flex gap-1 pt-2">
-                            <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
+                            <button class="btn btn-sm text-muted sl-like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}"><i class="bi ${isLiked ? 'bi-heart-fill' : 'bi-heart'} p-1"></i><span class="sl-like-count">0</span></button>
                             <a href="post.html?id=${post.id}" class="text-decoration-none text-dark"> 
                                 <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
                             </a>
@@ -143,9 +143,11 @@ if (tryoutTab) {
 const postFeed = document.querySelector('#sl-post-feed');
 const sidebarPost = document.querySelector('#sl-open-tryouts');
 //null check to avoid crashing
+    
 if (postFeed) {
     const token = localStorage.getItem('access_token');
     const savedPostIds = [];
+    const likedPostIds = [];//array for liked post ids, similar to saved posts
 
     //send request to backend to get saved post Ids so we can show them as saved on load or reload
     //this fetch needs to be done first, we need to fill the array before we display the posts so we can show the proper saved state
@@ -157,7 +159,18 @@ if (postFeed) {
     .then(function(response) { return response.json(); }) //convert response into javascript object
     .then(function(postsSaved) {
         postsSaved.forEach(function(saved) {
-            savedPostIds.push(saved.post.id); //push id into array
+            savedPostIds.push(saved.post.id);
+        });
+    })
+    fetch('http://127.0.0.1:8000/api/posts/liked/', {//similar call as the saved post check for liked posts
+        headers: {
+            'Authorization': 'Bearer ' + token //who am i
+        }
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(postsLiked) {
+        postsLiked.forEach(function(liked) {
+            likedPostIds.push(liked.post.id); //setup liked post array for checking if the user has liked the posts
         });
         //send request to backend to retrieve posts. Use the auth token so the backend knows who is making the request.
         //When we are not specifying the method like GET, POST, PATCH the default method is GET.
@@ -168,7 +181,6 @@ if (postFeed) {
             }
         });
     })
-
     .then(function(response) { return response.json(); }) //get response from the backend as json and we use response.json to turn it into a usable JavaScript object
     // once we turned it into a usable javascript object we now have the posts which we can loop through.
     .then(function(posts) {
@@ -183,18 +195,21 @@ if (postFeed) {
             //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
 
             const isSaved = savedPostIds.includes(post.id) // check if the post id is in the array
+            const isLiked = likedPostIds.includes(post.id) //creating is liked array similar to saved posts array
             const creator = getCardCreator(post);
-            postFeed.innerHTML += creator.createCard(post, isSaved); 
+            postFeed.innerHTML += creator.createCard(post, isSaved, isLiked); 
             // sidebar using factory design pattern
-            console.log('post_type:', post.post_type, 'sidebarPost:', sidebarPost);
             if (sidebarPost && post.post_type === 'tryout') {
                 const sidebarCreator = new TryoutSidebarCardCreator();
                 sidebarPost.innerHTML += sidebarCreator.createCard(post);
             }
         });
         //listener functions to attatch btn listeners after posts have loaded
+        likeUpdateObserver();//added like update observer for setting listeners as observers for like counts
         saveListeners();
         shareListeners();
+        likeListeners();
+
     })
     //if any of the above breaks we display an error message, rather then jsut not doing anytihng
     .catch(function(error) {
