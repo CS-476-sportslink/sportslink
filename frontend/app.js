@@ -325,10 +325,39 @@ function shareListeners() {
 
 /* creating function for like listeners, will be similar to saving function above*/
 
-const event = new CustomEvent("notifyObserver", {//create custom event to notify observers of updates to likes, contains id of post which has been liked.
+const notifyObserver = new CustomEvent("notifyObserver", {//create custom event to notify observers of updates to likes, contains id of post which has been liked.
     bubbles: true, //bubbles from within listener (subject) for observer to receive data
-});
+}
+);
 
+function likeUpdateObserver() {
+    document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
+        btn.addEventListener('notifyObserver', function() {
+            const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
+            const label = btn.querySelector('.sl-like-count');
+            const postLikes = [];
+            fetch(`http://127.0.0.1:8000/api/posts/likes/${postId}/`, {
+                method: 'GET',
+                headers: { 
+                    'Authorization': 'Bearer ' + token 
+                } // who am i
+            })
+            .then(function(response) { return response.json(); }) //convert response into javascript object
+            .then(function(likes) {
+                alert(likes);
+                likes.forEach(function(p) {
+                    postLikes.push(likes); //push id into array
+                    //postLikes++;
+                });
+            })
+            .catch(function() {
+                alert('Failed to update like count');
+            });
+                label.textContent = postLikes.length;//filter for all liked posts with same post ID to count likes
+                alert(postLikes);
+            } 
+    )});
+}
 
 function likeListeners() {
     document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
@@ -336,7 +365,7 @@ function likeListeners() {
             const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
             const token = localStorage.getItem('access_token');
             const icon = btn.querySelector('i');
-            const label = btn.querySelector('.sl-like-label') // Saved and saved text
+
             if (btn.classList.contains('liked')) {
                 
                                 //this is for when a post is already saved. If clicked again we need to send delete request to backend to remove it from saved posts page.
@@ -383,24 +412,3 @@ function likeListeners() {
 }
 
 
-function likeUpdateObserver() {
-    document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
-        btn.addEventListener('notifyObserver', function() {
-            const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
-            const token = localStorage.getItem('access_token');
-            fetch(`http://127.0.0.1:8000/api/posts/${postId}/likes/`, {//will chage this in backend so it is similar to post pull
-                method: 'ALL'
-            })
-            .then(function(response) { return response.json(); }) //convert response into javascript object
-            .then(function(likes) {
-                likes.forEach(function(liked) {
-                    likedPostIds.push(liked.post.id); //will change this after changing in backend
-                });
-            })
-            .catch(function() {
-                alert('Failed to unlike post');
-            });//check if post is liked by the user, if it is don't run fetch to like the post
-            btn.likeCount = likedPostIds.filter(x==postId).length;//filter for all liked posts with same post ID to count likes
-            } 
-    )});
-}

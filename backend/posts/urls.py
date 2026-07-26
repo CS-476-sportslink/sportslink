@@ -1,5 +1,5 @@
 from django.urls import path
-from posts.views import PostListCreateView, PostDetailView, CommentListCreateView, SavedPostView, LikedPostView
+from posts.views import PostListCreateView, PostDetailView, CommentListCreateView, SavedPostView, LikedPostView, LikedPostCountView
 
 
 # https://docs.djangoproject.com/en/6.0/topics/http/urls/
@@ -11,5 +11,5 @@ urlpatterns = [
     path('saved/', SavedPostView.as_view(), name='saved-posts'),
     path('<uuid:post_id>/like/', LikedPostView.as_view(), name='like-post'),
     path('liked/', LikedPostView.as_view(), name='liked-posts'),
-    path('<post_id>/likes/', LikedPostView.as_view(), name='likes-on-post'),
+    path('likes/<post_id>/', LikedPostCountView.as_view(), name='likes-on-post'),
 ]
