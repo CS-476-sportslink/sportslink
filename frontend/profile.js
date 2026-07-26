@@ -310,28 +310,32 @@ if (followBtn && userId) {
     // then it sets the text to show the correct response such as Requested if pending and Connected if accepted
     // otherwise it will keep the follow button as it is by default
     fetch('http://127.0.0.1:8000/api/connections/', {
-        headers: { 'Authorization': 'Bearer ' + token }
+    headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(function(res) { return res.json(); })
     .then(function(connections) {
-        const conn = connections.find(function(c) {
-            return c.initiator.id === userId || c.receiver.id === userId;
-        });
-	if (conn) {
-	    if (conn.status === 'accepted') {
-	        followBtn.textContent = 'Following';
-	        followBtn.classList.remove('btn-outline-danger');
-	        followBtn.classList.add('btn-danger');
-	        followBtn.setAttribute('data-state', 'accepted');
-	        followBtn.setAttribute('data-connection-id', conn.id);
-	    }
-	} else {
-	    followBtn.textContent = 'Follow';
-	    followBtn.classList.add('btn-outline-danger');
-	    followBtn.classList.remove('btn-danger');
-	    followBtn.setAttribute('data-state', 'none');
-	    followBtn.setAttribute('data-connection-id', conn.id);
-	}
-    });
+        // fetch our own id because we need to see who we are viewing and who we are
+        fetch('http://127.0.0.1:8000/api/auth/me/', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(me) {
+            // check if I am the one following the specific user
+            const conn = connections.find(function(c) {
+                return c.initiator.id === me.id && c.receiver.id === userId;
+            });
 
+            if (conn) {
+                if (conn.status === 'accepted') {
+                    followBtn.textContent = 'Following';
+                    followBtn.classList.remove('btn-outline-danger');
+                    followBtn.classList.add('btn-danger');
+                    followBtn.setAttribute('data-state', 'accepted');
+                    followBtn.setAttribute('data-connection-id', conn.id);
+                }
+            } else {
+                followBtn.setAttribute('data-state', 'none');
+            }
+        });
+    })
 }
