@@ -77,7 +77,7 @@ class TryoutCardCreator extends PostCardCreator {
                         <a href="${post.media_url}" class="btn btn-outline-danger btn-sm w-100 mb-2" target="_blank">Sign Up</a>` : ''}
                         </a>
                         <div class="d-flex gap-1 pt-2">
-                            <button class="btn btn-sm text-muted sl-like-btn ${isLiked ? 'liked' : ''} data-post-id="${post.id}"><i class="bi ${isLiked ? 'bi-heart-fill' : 'bi-heart'} p-1"></i><span class="sl-like-count">0</span></button>
+                            <button class="btn btn-sm text-muted sl-like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}"><i class="bi ${isLiked ? 'bi-heart-fill' : 'bi-heart'} p-1"></i><span class="sl-like-count">0</span></button>
                             <a href="post.html?id=${post.id}" class="text-decoration-none text-dark"> 
                                 <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
                             </a>
