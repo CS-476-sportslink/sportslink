@@ -18,7 +18,7 @@ if (postDetail) {
     const likedPostIds = [];//array to check for liked post ids
 
     //
-    fetch('http://127.0.0.1:8000/api/posts/saved/', {
+    fetch('http://127.0.0.1:8000/api/posts/saved/', {//check posts that are saved
         headers: {
             'Authorization': 'Bearer ' + token //who am i
         }
@@ -26,10 +26,10 @@ if (postDetail) {
     .then(function(response) { return response.json(); }) //convert response into javascript object
     .then(function(postsSaved) {
         postsSaved.forEach(function(saved) {
-            savedPostIds.push(saved.post.id); //push id into array
+            savedPostIds.push(saved.post.id); //array to keep track of saved post ids
         });
     })
-    fetch('http://127.0.0.1:8000/api/posts/liked/', {
+    fetch('http://127.0.0.1:8000/api/posts/liked/', {//check posts that are liked
         headers: {
             'Authorization': 'Bearer ' + token //who am i
         }
@@ -37,12 +37,9 @@ if (postDetail) {
     .then(function(response) { return response.json(); }) //convert response into javascript object
     .then(function(postsLiked) {
         postsLiked.forEach(function(liked) {
-            likedPostIds.push(liked.post.id); //push id into array
+            likedPostIds.push(liked.post.id); //array for liked post ids
         });
-        //send request to backend to retrieve posts. Use the auth token so the backend knows who is making the request.
-        //When we are not specifying the method like GET, POST, PATCH the default method is GET.
-        //call this fetch as a return so we can give its result to the next .then()
-        return fetch(`http://127.0.0.1:8000/api/posts/${postId}/`, {
+        return fetch(`http://127.0.0.1:8000/api/posts/${postId}/`, {//retrieve post for page, post id in get request
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -52,7 +49,7 @@ if (postDetail) {
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
     .then(function(response) { return response.json(); })
     .then(function(post) {
-        const isSaved = savedPostIds.includes(post.id); // check if the post id is in the array
+        const isSaved = savedPostIds.includes(post.id); // check if the post id is in either liked post or saved post ids, display icons based on this
         const isLiked = likedPostIds.includes(post.id);
         const initials = post.user.first_name[0] + post.user.last_name[0];
         postDetail.innerHTML = `
@@ -90,7 +87,7 @@ if (postDetail) {
                 </div>
             </div>`;
 
-            likeUpdateObserver();
+            likeUpdateObserver();//listeners and observer 
             saveListeners();
             shareListeners();
             likeListeners();

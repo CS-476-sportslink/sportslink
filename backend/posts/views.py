@@ -62,14 +62,12 @@ class SavedPostView(APIView):
         SavedPost.objects.filter(user=request.user, post=post_id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#
-
 class LikedPostView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         liked = PostLike.objects.filter(user=request.user) 
-        serializer = LikedPostSerializer(liked, many=True) 
+        serializer = LikedPostSerializer(liked, many=True) #essentially the same as saved post view
         return Response(serializer.data)
 
     def post(self, request, post_id):
@@ -81,7 +79,7 @@ class LikedPostView(APIView):
         PostLike.objects.filter(user=request.user, post=post_id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class LikedPostCountView(APIView):
+class LikedPostCountView(APIView):#made another view for counting the liked posts to resolve bugs
     permission_classes = [IsAuthenticated]
 
     def get(self, request, post_id):#get all likes for one post

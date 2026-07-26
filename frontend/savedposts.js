@@ -1,11 +1,11 @@
-// Load posts feed
+//essentially the same as likedposts.js, just changed so saved posts are displayed rather than liked posts.
 
 const postFeed = document.querySelector('#sl-saved-posts');
 //null check to avoid crashing
 if (postFeed) {
     const token = localStorage.getItem('access_token');
     const savedPostIds = [];
-    const likedPostIds = [];//array for liked post ids, similar to saved posts
+    const likedPostIds = [];//arrays for liked posts and saved posts
 
     //
     fetch('http://127.0.0.1:8000/api/posts/saved/', {
@@ -29,10 +29,7 @@ if (postFeed) {
         postsLiked.forEach(function(liked) {
             likedPostIds.push(liked.post.id); //push id into array
         });
-        //send request to backend to retrieve posts. Use the auth token so the backend knows who is making the request.
-        //When we are not specifying the method like GET, POST, PATCH the default method is GET.
-        //call this fetch as a return so we can give its result to the next .then()
-        return fetch('http://127.0.0.1:8000/api/posts/', {
+        return fetch('http://127.0.0.1:8000/api/posts/', {//retrieve posts
             headers: {
                 'Authorization': 'Bearer ' + token //who am i
             }
@@ -45,21 +42,13 @@ if (postFeed) {
             postFeed.innerHTML = '<p class="text-muted text-center">No posts yet.</p>'; //Show that there are no posts if there are no posts.
             return;
         }
-        // when there is at least one post returned, we can display the post on the page. Using foreach so that we can do this exact same format for each post returned.
-        posts.forEach(function(post) {
+        posts.forEach(function(post) {//for each loop to go through all post data received
             //`${}` is a template literal which lets us put variables inside the html, ${} being the placeholder for those variables
-            //each post gets inserted into the div on home page with id="sl-post-feed"
-            /* the ? is terenary operator. We use it here on line 45 because if a user does not add any link or media to their post there is no reason for us to show that link box
-            so we have if post.media_url does exists display that html with the link box on the post. : acts as the else condition so we have : '' which means
-            if it does not exist just show nothing */
-
-            // check if the post id is in the savedPostIds array
             //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
-            const isSaved = savedPostIds.includes(post.id) // check if the post id is in the array
-            const isLiked = likedPostIds.includes(post.id) //creaing is liked array similar to saved posts array
+            const isSaved = savedPostIds.includes(post.id) // check which posts ids are liked or saved, use this to set buttons and decide if post is displayed or not
+            const isLiked = likedPostIds.includes(post.id)
             const initials = post.user.first_name[0] + post.user.last_name[0]; 
-            //add postHTML to whatever is already in postFeed. Could be nothing but could be posts that have already been created.
-             if(isSaved){
+             if(isSaved){//if post is saved, display post
                     postFeed.innerHTML += `
                     <a href="post.html?id=${post.id}" class="text-decoration-none text-dark"> 
                         <div class="card shadow-sm mb-4 sl-post-card">
@@ -98,13 +87,13 @@ if (postFeed) {
                         </div>`;
                                 }
         });
-        //listener functions to attatch btn listeners after posts have loaded
+        //listener functions to attatch btn listeners after posts have loaded and observers for like count updating
         likeUpdateObserver();
         saveListeners();
         likeListeners();
         shareListeners();
     })
-    //if any of the above breaks we display an error message, rather then jsut not doing anytihng
+    //catch if something goes wrong
     .catch(function(error) {
         postFeed.innerHTML = '<p class="text-muted text-center">Failed to load posts.</p>';
     });

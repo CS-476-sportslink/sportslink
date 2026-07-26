@@ -1,14 +1,14 @@
 // Load posts feed
 
-const postFeed = document.querySelector('#sl-liked-posts');
+const postFeed = document.querySelector('#sl-liked-posts');//connect to sl-liked-posts tag
 //null check to avoid crashing
 if (postFeed) {
     const token = localStorage.getItem('access_token');
     const savedPostIds = [];
-    const likedPostIds = [];//array for liked post ids, similar to saved posts
+    const likedPostIds = [];//arrays for liked posts and saved post ids
 
     //
-    fetch('http://127.0.0.1:8000/api/posts/saved/', {
+    fetch('http://127.0.0.1:8000/api/posts/saved/', {//fetch saved posts
         headers: {
             'Authorization': 'Bearer ' + token //who am i
         }
@@ -19,9 +19,9 @@ if (postFeed) {
             savedPostIds.push(saved.post.id); //push id into array
         });
     })
-    fetch('http://127.0.0.1:8000/api/posts/liked/', {
+    fetch('http://127.0.0.1:8000/api/posts/liked/', {//fetch liked posts
         headers: {
-            'Authorization': 'Bearer ' + token //who am i
+            'Authorization': 'Bearer ' + token
         }
     })
     .then(function(response) { return response.json(); }) //convert response into javascript object
@@ -29,10 +29,7 @@ if (postFeed) {
         postsLiked.forEach(function(liked) {
             likedPostIds.push(liked.post.id); //push id into array
         });
-        //send request to backend to retrieve posts. Use the auth token so the backend knows who is making the request.
-        //When we are not specifying the method like GET, POST, PATCH the default method is GET.
-        //call this fetch as a return so we can give its result to the next .then()
-        return fetch('http://127.0.0.1:8000/api/posts/', {
+        return fetch('http://127.0.0.1:8000/api/posts/', {//fetch all posts
             headers: {
                 'Authorization': 'Bearer ' + token //who am i
             }
@@ -55,11 +52,10 @@ if (postFeed) {
 
             // check if the post id is in the savedPostIds array
             //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
-            const isSaved = savedPostIds.includes(post.id) // check if the post id is in the array
-            const isLiked = likedPostIds.includes(post.id) //creaing is liked array similar to saved posts array
+            const isSaved = savedPostIds.includes(post.id) // check if posts are either liked or saved, used to set icons in html template and whether post is displayed (whether it is liked or not)
+            const isLiked = likedPostIds.includes(post.id)
             const initials = post.user.first_name[0] + post.user.last_name[0]; 
-            //add postHTML to whatever is already in postFeed. Could be nothing but could be posts that have already been created.
-             if(isLiked){
+            if(isLiked){//if post is liked, display on page
                     postFeed.innerHTML += `
                     <a href="post.html?id=${post.id}" class="text-decoration-none text-dark"> 
                         <div class="card shadow-sm mb-4 sl-post-card">
@@ -96,15 +92,15 @@ if (postFeed) {
                                 </div>
                             </div>
                         </div>`;
-                                }
+            }
         });
-        //listener functions to attatch btn listeners after posts have loaded
+        //listener functions to attatch btn listeners after posts have loaded and observer for like counts
         likeUpdateObserver();
         saveListeners();
         likeListeners();
         shareListeners();
     })
-    //if any of the above breaks we display an error message, rather then jsut not doing anytihng
+    //failed to load posts catch
     .catch(function(error) {
         postFeed.innerHTML = '<p class="text-muted text-center">Failed to load posts.</p>';
     });

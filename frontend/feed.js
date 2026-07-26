@@ -159,18 +159,18 @@ if (postFeed) {
     .then(function(response) { return response.json(); }) //convert response into javascript object
     .then(function(postsSaved) {
         postsSaved.forEach(function(saved) {
-            savedPostIds.push(saved.post.id); //push id into array
+            savedPostIds.push(saved.post.id);
         });
     })
-    fetch('http://127.0.0.1:8000/api/posts/liked/', {
+    fetch('http://127.0.0.1:8000/api/posts/liked/', {//similar call as the saved post check for liked posts
         headers: {
             'Authorization': 'Bearer ' + token //who am i
         }
     })
-    .then(function(response) { return response.json(); }) //convert response into javascript object
+    .then(function(response) { return response.json(); })
     .then(function(postsLiked) {
         postsLiked.forEach(function(liked) {
-            likedPostIds.push(liked.post.id); //push id into array
+            likedPostIds.push(liked.post.id); //setup liked post array for checking if the user has liked the posts
         });
         //send request to backend to retrieve posts. Use the auth token so the backend knows who is making the request.
         //When we are not specifying the method like GET, POST, PATCH the default method is GET.
@@ -206,7 +206,7 @@ if (postFeed) {
             }
         });
         //listener functions to attatch btn listeners after posts have loaded
-        likeUpdateObserver();
+        likeUpdateObserver();//added like update observer for setting listeners as observers for like counts
         saveListeners();
         shareListeners();
         likeListeners();
