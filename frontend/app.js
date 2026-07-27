@@ -370,6 +370,140 @@ function shareListeners() {
     });
 }
 
+// Search dropdown
+/* As the user types in the search bar we send a request to the backend
+and display matching athletes and coaches in a dropdown below the search bar.
+We use a debounce so we dont send a request on every single keypress 
+we wait until the user stops typing for 300ms before sending. 
+https://www.geeksforgeeks.org/javascript/debouncing-in-javascript/
+https://www.w3schools.com/howto/howto_js_filter_lists.asp */
+const searchInput = document.querySelector('#sl-search-input');
+const searchDropdown = document.querySelector('#sl-search-dropdown');
+
+if (searchInput && searchDropdown) {
+    let searchTimeout = null;
+
+    searchInput.addEventListener('input', function() {
+        const query = searchInput.value.trim();
+
+//clear previous timeout so we dont spam the API
+        clearTimeout(searchTimeout);
+
+//hide dropdown if search is empty
+        if (!query) {
+            searchDropdown.style.display = 'none';
+            searchDropdown.innerHTML = '';
+            return;
+        }
+
+//wait 300ms after user stops typing before sending request
+        searchTimeout = setTimeout(function() {
+            const token = localStorage.getItem('access_token');
+
+            fetch(`http://127.0.0.1:8000/api/search/?name=${encodeURIComponent(query)}`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                searchDropdown.innerHTML = '';
+
+//set athlete and coach result vars
+                const athletes = data.athletes.results;
+                const coaches = data.coaches.results;
+
+//if no results show a message
+                if (athletes.length === 0 && coaches.length === 0) {
+                    searchDropdown.innerHTML = `
+                        <div class="p-3 text-muted small">No results found for "${query}"</div>`;
+                    searchDropdown.style.display = 'block';
+                    return;
+                }
+
+//show athlete results
+                if (athletes.length > 0) {
+                    searchDropdown.innerHTML += `
+                        <div class="px-3 py-2 border-bottom">
+                            <small class="text-muted fw-semibold">ATHLETES</small>
+                        </div>`;
+                    athletes.forEach(function(athlete) {
+//find the initials of the athlete to put as profile avatar
+                        const initials = (athlete.first_name ? athlete.first_name[0] : '') +
+                                         (athlete.last_name ? athlete.last_name[0] : '');
+                        searchDropdown.innerHTML += `
+                            <a href="profile.html?id=${athlete.user_id}" 
+                               class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-dark sl-search-result">
+                                <div class="sl-post-avatar sl-avatar-player" 
+                                     style="width:36px;height:36px;font-size:12px;flex-shrink:0">
+                                    ${initials}
+                                </div>
+                                <div>
+// show athlete information
+                                    <div class="fw-semibold small">
+                                        ${athlete.first_name} ${athlete.last_name}
+                                    </div>
+                                    <div class="text-muted" style="font-size:11px">
+                                        ${athlete.position} • ${athlete.sport}
+                                    </div>
+                                </div>
+                                <span class="sl-badge-player ms-auto">Athlete</span>
+                            </a>`;
+                    });
+                }
+
+//show coach results
+                if (coaches.length > 0) {
+                    searchDropdown.innerHTML += `
+                        <div class="px-3 py-2 border-bottom border-top">
+                            <small class="text-muted fw-semibold">COACHES</small>
+                        </div>`;
+//get coaches initials for avatar then display their name and team
+                    coaches.forEach(function(coach) {
+                        const initials = (coach.first_name ? coach.first_name[0] : '') +
+                                         (coach.last_name ? coach.last_name[0] : '');
+                        searchDropdown.innerHTML += `
+                            <a href="profile.html?id=${coach.user_id}" 
+                               class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-dark sl-search-result">
+                                <div class="sl-post-avatar sl-avatar-coach" 
+                                     style="width:36px;height:36px;font-size:12px;flex-shrink:0">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold small">
+                                        ${coach.first_name} ${coach.last_name}
+                                    </div>
+                                    <div class="text-muted" style="font-size:11px">
+                                        ${coach.school_or_team}
+                                    </div>
+                                </div>
+                                <span class="sl-badge-player ms-auto">Coach</span>
+                            </a>`;
+                    });
+                }
+
+                searchDropdown.style.display = 'block';
+            })
+//Throw error
+            .catch(function() {
+                searchDropdown.innerHTML = `
+                    <div class="p-3 text-muted small">Something went wrong</div>`;
+                searchDropdown.style.display = 'block';
+            });
+        }, 300);
+    });
+
+//hide dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+            searchDropdown.style.display = 'none';
+        }
+    });
+
+//hide dropdown when pressing escape
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            searchDropdown.style.display = 'none';
+            searchInput.value = '';
+        }
 
 
 const notifyObserver = new CustomEvent("notifyObserver", {//custom event to notify observers (like count on post) of change to like count
