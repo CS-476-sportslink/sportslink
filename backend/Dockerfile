@@ -25,5 +25,6 @@ COPY . .
 #the app listens on port 8000
 EXPOSE 8000
 
-#runs the app on port 8000
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+#runs the app through the entrypoint.sh script so that the migrations automatically run before the 
+#app
+ENTRYPOINT["./entrypoint.sh"]
