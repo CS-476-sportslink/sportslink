@@ -441,7 +441,7 @@ if (searchInput && searchDropdown) {
                                         ${athlete.first_name} ${athlete.last_name}
                                     </div>
                                     <div class="text-muted" style="font-size:11px">
-                                        ${athlete.position} • ${athlete.sport}
+                                        ${athlete.sport}
                                     </div>
                                 </div>
                                 <span class="sl-badge-player ms-auto">Athlete</span>
@@ -471,7 +471,7 @@ if (searchInput && searchDropdown) {
                                         ${coach.first_name} ${coach.last_name}
                                     </div>
                                     <div class="text-muted" style="font-size:11px">
-                                        ${coach.school_or_team}
+                                        ${coach.sport||''}
                                     </div>
                                 </div>
                                 <span class="sl-badge-player ms-auto">Coach</span>
