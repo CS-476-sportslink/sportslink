@@ -1,29 +1,36 @@
 //Forgot Password Form
 const forgotPasswordForm = document.querySelector('#forgotPasswordForm');
 
-//similar template from app.js
-//
 if(forgotPasswordForm) {
     forgotPasswordForm.addEventListener('submit',function(e) {
         e.preventDefault();
 
-        const email = document.querySelector('#email').value;
+        const email = document.querySelector('#email');
         const emailError = document.querySelector('#emailError');
         const alertSuccessfull = document.querySelector('#alertSuccessfull');
 
+        //trim any empty spaces in the beginning or end
+        const emailValue = email.value.trim();
 
         let isValid = true;
-        if(email === ""){ 
-            email.style.color = 'red';
-            email.textContent = "Please enter an email address!";
+        //Email regex
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        //Input is empty display an error
+        if(emailValue === ""){ 
+            emailError.style.color = 'red';
+            emailError.textContent = "Please enter an email address!";
             isValid = false;
         }
 
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if(isValid && !regex.test(email)){
+        //evaluate whether text matches the email format and if it passes both check then clear the error message
+        if(isValid && !regex.test(emailValue)){
             emailError.style.color = 'red';
             emailError.textContent = "This email is invalid, Please enter a valid email!";  
             isValid = false; 
+        }
+        else if(isValid){
+        emailError.textContent = "";
         }
 
         //fetch network request
@@ -116,3 +123,4 @@ if(resetPasswordForm){
 
     });
 }
+
