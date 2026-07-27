@@ -3,6 +3,11 @@ from .models import AthleteProfile
 from .stat_fields import INTEREST_LEVELS_BY_SPORT, STAT_FIELDS_BY_POSITION
 
 class AthleteProfileSerializer(serializers.ModelSerializer):
+# pull first_name, last_name and user_id from the related User model
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
+    user_id = serializers.UUIDField(source='user.id', read_only=True)
+
     class Meta:
         model = AthleteProfile
         fields = '__all__'
