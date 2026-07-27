@@ -462,7 +462,7 @@ if (searchInput && searchDropdown) {
                         searchDropdown.innerHTML += `
                             <a href="profile.html?id=${coach.id}" 
                                class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-dark sl-search-result">
-                                <div class="sl-post-avatar sl-avatar-coach" 
+                                <div class="sl-post-avatar sl-avatar-player" 
                                      style="width:36px;height:36px;font-size:12px;flex-shrink:0">
                                     ${initials}
                                 </div>
@@ -503,8 +503,8 @@ if (searchInput && searchDropdown) {
             searchDropdown.style.display = 'none';
             searchInput.value = '';
         }
-
-
+    });
+}
 const notifyObserver = new CustomEvent("notifyObserver", {//custom event to notify observers (like count on post) of change to like count
     bubbles: true, //bubbles from within listener (subject) for observer to receive data
 });
