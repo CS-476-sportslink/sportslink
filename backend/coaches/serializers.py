@@ -3,6 +3,11 @@ from .models import CoachProfile
 
 
 class CoachProfileSerializer(serializers.ModelSerializer):
+# pull the first and last name from the user model
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
+    user_id = serializers.UUIDField(source='user.id', read_only=True)
+
 
     class Meta:
         model = CoachProfile

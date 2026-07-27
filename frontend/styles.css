@@ -289,3 +289,8 @@ textarea {
 .sl-profile-links a {
     color: var(--sl-red);
 }
+
+.sl-search-result:hover {
+    background-color: #FFF0F0;
+    border-left: 3px solid var(--sl-red);
+}
