@@ -28,10 +28,19 @@
         </a>
 
         <form>
-            <div class="sl-search d-flex align-items-center rounded-pill py-1 px-3">
-                <span class="bi bi-search fs-5"></span>
-                <input class="sl-search-input ms-2" type="search" placeholder="Search">
-            </div>
+	    <div class="position-relative">
+		<div class="sl-search d-flex align-items-center rounded-pill py-1 px-3">
+	    	    <span class="bi bi-search fs-5"></span>
+	    	    <input class="sl-search-input ms-2" type="search" 
+	    	           placeholder="Search athletes and coaches..."
+	    	           id="sl-search-input"
+	    	           autocomplete="off">
+	    	</div>
+	    	<div id="sl-search-dropdown" 
+	    	     class="position-absolute bg-white shadow rounded mt-1 w-100"
+	    	     style="display:none; z-index:1000; max-height:400px; overflow-y:auto; min-width:300px">
+	    	</div>
+	    </div>
         </form>
 
 
