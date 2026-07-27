@@ -430,14 +430,13 @@ if (searchInput && searchDropdown) {
                         const initials = (athlete.first_name ? athlete.first_name[0] : '') +
                                          (athlete.last_name ? athlete.last_name[0] : '');
                         searchDropdown.innerHTML += `
-                            <a href="profile.html?id=${athlete.user_id}" 
+                            <a href="profile.html?id=${athlete.id}" 
                                class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-dark sl-search-result">
                                 <div class="sl-post-avatar sl-avatar-player" 
                                      style="width:36px;height:36px;font-size:12px;flex-shrink:0">
                                     ${initials}
                                 </div>
                                 <div>
-// show athlete information
                                     <div class="fw-semibold small">
                                         ${athlete.first_name} ${athlete.last_name}
                                     </div>
@@ -461,7 +460,7 @@ if (searchInput && searchDropdown) {
                         const initials = (coach.first_name ? coach.first_name[0] : '') +
                                          (coach.last_name ? coach.last_name[0] : '');
                         searchDropdown.innerHTML += `
-                            <a href="profile.html?id=${coach.user_id}" 
+                            <a href="profile.html?id=${coach.id}" 
                                class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-dark sl-search-result">
                                 <div class="sl-post-avatar sl-avatar-coach" 
                                      style="width:36px;height:36px;font-size:12px;flex-shrink:0">
