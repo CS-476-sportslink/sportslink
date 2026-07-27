@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from posts.models import Post, Comment, SavedPost
-from posts.serializers import PostSerializer, CommentSerializer, SavedPostSerializer
+from posts.models import Post, Comment, SavedPost, PostLike
+from posts.serializers import PostSerializer, CommentSerializer, SavedPostSerializer, LikedPostSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -61,3 +61,28 @@ class SavedPostView(APIView):
     def delete(self, request, post_id):
         SavedPost.objects.filter(user=request.user, post=post_id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class LikedPostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        liked = PostLike.objects.filter(user=request.user) 
+        serializer = LikedPostSerializer(liked, many=True) #essentially the same as saved post view
+        return Response(serializer.data)
+
+    def post(self, request, post_id):
+        post = Post.objects.get(pk=post_id)
+        PostLike.objects.get_or_create(user=request.user, post=post)
+        return Response({'message' : 'Post Liked'}, status=status.HTTP_201_CREATED)
+    
+    def delete(self, request, post_id):
+        PostLike.objects.filter(user=request.user, post=post_id).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class LikedPostCountView(APIView):#made another view for counting the liked posts to resolve bugs
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, post_id):#get all likes for one post
+        likes = PostLike.objects.filter(post=post_id)
+        serializer = LikedPostSerializer(likes, many=True)
+        return Response(serializer.data)
