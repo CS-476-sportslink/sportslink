@@ -60,10 +60,10 @@ if (postDetail) {
                         <div>
                             <div class="d-flex align-items-center gap-3">
                             <a href="profile.html?id=${post.user.id}" class="fw-semibold text-dark text-decoration-none">${post.user.first_name} ${post.user.last_name}</a>                                
-                            <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn" data-user-id="${post.user.id }">Follow</button>
                             </div>
                             <div class="text-muted small">
                                 <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
+                                <span class="text-dark">${post.user.sport ? ' • ' + post.user.sport : ''}</span>
                             </div>
                         </div>
                         <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
@@ -118,13 +118,15 @@ if (postDetail) {
                                 <div class="d-flex align-items-center gap-2 mb-2">
                                     <div class="sl-post-avatar sl-avatar-player sl-comment-inner-avatar">${initials}</div>
                                     <div>
-                                    <a href="profile.html?id=${comment.user.id}" class="fw-semibold text-dark text-decoration-none">${comment.user.first_name} ${comment.user.last_name}</a>                                        <div class="text-muted small"><span class="sl-badge-player me-1">${comment.user.role.charAt(0).toUpperCase() + comment.user.role.slice(1)}</span></div>
+                                    <a href="profile.html?id=${comment.user.id}" class="fw-semibold text-dark text-decoration-none">${comment.user.first_name} ${comment.user.last_name}</a>                                        
+                                    <div class="text-muted small">
+                                        <span class="sl-badge-player me-1">${comment.user.role.charAt(0).toUpperCase() + comment.user.role.slice(1)}</span>
+                                        <span class="text-dark">${comment.user.sport ? ' • ' + comment.user.sport : ''}</span>
+                                    </div>
                                     </div>
                                     <div class="text-muted small ms-auto">${new Date(comment.created_at).toLocaleDateString()}</div>
                                 </div>
                                 <p class="small mb-2">${comment.body}</p>
-                                <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
-                                <button class="btn btn-sm text-muted sl-reply-btn">Reply</button>
                             </div>
                         </div>
                     </div>`;

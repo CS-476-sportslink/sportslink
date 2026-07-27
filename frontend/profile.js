@@ -43,9 +43,12 @@ if (profilePostFeed) {
                     if (me.id !== user.id && (me.role === 'coach' || me.role === 'school')) {
                         contact.setAttribute('href', 'mailto:' + user.email);
                         contact.style.display = 'inline-block';
-			if (followBtn) followBtn.style.display = 'inline-block';
                     } else {
-                        contact.style.display = 'none'; //hide button for athletes.
+                        contact.style.display = 'none';
+                    }
+                    
+                    if (followBtn && me.id !== user.id) {
+                        followBtn.style.display = 'inline-block';
                     }
 		    if (followBtn) {
 			if (me.id === user.id) {
@@ -86,17 +89,12 @@ if (profilePostFeed) {
                                     <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
                                     <div class="text-muted small">
                                         <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
+                                        <span class="text-dark">${post.user.sport ? ' • ' + post.user.sport : ''}</span>
                                     </div>
                                 </div>
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
                             </div>
                             <p class="small mb-2">${post.body}</p>
-                            <div class="d-flex gap-1 pt-2">
-                                <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
-                                <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
-                                <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
-                                <button class="btn btn-sm text-muted sl-save-btn"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
-                            </div>
                         </div>
                     </div>
                 </a>`;
@@ -197,17 +195,12 @@ if (editProfilePostFeed) {
                                     <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
                                     <div class="text-muted small">
                                         <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
+                                        <span class="text-dark">${post.user.sport ? ' • ' + post.user.sport : ''}</span>
                                     </div>
                                 </div>
                                 <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
                             </div>
                             <p class="small mb-2">${post.body}</p>
-                            <div class="d-flex gap-1 pt-2">
-                                <button class="btn btn-sm text-muted sl-like-btn"><i class="bi bi-heart p-1"></i><span class="sl-like-count">0</span></button>
-                                <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
-                                <button class="btn btn-sm text-muted"><i class="bi bi-share p-1"></i>Share</button>
-                                <button class="btn btn-sm text-muted sl-save-btn"><i class="bi bi-bookmark p-1"></i><span class="sl-save-label">Save</span></button>
-                            </div>
                         </div>
                     </div>
                 </a>`;
@@ -317,28 +310,32 @@ if (followBtn && userId) {
     // then it sets the text to show the correct response such as Requested if pending and Connected if accepted
     // otherwise it will keep the follow button as it is by default
     fetch('http://127.0.0.1:8000/api/connections/', {
-        headers: { 'Authorization': 'Bearer ' + token }
+    headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(function(res) { return res.json(); })
     .then(function(connections) {
-        const conn = connections.find(function(c) {
-            return c.initiator.id === userId || c.receiver.id === userId;
-        });
-	if (conn) {
-	    if (conn.status === 'accepted') {
-	        followBtn.textContent = 'Following';
-	        followBtn.classList.remove('btn-outline-danger');
-	        followBtn.classList.add('btn-danger');
-	        followBtn.setAttribute('data-state', 'accepted');
-	        followBtn.setAttribute('data-connection-id', conn.id);
-	    }
-	} else {
-	    followBtn.textContent = 'Follow';
-	    followBtn.classList.add('btn-outline-danger');
-	    followBtn.classList.remove('btn-danger');
-	    followBtn.setAttribute('data-state', 'none');
-	    followBtn.setAttribute('data-connection-id', conn.id);
-	}
-    });
+        // fetch our own id because we need to see who we are viewing and who we are
+        fetch('http://127.0.0.1:8000/api/auth/me/', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(me) {
+            // check if I am the one following the specific user
+            const conn = connections.find(function(c) {
+                return c.initiator.id === me.id && c.receiver.id === userId;
+            });
 
+            if (conn) {
+                if (conn.status === 'accepted') {
+                    followBtn.textContent = 'Following';
+                    followBtn.classList.remove('btn-outline-danger');
+                    followBtn.classList.add('btn-danger');
+                    followBtn.setAttribute('data-state', 'accepted');
+                    followBtn.setAttribute('data-connection-id', conn.id);
+                }
+            } else {
+                followBtn.setAttribute('data-state', 'none');
+            }
+        });
+    })
 }

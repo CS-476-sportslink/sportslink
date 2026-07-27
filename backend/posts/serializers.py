@@ -5,7 +5,7 @@ from users.models import User
 class PostUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'role']
+        fields = ['id', 'first_name', 'last_name', 'email', 'role', 'sport']
 
 # https://www.django-rest-framework.org/api-guide/serializers/#modelserializer
 class PostSerializer(serializers.ModelSerializer):

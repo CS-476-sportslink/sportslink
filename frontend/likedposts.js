@@ -1,8 +1,8 @@
 // Load posts feed
 
-const postFeed = document.querySelector('#sl-liked-posts');//connect to sl-liked-posts tag
+const likedPostFeed = document.querySelector('#sl-liked-posts');//connect to sl-liked-posts tag
 //null check to avoid crashing
-if (postFeed) {
+if (likedPostFeed) {
     const token = localStorage.getItem('access_token');
     const savedPostIds = [];
     const likedPostIds = [];//arrays for liked posts and saved post ids
@@ -39,7 +39,7 @@ if (postFeed) {
     // once we turned it into a usable javascript object we now have the posts which we can loop through.
     .then(function(posts) {
         if (posts.length === 0) {
-            postFeed.innerHTML = '<p class="text-muted text-center">No posts yet.</p>'; //Show that there are no posts if there are no posts.
+            likedPostFeed.innerHTML = '<p class="text-muted text-center">No posts yet.</p>'; //Show that there are no posts if there are no posts.
             return;
         }
         // when there is at least one post returned, we can display the post on the page. Using foreach so that we can do this exact same format for each post returned.
@@ -56,42 +56,8 @@ if (postFeed) {
             const isLiked = likedPostIds.includes(post.id)
             const initials = post.user.first_name[0] + post.user.last_name[0]; 
             if(isLiked){//if post is liked, display on page
-                    postFeed.innerHTML += `
-                    <a href="post.html?id=${post.id}" class="text-decoration-none text-dark"> 
-                        <div class="card shadow-sm mb-4 sl-post-card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start gap-2 mb-2">
-                                    <div class="sl-post-avatar sl-avatar-player">${initials}</div>
-                                    <div>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
-                                            <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
-                                        </div>
-                                        <div class="text-muted small">
-                                            <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
-                                        </div>
-                                    </div>
-                                    <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
-                                </div>
-                                <p class="small mb-2">${post.body}</p>
-                                ${post.media_url ? `
-                                <div class="d-flex align-items-center gap-2 p-2 mb-2 sl-video-block">
-                                    <div class="sl-play-btn">
-                                        <i class="bi bi-play-fill text-white"></i>
-                                    </div>
-                                    <div>
-                                        <div class="small fw-semibold"><a href="${post.media_url}" target="_blank" class="text-decoration-none text-dark">Watch video</a></div>
-                                    </div>
-                                </div>` : ''}
-                                </a>
-                                <div class="d-flex gap-1 pt-2">
-                                    <button class="btn btn-sm text-muted sl-like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}"><i class="bi ${isLiked ? 'bi-heart-fill' : 'bi-heart'} p-1"></i><span class="sl-like-count">0</span></button>
-                                    <button class="btn btn-sm text-muted"><i class="bi bi-chat p-1"></i>Comment</button>
-                                    <button class="btn btn-sm text-muted sl-share-btn" data-post-id="${post.id}"><i class="bi bi-share p-1"></i>Share</button>
-                                    <button class="btn btn-sm text-muted sl-save-btn ${isSaved ? 'saved' : ''}" data-post-id="${post.id}"><i class="bi ${isSaved ? 'bi-bookmark-fill' : 'bi-bookmark'} p-1"></i><span class="sl-save-label">${isSaved ? 'Saved' : 'Save'}</span></button>
-                                </div>
-                            </div>
-                        </div>`;
+                const creator = getCardCreator(post);
+                    likedPostFeed.innerHTML += creator.createCard(post, isSaved, isLiked);
             }
         });
         //listener functions to attatch btn listeners after posts have loaded and observer for like counts
@@ -102,6 +68,6 @@ if (postFeed) {
     })
     //failed to load posts catch
     .catch(function(error) {
-        postFeed.innerHTML = '<p class="text-muted text-center">Failed to load posts.</p>';
+        likedPostFeed.innerHTML = '<p class="text-muted text-center">Failed to load posts.</p>';
     });
 }

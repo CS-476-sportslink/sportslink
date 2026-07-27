@@ -42,12 +42,8 @@ def send_connection(request):
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # Check if connection already exists in either direction
-    existing = Connection.objects.filter(
-        initiator=request.user, receiver=receiver
-    ) | Connection.objects.filter(
-        initiator=receiver, receiver=request.user
-    )
+    # Only check if I have already followed this specific person
+    existing = Connection.objects.filter(initiator=request.user, receiver=receiver)
 
     if existing.exists():
         return Response({'error': 'Connection already exists'}, status=status.HTTP_400_BAD_REQUEST)

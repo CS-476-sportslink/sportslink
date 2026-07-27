@@ -21,10 +21,10 @@ class SocialCardCreator extends PostCardCreator {
                             <div>
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
-                                    <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
                                 </div>
                                 <div class="text-muted small">
                                     <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
+                                    <span class="text-dark">${post.user.sport ? ' • ' + post.user.sport : ''}</span>
                                 </div>
                             </div>
                             <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
@@ -64,10 +64,10 @@ class TryoutCardCreator extends PostCardCreator {
                             <div>
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="fw-semibold">${post.user.first_name} ${post.user.last_name}</div>
-                                    <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
                                 </div>
                                 <div class="text-muted small">
                                     <span class="sl-badge-player me-1">${post.user.role.charAt(0).toUpperCase() + post.user.role.slice(1)}</span>
+                                    <span class="text-dark">${post.user.sport ? ' • ' + post.user.sport : ''}</span>
                                 </div>
                             </div>
                             <div class="text-muted small ms-auto">${new Date(post.created_at).toLocaleDateString()}</div>
@@ -199,7 +199,6 @@ if (postFeed) {
             const creator = getCardCreator(post);
             postFeed.innerHTML += creator.createCard(post, isSaved, isLiked); 
             // sidebar using factory design pattern
-            console.log('post_type:', post.post_type, 'sidebarPost:', sidebarPost);
             if (sidebarPost && post.post_type === 'tryout') {
                 const sidebarCreator = new TryoutSidebarCardCreator();
                 sidebarPost.innerHTML += sidebarCreator.createCard(post);
