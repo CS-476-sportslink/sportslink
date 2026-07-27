@@ -123,7 +123,7 @@ function getCardCreator(post) {
 //show this tab only when the user has the school or coach role.
 const tryoutTab = document.querySelector('#sl-tryout-tab');
 if (tryoutTab) {
-    fetch('http://127.0.0.1:8000/api/auth/me/', {
+    fetch('https://sportslink.tynan.pro/api/auth/me/', {
         headers: {
             'Authorization': 'Bearer ' + token
         }
@@ -151,7 +151,7 @@ if (postFeed) {
 
     //send request to backend to get saved post Ids so we can show them as saved on load or reload
     //this fetch needs to be done first, we need to fill the array before we display the posts so we can show the proper saved state
-    fetch('http://127.0.0.1:8000/api/posts/saved/', {
+    fetch('https://sportslink.tynan.pro/api/posts/saved/', {
         headers: {
             'Authorization': 'Bearer ' + token //who am i
         }
@@ -162,7 +162,7 @@ if (postFeed) {
             savedPostIds.push(saved.post.id);
         });
     })
-    fetch('http://127.0.0.1:8000/api/posts/liked/', {//similar call as the saved post check for liked posts
+    fetch('https://sportslink.tynan.pro/api/posts/liked/', {//similar call as the saved post check for liked posts
         headers: {
             'Authorization': 'Bearer ' + token //who am i
         }
@@ -175,7 +175,7 @@ if (postFeed) {
         //send request to backend to retrieve posts. Use the auth token so the backend knows who is making the request.
         //When we are not specifying the method like GET, POST, PATCH the default method is GET.
         //call this fetch as a return so we can give its result to the next .then()
-        return fetch('http://127.0.0.1:8000/api/posts/', {
+        return fetch('https://sportslink.tynan.pro/api/posts/', {
             headers: {
                 'Authorization': 'Bearer ' + token //who am i
             }
@@ -237,7 +237,7 @@ function createPost(buttonId, bodyClass, linkClass, postType) {
         }
 
         /* Send post request to backend to the posts endpoint. Here we are sending as POST as we want to create post not retrieve */
-        fetch('http://127.0.0.1:8000/api/posts/', {
+        fetch('https://sportslink.tynan.pro/api/posts/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', //sending JSON

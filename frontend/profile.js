@@ -12,10 +12,10 @@ if (profilePostFeed) {
     const token = localStorage.getItem('access_token');
 
     //if user id in the url then we fetch that user. If there userId is null then there is no id in the search bar and we fetch the logged in user instead
-    let profileUrl = 'http://127.0.0.1:8000/api/auth/me/'; //fetch logged in user
+    let profileUrl = 'https://sportslink.tynan.pro/api/auth/me/'; //fetch logged in user
     //the null check to see if theres an id in search bar.
     if (userId) { //we get this userId from the app.js file
-        profileUrl = `http://127.0.0.1:8000/api/auth/users/${userId}/`; //fetch the user using the user id instead of logged in user
+        profileUrl = `https://sportslink.tynan.pro/api/auth/users/${userId}/`; //fetch the user using the user id instead of logged in user
     }
 
     //fetch request to the backend to get the currently logged in user
@@ -32,7 +32,7 @@ if (profilePostFeed) {
                 contact.style.display = 'none';
             } else {
                 // this runs when we are on someone elses profile. We need to fetch logged in user so we can check their role
-                fetch('http://127.0.0.1:8000/api/auth/me/', {
+                fetch('https://sportslink.tynan.pro/api/auth/me/', {
                     headers: { 'Authorization': 'Bearer ' + token }
                 })
                 .then(function(response) { return response.json(); }) //convert response to javascript object
@@ -66,7 +66,7 @@ if (profilePostFeed) {
                 });
             }
         }
-        return fetch(`http://127.0.0.1:8000/api/posts/?user=${user.id}`, {
+        return fetch(`https://sportslink.tynan.pro/api/posts/?user=${user.id}`, {
             headers: { 'Authorization': 'Bearer ' + token }
         });
     })
@@ -111,7 +111,7 @@ const editBioTextarea = document.querySelector('#sl-edit-bio-textarea');
 if (editBioDisplay || editBioTextarea) {
     const token = localStorage.getItem('access_token');
     //fetch the currently logged on user
-    fetch('http://127.0.0.1:8000/api/auth/me/', {
+    fetch('https://sportslink.tynan.pro/api/auth/me/', {
         headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(function(response) { return response.json(); }) //turn response into javascript object
@@ -135,7 +135,7 @@ if (saveBioBtn) {
 
         //send a PATCH request to the backend to only update the bio field for the user that is logged on
         //PATCH method is uesd to update specific fields only
-        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+        fetch('https://sportslink.tynan.pro/api/auth/me/update/', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -166,13 +166,13 @@ const editProfilePostFeed = document.querySelector('#sl-edit-profile-post-feed')
 if (editProfilePostFeed) {
     const token = localStorage.getItem('access_token');
     //fetch request to the backend to get the currently logged in user
-    fetch('http://127.0.0.1:8000/api/auth/me/', {
+    fetch('https://sportslink.tynan.pro/api/auth/me/', {
         headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(function(response) { return response.json(); }) //convert resposne into javascript object
      //now that we have the user send a request to the backend to get all the posts made by the user using their id.
     .then(function(user) {
-        return fetch(`http://127.0.0.1:8000/api/posts/?user=${user.id}`, {
+        return fetch(`https://sportslink.tynan.pro/api/posts/?user=${user.id}`, {
             headers: { 'Authorization': 'Bearer ' + token }
         });
     })
@@ -218,7 +218,7 @@ if (saveLinksBtn) {
     const token = localStorage.getItem('access_token');
 
     // get the currently logged in user
-    fetch('http://127.0.0.1:8000/api/auth/me/', {
+    fetch('https://sportslink.tynan.pro/api/auth/me/', {
         headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(function(response) { return response.json(); }) //convert response into javascript object
@@ -270,7 +270,7 @@ if (saveLinksBtn) {
         });
 
         // send request to backend to save links array on the logged in users account
-        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+        fetch('https://sportslink.tynan.pro/api/auth/me/update/', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json', //sending json
@@ -309,13 +309,13 @@ if (followBtn && userId) {
     // if it is then it checks the status that is set in the backend and stored in the database as either pending or accepted
     // then it sets the text to show the correct response such as Requested if pending and Connected if accepted
     // otherwise it will keep the follow button as it is by default
-    fetch('http://127.0.0.1:8000/api/connections/', {
+    fetch('https://sportslink.tynan.pro/api/connections/', {
     headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(function(res) { return res.json(); })
     .then(function(connections) {
         // fetch our own id because we need to see who we are viewing and who we are
-        fetch('http://127.0.0.1:8000/api/auth/me/', {
+        fetch('https://sportslink.tynan.pro/api/auth/me/', {
             headers: { 'Authorization': 'Bearer ' + token }
         })
         .then(function(res) { return res.json(); })
