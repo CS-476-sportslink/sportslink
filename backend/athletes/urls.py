@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+#urls.py is what controls what view funcitons are accessed at each url in the API
 urlpatterns = [
     path('', views.create_profile, name='athlete-create'),
     path('me/', views.get_my_profile, name='athlete-me'),
