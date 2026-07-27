@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+#this determines the URL paths for each of the views.py functions and when they get called
 urlpatterns = [
     path('', views.create_profile, name='coach-create'),
     path('me/', views.get_my_profile, name='coach-me'),
