@@ -103,8 +103,23 @@ body {
     max-height: 30px;
 }
 
+/*request a reset link button*/
+.btn-reset{
+    background: var(--sl-red);      
+}
+
+/*Hover effect for request a reset link button*/
+.btn-reset:hover{
+    background: var(--sl-red-dark);
+    border-color: #d8d5ea;
+}
 
 
+/*Hover effect for back to login button*/
+.btn-backToLogin:hover{
+    background: lightgrey;
+    border-color: #d8d5ea;
+}
 
 .sl-logo {
     width: 28px;
