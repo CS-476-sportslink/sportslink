@@ -24,7 +24,7 @@ if (loginForm) {
                 alert('Invalid email or password');
             }
         })
-        .catch(function(error) {
+        .catch(function() {
             alert('Something went wrong, please try again');
         });
     });
@@ -122,7 +122,7 @@ if (bioSubmit) {
         })
         .then(function(response) { return response.json(); })
         .then(function(data) {
-            if (data.email) {
+            if (data.id) {
                 // registration worked so now we can log them in
                 return fetch('http://127.0.0.1:8000/api/token/', {
                     method: 'POST',
@@ -131,6 +131,7 @@ if (bioSubmit) {
                 });
             } else {
                 alert('Signup failed. Please try again.');
+                window.location.href = 'signup.html';
             }
         })
         .then(function(response) { return response.json(); })
@@ -152,5 +153,15 @@ if (bioSubmit) {
         .catch(function() {
             alert('Something went wrong, please try again');
         });
+    });
+}
+
+//forgot password button
+const forgotPassword = document.querySelector('#forgotPassword');
+
+if (forgotPassword) {
+    forgotPassword.addEventListener('click', function() {
+        //redirect to login page 
+        window.location.href = 'forgot_password.html';
     });
 }

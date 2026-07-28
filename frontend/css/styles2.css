@@ -1,0 +1,128 @@
+
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0
+    
+}
+
+.container-fluid{
+    min-height: 100vh;
+}
+
+/* brand colour*/
+:root{
+    --sl-red: #CC0000;
+    --sl-red-dark: #990000;
+}
+
+/*Navigation bar*/
+.sl-navbar{
+    background: var(--sl-red);
+    border-bottom: 3px solid var(--sl-red-dark);
+    height:75px;
+    
+}
+
+/*sportslink logo*/
+.logo{
+    color:white;
+}
+
+/*sidebar navgation*/
+.sidebar{
+    background: var(--sl-red);
+    border-bottom: 3px solid var(--sl-red);
+    height: 100vh;
+    overflow-y: auto;
+}
+
+
+/*Login button*/
+.btn-login{
+    background: var(--sl-red);
+    padding: 5px 170px;
+}
+
+.btn-login:hover{
+    background: var(--sl-red-dark);
+    border-color: #d8d5ea;
+}
+
+/*Signup button*/
+.btn-signup{
+    background: var(--sl-red);
+    padding: 5px 170px;      
+}
+
+/*Hover effect for signup button*/
+.btn-signup:hover{
+    background: var(--sl-red-dark);
+    border-color: #d8d5ea;
+}
+
+/*upload image icon*/
+.rounded-circle{
+    width: 100px;
+    height: 100px;
+    background-color: gray;
+
+}
+
+.text-area{
+    min-height: 150px;
+}
+
+/*Login Google button*/
+.btn-google{
+    padding: 0px 95px; 
+
+}
+
+/*Hover effect for login google button*/
+.btn-google:hover{
+    background: lightgrey;
+    border-color: #d8d5ea;
+}
+
+/*Signup Google Button*/
+.google-btn{
+    padding: 0px 130px; 
+    
+}
+
+/*Hover effect for signup google button*/
+.google-btn:hover{
+    background: lightgrey;
+    border-color: #d8d5ea;
+}
+
+/*image*/
+.img{
+    max-width: 30px;
+    max-height: 30px;
+}
+
+/*request a reset link button*/
+.btn-reset{
+    background: var(--sl-red);      
+}
+
+/*Hover effect for request a reset link button*/
+.btn-reset:hover{
+    background: var(--sl-red-dark);
+    border-color: #d8d5ea;
+}
+
+
+/*Hover effect for back to login button*/
+.btn-backToLogin:hover{
+    background: lightgrey;
+    border-color: #d8d5ea;
+}
+
+.sl-logo {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+}
