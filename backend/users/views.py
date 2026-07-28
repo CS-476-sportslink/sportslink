@@ -91,15 +91,14 @@ class ForgotPasswordView(APIView):
             #generate temporary token - crypographic function
             token = default_token_generator.make_token(user)
             #generate the following link with website domain, uid and unique temporary token 
-            reset_url = f"http://127.0.0.1:5500/reset_password.html?user_id={user_id}&token={token}"
-
+            reset_url = f"http://127.0.0.1:5500/frontend/reset_password.html?user_id={user_id}&token={token}"            
             #send email with the password reset link 
             send_mail(
                 subject=f"Reset Your Password",
                 message=f"You can now reset your password to access your account, Please click the link to reset your password: {reset_url}",
                 from_email='sportslink.help@gmail.com',
                 recipient_list=[user.email],
-                fail_silently='False',
+                fail_silently=False,
 
             )
             return Response({'message': 'Reset password link has been successfully sent!'}, status=status.HTTP_200_OK)

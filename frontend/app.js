@@ -7,7 +7,7 @@ if (!localStorage.getItem('access_token') && (
     window.location.pathname.includes('editprofile.html') || 
     window.location.pathname.includes('settings.html'))
 ){
-    window.location.href = '../Loginandsignup/login.html';
+    window.location.href = 'login.html';
 }
 
 //like button change class and increment like count
@@ -233,11 +233,11 @@ if (logoutBtn) {
         // We need to clear it so the frontend doesnt hold any of that logged in information from the user
         .then(function() {
             localStorage.clear();
-            window.location.href = '../Loginandsignup/login.html';
+            window.location.href = 'login.html';
         })
         .catch(function() {
             localStorage.clear();
-            window.location.href = '../Loginandsignup/login.html';
+            window.location.href = 'login.html';
         });
     });
 }
