@@ -6,15 +6,12 @@ if(forgotPasswordForm) {
         e.preventDefault();
 
         const email = document.querySelector('#email');
+        const emailValue = email.value;
         const emailError = document.querySelector('#emailError');
         const alertSuccessfull = document.querySelector('#alertSuccessfull');
-
-        //trim any empty spaces in the beginning or end
-        const emailValue = email.value.trim();
+        
 
         let isValid = true;
-        //Email regex
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         //Input is empty display an error
         if(emailValue === ""){ 
@@ -23,23 +20,28 @@ if(forgotPasswordForm) {
             isValid = false;
         }
 
+        //Email regex
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
         //evaluate whether text matches the email format and if it passes both check then clear the error message
         if(isValid && !regex.test(emailValue)){
             emailError.style.color = 'red';
             emailError.textContent = "This email is invalid, Please enter a valid email!";  
             isValid = false; 
         }
-        else if(isValid){
-        emailError.textContent = "";
+
+        //stop here if the validation failed - dont call the backend
+        if(!isValid){
+        return;
         }
 
         //fetch network request
-        fetch('http://127.0.0',{
+        fetch('http://127.0.0.1:8000/api/auth/forgot-password/',{
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify({email: email})
+            body: JSON.stringify({email: emailValue})
         })
         .then(function(response){ 
             if(response.ok){
@@ -100,7 +102,7 @@ if(resetPasswordForm){
             return;
         }
 
-        const response = await fetch('http://127.0.0', {
+        const response = await fetch('http://127.0.0.1:8000/api/auth/reset-password/', {
             headers: {'Content-Type': 'aaplication/json'},
             body: JSON.stringify({
                 user_id: user_id,
