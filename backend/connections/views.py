@@ -42,12 +42,8 @@ def send_connection(request):
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # Check if connection already exists in either direction
-    existing = Connection.objects.filter(
-        initiator=request.user, receiver=receiver
-    ) | Connection.objects.filter(
-        initiator=receiver, receiver=request.user
-    )
+    # Only check if I have already followed this specific person
+    existing = Connection.objects.filter(initiator=request.user, receiver=receiver)
 
     if existing.exists():
         return Response({'error': 'Connection already exists'}, status=status.HTTP_400_BAD_REQUEST)
@@ -55,7 +51,7 @@ def send_connection(request):
     connection = Connection.objects.create(
         initiator=request.user,
         receiver=receiver,
-        status=Connection.STATUS_PENDING
+        status=Connection.STATUS_ACCEPTED
     )
 
     serializer = ConnectionSerializer(connection)
@@ -95,11 +91,8 @@ def withdraw_connection(request, pk):
         return Response({'error': 'Connection not found'}, status=status.HTTP_404_NOT_FOUND)
 
     # Only the initiator can withdraw
-    if connection.initiator != request.user:
-        return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
-
-    if connection.status != Connection.STATUS_PENDING:
-        return Response({'error': 'Can only withdraw pending requests'}, status=status.HTTP_400_BAD_REQUEST)
+    #if connection.initiator != request.user:
+     #   return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
 
     connection.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)

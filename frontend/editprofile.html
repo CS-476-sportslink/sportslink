@@ -28,10 +28,19 @@
         </a>
 
         <form>
-            <div class="sl-search d-flex align-items-center rounded-pill py-1 px-3">
-                <span class="bi bi-search fs-5"></span>
-                <input class="sl-search-input ms-2" type="search" placeholder="Search">
-            </div>
+	    <div class="position-relative">
+		<div class="sl-search d-flex align-items-center rounded-pill py-1 px-3">
+	    	    <span class="bi bi-search fs-5"></span>
+	    	    <input class="sl-search-input ms-2" type="search" 
+	    	           placeholder="Search athletes and coaches..."
+	    	           id="sl-search-input"
+	    	           autocomplete="off">
+	    	</div>
+	    	<div id="sl-search-dropdown" 
+	    	     class="position-absolute bg-white shadow rounded mt-1 w-100"
+	    	     style="display:none; z-index:1000; max-height:400px; overflow-y:auto; min-width:300px">
+	    	</div>
+	    </div>
         </form>
 
 
@@ -42,12 +51,12 @@
                     <i class="bi bi-house-fill fs-5"></i>
                 </a>
             </li>
-            <li class="nav-item">
+<!--             <li class="nav-item">
                 <a class="nav-link text-white" href="#" title="Messages">
                     <i class="bi bi-chat-fill fs-5"></i>
                 </a>
-            </li>
-             <li class="nav-item dropdown">
+            </li> -->
+<!--              <li class="nav-item dropdown">
                 <a class="nav-link text-white" href="#" data-bs-toggle="dropdown" title="Notifications">
                     <span class="position-relative">
                         <i class="bi bi-bell-fill fs-5"></i>
@@ -80,22 +89,17 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
             <li class="nav-item dropdown">
                 <a class="nav-link text-white dropdown-toggle current" href="#" data-bs-toggle="dropdown" title="Profile">
                     <i class="bi bi-person-circle fs-5"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <a class="dropdown-item" href="profile.html">
-                            <i class="bi bi-person me-2"></i>View Profile
-                        </a>
-                    </li>
-                    <li>
                         <hr class=dropdown-divider>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="settings.html">
                             <i class="bi bi-gear me-2"></i>Settings
                         </a>
                     </li>
@@ -103,8 +107,8 @@
                         <hr class=dropdown-divider>
                     </li>
                     <li>
-                        <a class="dropdown-item text-danger" href="#">
-                            <i class="bi bi-box-arrow-right me-2" id="sl-logout-btn"></i>Logout
+                        <a class="dropdown-item text-danger" href="#" id="sl-logout-btn">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
                         </a>
                     </li>
                 </ul>
@@ -124,16 +128,16 @@
                         <!-- link to account settings page-->
                         <a href="settings.html"><button class="btn btn-danger btn-sm">Account Settings</button></a>
                     </div>
-                    <div class="card-body text-left">
+                    <div class="card-body text-center">
                         <div class="sl-avatar mx-auto mb-2 sl-current-user-avatar"></div>
                         <h6 class="fw-bold mb-1 sl-current-user-name"></h6>
                         <p class="text-muted small mb-2" id="sl-current-user-info"></p>
 
-                        <!--links to upload profile and backgroud photos-->
+                        <!--links to upload profile and backgroud photos
                         <p class="text-muted small mb-2">Change avatar:</p>
                         <input class="text-muted small mb-2" type="file" id="avatar" accept="image/png, image/jpg" />
                         <p class="text-muted small mb-2">Upload background image:</p>
-                        <input class="text-muted small mb-2" type="file" id="background" accept="image/png, image/jpg" />
+                        <input class="text-muted small mb-2" type="file" id="background" accept="image/png, image/jpg" />-->
                         
                     </div>
                     </div>
@@ -211,64 +215,6 @@
             </div>
             <!-- Right sidebar -->
             <div class="col-lg-3">
-
-                <!--connections-->
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <div>
-                                <div class="fw-semibold">Connections</div>
-                            </div>
-                        </div>
-                            <a href="#" class="text-decoration-none">
-                                <div class="card shadow-sm sl-post-card">
-                                <div class="card-body text-center">
-                                    <div class="d-flex align-items-start gap-2 mb-2">
-                                        <div class="sl-post-avatar sl-avatar-player">BS</div>
-                                        <div>
-                                            <div class="fw-semibold">Brendan Stevenson</div>
-                                            <div class="text-muted small">
-                                                <span class="sl-badge-player me-1">Athlete</span>
-                                                </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                </div>
-                            </a>
-                            <a href="#" class="text-decoration-none">
-                                <div class="card shadow-sm sl-post-card">
-                                <div class="card-body text-center">
-                                    <div class="d-flex align-items-start gap-2 mb-2">
-                                        <div class="sl-post-avatar sl-avatar-player">BS</div>
-                                        <div>
-                                            <div class="fw-semibold">Brendan Stevenson</div>
-                                            <div class="text-muted small">
-                                                <span class="sl-badge-player me-1">Athlete</span>
-                                                </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                </div>
-                            </a>
-                            <a href="#" class="text-decoration-none">
-                                <div class="card shadow-sm sl-post-card">
-                                <div class="card-body text-center">
-                                    <div class="d-flex align-items-start gap-2 mb-2">
-                                        <div class="sl-post-avatar sl-avatar-player">BS</div>
-                                        <div>
-                                            <div class="fw-semibold">Brendan Stevenson</div>
-                                            <div class="text-muted small">
-                                                <span class="sl-badge-player me-1">Athlete</span>
-                                                </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                </div>
-                            </a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -38,5 +38,7 @@ urlpatterns = [
     path('api/posts/', include('posts.urls')),
     path('api/users/', include('users.urls')),
     
+    path('api/search/', include('search.urls')),
+    path('api/connections/', include('connections.urls')),
 
 ]

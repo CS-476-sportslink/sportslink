@@ -1,0 +1,24 @@
+# This is the container for the db and the backend. We use docker compose to orchestrate the containers together 
+services:
+
+  db:
+    image: postgres:16
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:

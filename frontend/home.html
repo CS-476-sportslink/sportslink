@@ -27,10 +27,19 @@
         </a>
 
         <form>
-            <div class="sl-search d-flex align-items-center rounded-pill py-1 px-3">
-                <span class="bi bi-search fs-5"></span>
-                <input class="sl-search-input ms-2" type="search" placeholder="Search">
-            </div>
+	    <div class="position-relative">
+		<div class="sl-search d-flex align-items-center rounded-pill py-1 px-3">
+	    	    <span class="bi bi-search fs-5"></span>
+	    	    <input class="sl-search-input ms-2" type="search" 
+	    	           placeholder="Search athletes and coaches..."
+	    	           id="sl-search-input"
+	    	           autocomplete="off">
+	    	</div>
+	    	<div id="sl-search-dropdown" 
+	    	     class="position-absolute bg-white shadow rounded mt-1 w-100"
+	    	     style="display:none; z-index:1000; max-height:400px; overflow-y:auto; min-width:300px">
+	    	</div>
+	    </div>
         </form>
 
 
@@ -41,12 +50,12 @@
                     <i class="bi bi-house-fill fs-5"></i>
                 </a>
             </li>
-            <li class="nav-item">
+<!--             <li class="nav-item">
                 <a class="nav-link text-white" href="#" title="Messages">
                     <i class="bi bi-chat-fill fs-5"></i>
                 </a>
-            </li>
-            <li class="nav-item dropdown">
+            </li> -->
+<!--             <li class="nav-item dropdown">
                 <a class="nav-link text-white" href="#" data-bs-toggle="dropdown" title="Notifications">
                     <span class="position-relative">
                         <i class="bi bi-bell-fill fs-5"></i>
@@ -79,7 +88,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
             <li class="nav-item dropdown">
                 <a class="nav-link text-white dropdown-toggle" href="#" data-bs-toggle="dropdown" title="Profile">
                     <i class="bi bi-person-circle fs-5"></i>
@@ -126,11 +135,11 @@
                         <p class="text-muted small mb-2" id="sl-current-user-info">Forward • Hockey • Regina</p>
                         <div class="d-flex justify-content-around border-top pt-2">
                             <div>
-                                <div class="fw-bold">142</div>
-                                <div class="text-muted sl-follow-label">Followers</div>
+				    <div class="fw-bold"><span class="sl-followers-count">0</span></div>
+				    <div class="text-muted sl-follow-label">Followers</div>
                             </div>
                             <div>
-                                <div class="fw-bold"><span class="sl-following-count">89</span></div>
+                                <div class="fw-bold"><span class="sl-following-count">0</span></div>
                                 <div class="text-muted sl-follow-label">Following</div>
                             </div>
                         </div>
@@ -139,13 +148,17 @@
 
                 <div class="card shadow-sm mt-3">
                     <div class="card-body">
-                        <a href="profile.html" class="d-flex align-items-center gap-3 text-decoration-none text-dark py-2">
+                        <a href="profile.html" id="sl-my-profile-sidebar" class="d-flex align-items-center gap-3 text-decoration-none text-dark py-2">
                             <i class="bi bi-person fs-5"></i>
                             <span class="fw-semibold">Profile</span>
                         </a>
                         <a href="savedposts.html" class="d-flex align-items-center gap-3 text-decoration-none text-dark py-2">
                             <i class="bi bi-bookmark fs-5"></i>
                             <span class="fw-semibold">Saved Posts</span>
+                        </a>
+                        <a href="likedposts.html" class="d-flex align-items-center gap-3 text-decoration-none text-dark py-2">
+                            <i class="bi bi-heart fs-5"></i>
+                            <span class="fw-semibold">Liked Posts</span>
                         </a>
                         <a href="settings.html" class="d-flex align-items-center gap-3 text-decoration-none text-dark py-2">
                             <i class="bi bi-gear fs-5"></i>
@@ -173,69 +186,12 @@
 
             <!-- Right sidebar -->
             <div class="col-lg-3">
-                <!-- trending athletes, may delete this in the future -->
-                <div class="card shadow-sm mb-3">
-                    <div class="card-header sl-sidebar-header">
-                        <i class="bi bi-graph-up-arrow me-1"></i> Trending Athletes
-                    </div>
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item d-flex align-items-center gap-2 py-2">
-                            <div class="sl-post-avatar sl-avatar-player">BS</div>
-                            <div class="flex-grow-1">
-                                <div class="small fw-semibold">Brendan Stevenson</div>
-                                <div class="sl-follow-label text-muted">Forward • Hockey • Regina</div>
-                            </div>
-                            <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
-                        </div>
-
-                        <div class="list-group-item d-flex align-items-center gap-2 py-2">
-                            <div class="sl-post-avatar sl-avatar-player">SK</div>
-                            <div class="flex-grow-1">
-                                <div class="small fw-semibold">Samantha Krausher</div>
-                                <div class="sl-follow-label text-muted">Left Side • Volleyball • Regina</div>
-                            </div>
-                            <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
-                        </div>
-
-                        <div class="list-group-item d-flex align-items-center gap-2 py-2">
-                            <div class="sl-post-avatar sl-avatar-player">LJ</div>
-                            <div class="flex-grow-1">
-                                <div class="small fw-semibold">Lebron James</div>
-                                <div class="sl-follow-label text-muted">Small Forward • Basketball • Los Angeles</div>
-                            </div>
-                            <button class="btn btn-outline-danger btn-sm py-0 sl-follow-btn">Follow</button>
-                        </div>
-                    </div>
-
-
-                </div>
                 <!--Tryout posts-->
                 <div class="card shadow-sm">
                     <div class="card-header sl-sidebar-header">
                         <i class="bi bi-clipboard-check me-1"></i> Open Tryouts
                     </div>
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item py-2">
-                            <div class="d-flex align-items-center gap-2 mb-2 mt-2">
-                                <div class="sl-post-avatar sl-avatar-player">MB</div>
-                                <div>
-                                    <div class="small fw-semibold">U of R Cougars</div>
-                                    <div class="sl-follow-label text-muted">Hockey • August 17</div>
-                                </div>
-                            </div>
-                            <a href="#" class="btn btn-outline-danger btn-sm w-100 mb-2">Sign Up</a>
-                        </div>
-                        <div class="list-group-item py-2">
-                            <div class="d-flex align-items-center gap-2 mb-2 mt-2">
-                                <div class="sl-post-avatar sl-avatar-player">PY</div>
-                                <div>
-                                    <div class="small fw-semibold">U of R Cougars</div>
-                                    <div class="sl-follow-label text-muted">Volleyball • August 12</div>
-                                </div>
-                            </div>
-                            <a href="#" class="btn btn-outline-danger btn-sm w-100 mb-2">Sign Up</a>
-                        </div>
-                    </div>
+                    <div class="list-group list-group-flush" id="sl-open-tryouts"></div>
                 </div>
 
 
@@ -261,7 +217,7 @@
                             <a class="nav-link active" data-bs-toggle="tab" href="#social">Social</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tryout">Tryout</a>
+                            <a class="nav-link" data-bs-toggle="tab" href="#tryout" id="sl-tryout-tab">Tryout</a>
                         </li>
                     </ul>
 
@@ -277,15 +233,10 @@
 
                         <!-- Tryout post -->
                         <div class="tab-pane fade" id="tryout">
-                            <input type="text" class="form-control mb-2" placeholder="Team or School Name">
-                            <input type="text" class="form-control mb-2" placeholder="Sport">
-                            <input type="date" class="form-control mb-2">
-                            <input type="text" class="form-control mb-2" placeholder="Location">
-                            <textarea class="form-control mb-2" rows="3"
-                                placeholder="Details about the tryout"></textarea>
+                            <textarea class="form-control border-0 sl-tryout-body" rows="6" placeholder="Start typing here..."></textarea>
                             <div class="d-flex justify-content-between align-items-center flex-nowrap mt-3">
-                                <input type="text" class="form-control w-50" placeholder="Add a sign up link (optional)">
-                                <button type="button" class="btn btn-danger px-4 ms-2">Post</button>
+                                <input type="text" class="form-control w-50 sl-tryout-signup-link" placeholder="Add link to tryout signup. (Optional)">
+                                <button type="button" class="btn btn-danger px-4 ms-2" id="sl-create-tryout-btn">Post</button>
                             </div>
                         </div>
                     </div>

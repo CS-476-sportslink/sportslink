@@ -10,6 +10,11 @@ class Post(models.Model):
         ('video', 'Video'),
     ]
 
+    POST_TYPE_CHOICES = [
+        ('social', 'Social'),
+        ('tryout', 'Tryout'),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     body = models.TextField(blank=True)
@@ -17,6 +22,7 @@ class Post(models.Model):
     media_type = models.CharField(max_length=10, choices=MEDIA_CHOICES, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    post_type = models.CharField(max_length=10, choices=POST_TYPE_CHOICES)
 
     class Meta:
         ordering = ['-created_at']

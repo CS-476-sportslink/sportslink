@@ -39,65 +39,86 @@ document.querySelectorAll('.sl-like-btn').forEach(function (btn) {
     });
 });
 
-
-//Save button similar to like button
-/* This is pretty much identical to the like button
-we look for all the save buttons present on the page.
-We listen for a click and once we recieve it we change the icon style
-to match what we are wanting */
-
 //Follow button functionality
 /* Same concept as both buttons above, we find each follow button, wait for a click through the event listener
 and then we change the style of the button accordingly  */
-document.querySelectorAll('.sl-follow-btn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        const followingCount = document.querySelector('.sl-following-count');
-        if (btn.classList.contains('following')) {
-            btn.classList.remove('following');
-            btn.classList.remove('btn-danger');
-            btn.classList.add('btn-outline-danger');
-            btn.textContent = 'Follow';
-            // Since the followers are stored as text, convert that text to a number so we can perform operations using parseInt
-            if (followingCount) {
-                followingCount.textContent = parseInt(followingCount.textContent) - 1;
-            }
-        } else {
-            btn.classList.add('following');
-            btn.classList.remove('btn-outline-danger');
-            btn.classList.add('btn-danger');
-            btn.textContent = 'Following';
-            if (followingCount) {
-                followingCount.textContent = parseInt(followingCount.textContent) + 1;
-            }
-        }
-    });
-});
+document.addEventListener('click', function(e) {
+    //set id for button
+    const btn = e.target.closest('.sl-follow-btn');
+    if (!btn) return;
 
-//Notifications
-/* Find the read all button on the notifications tab.
-add eventlistener to listen for a click, once that button is clicked
-change/remove styles to give the notifications a style that makes them feel like they have been read
-also the number for missed notifications disappears once read all is clicked. */
-const readAllBtn = document.querySelector('.sl-read-all-btn');
-if (readAllBtn) {
-    readAllBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        const badge = document.querySelector('.sl-notification-badge');
-        if (badge) {
-            badge.classList.add('sl-hidden'); //gets rid of the missed notification badge/number
-        }
-        document.querySelectorAll('.sl-notification-unread').forEach(function (notification) {
-            notification.classList.remove('sl-notification-unread'); //get rid of the highlighted notification to make it feel like its been read.
+    e.stopPropagation();
+    e.preventDefault();
+
+//get token, id of reciever, connection id and the state
+    const token = localStorage.getItem('access_token');
+    const receiverId = btn.getAttribute('data-user-id');
+    const connectionId = btn.getAttribute('data-connection-id');
+    const state = btn.getAttribute('data-state');
+
+    if (!receiverId) return;
+
+
+//check the state and if its empty then POST the follow and set the connection to following then increase the following count 
+    if (state === 'none') {
+        fetch('https://sportslink.tynan.pro/api/connections/send/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ receiver_id: receiverId })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.id) {
+                btn.textContent = 'Following';
+                btn.classList.remove('btn-outline-danger');
+                btn.classList.add('btn-danger');
+                btn.setAttribute('data-state', 'accepted');
+                btn.setAttribute('data-connection-id', data.id);
+		if (userId && followersCount) {
+		    followersCount.textContent = parseInt(followersCount.textContent) + 1;
+		}
+                if (!userId && followingCount) {
+                    followingCount.textContent = parseInt(followingCount.textContent) + 1;
+                }
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong');
         });
-    });
-};
+//If the state is already set to following accepted then the click will change it to unfollow and reduce the following count
+    } else if (state === 'accepted') {
+        fetch(`https://sportslink.tynan.pro/api/connections/${connectionId}/withdraw/`, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(function(res) {
+            if (res.status === 204) {
+                btn.textContent = 'Follow';
+                btn.classList.remove('btn-danger');
+                btn.classList.add('btn-outline-danger');
+                btn.setAttribute('data-state', 'none');
+                btn.removeAttribute('data-connection-id');
+		if (userId && followersCount) {
+		    followersCount.textContent = parseInt(followersCount.textContent) - 1;
+		}
+                if (!userId && followingCount) {
+                    followingCount.textContent = parseInt(followingCount.textContent) - 1;
+                }
+            }
+        })
+        .catch(function() {
+            alert('Something went wrong');
+        });
+    }
+});
 
 //Resize comment area on post.html
 /*  */
 document.querySelectorAll('textarea').forEach(function (textarea) {
-    textarea.addEventListener('input', function (e) {
+    textarea.addEventListener('input', function () {
         textarea.style.height = 'auto'; // When we delete text from comment box, if we do not have this line the browser keeps the size of the box to what it was set to previously. Need this to resize the box down so when there is no content we dont have a large text box.
         textarea.style.height = textarea.scrollHeight + 'px'; // when text is added into the textbox, make the textbox grow with the text, when the box grows with our text we dont see that ugly scrollbar showup
     });
@@ -106,7 +127,7 @@ document.querySelectorAll('textarea').forEach(function (textarea) {
 //Post replies
 // This may get deleted as we haven't configured the ability to reply to a comment yet.
 document.querySelectorAll('.sl-reply-btn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
+    btn.addEventListener('click', function () {
         const replyBox = btn.closest('.card-body').querySelector('.sl-reply-box'); // search up to the comment card for the reply box thats inside of it. Closest searches up where queryselector searches down
         replyBox.classList.toggle('sl-hidden'); // hide the reply box until it is clicked on. toggle just switches it back and forth between hidden and not hidden.
     });
@@ -118,7 +139,7 @@ we dont want the user seeing all the page information at one time so we hide it 
 that section is clicked on show it and hide the others. */
 //sets up event listeners
 document.querySelectorAll('.sl-settings-nav .nav-link').forEach(function (link) {
-    link.addEventListener('click', function (e) {
+    link.addEventListener('click', function () {
         // hide the content of the tabs/sections
         document.querySelectorAll('.sl-settings-section').forEach(function (section) {
             section.classList.remove('active');
@@ -146,10 +167,10 @@ const params = new URLSearchParams(window.location.search);
 const userId = params.get('id');
 
 //if user id in the url then we fetch that user. If there userId is null then there is no id in the search bar and we fetch the logged in user instead
-let profileUrl = 'http://127.0.0.1:8000/api/auth/me/'; //fetch logged in user
+let profileUrl = 'https://sportslink.tynan.pro/api/auth/me/'; //fetch logged in user
 //the null check to see if theres an id in search bar and make sure we are on profile page.
 if (userId && window.location.pathname.includes('profile.html')) {
-    profileUrl = `http://127.0.0.1:8000/api/auth/users/${userId}/`; //fetch the user using the user id instead of logged in user
+    profileUrl = `https://sportslink.tynan.pro/api/auth/users/${userId}/`; //fetch the user using the user id instead of logged in user
 }
 //null check to prevent crashing
 if (token) {
@@ -162,10 +183,9 @@ if (token) {
     .then(function(user) {
         // to avoid issues in the future regarding id showing or not showing in url depending on how you accessed the profile.
         // set the id in our own profile url
-        const profileURL = document.querySelector('#sl-my-profile');
-        if (profileURL) {
-            profileURL.setAttribute('href', 'profile.html?id=' + user.id); //find href and change the value
-        }
+        document.querySelectorAll('#sl-my-profile, #sl-my-profile-sidebar').forEach(function(link) {
+            link.setAttribute('href', 'profile.html?id=' + user.id);
+        });
         // gets the users initials by taking index 0 of their first and last name
         const initials = user.first_name[0] + user.last_name[0]
 
@@ -183,7 +203,8 @@ if (token) {
         const userInfo = document.querySelector('#sl-current-user-info');
         //null check, if userInfo does not exist and crashes then this whole script crashes
         if (userInfo) {
-            userInfo.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1); //Removed the ternery operator here, we need to show it this way as our way before only handled two roles. This way we can show whatever role is saved. We make the firs char uppercase and the slice joins everything from index 1 onwards.
+            userInfo.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1) + (user.sport ? ' • ' + user.sport : ''); //Removed the ternery operator here, we need to show it this way as our way before only handled two roles. This way we can show whatever role is saved. We make the firs char uppercase and the slice joins everything from index 1 onwards.
+
         }
 
         // About me bio on the profile page
@@ -206,6 +227,10 @@ if (token) {
                 profileLinks.innerHTML = '<p class="text-muted small">No links added yet.</p>';
             }
         }
+        
+    })
+    .catch(function() {
+        console.error('failed to do so');
     });
 }
 
@@ -221,7 +246,7 @@ if (logoutBtn) {
         const refreshToken = localStorage.getItem('refresh_token');
 
         // we are sending the logout request to the backend via POST. Have to use POST because we are asking server to do something, not just retrieve something
-        fetch('http://127.0.0.1:8000/api/auth/logout/', {
+        fetch('https://sportslink.tynan.pro/api/auth/logout/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', //tells server request body is json
@@ -256,7 +281,7 @@ function saveListeners() {
             const label = btn.querySelector('.sl-save-label') // Saved and saved text
             if (btn.classList.contains('saved')) {
                 //this is for when a post is already saved. If clicked again we need to send delete request to backend to remove it from saved posts page.
-                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                fetch(`https://sportslink.tynan.pro/api/posts/${postId}/save/`, {
                     method: 'DELETE',
                     headers: { 
                         'Authorization': 'Bearer ' + token 
@@ -274,7 +299,7 @@ function saveListeners() {
                 });
             } else {
                 //when the post is not saved, send request to backend to save post.
-                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                fetch(`https://sportslink.tynan.pro/api/posts/${postId}/save/`, {
                     method: 'POST',
                     headers: { 
                         'Authorization': 'Bearer ' + token 
@@ -320,5 +345,255 @@ function shareListeners() {
                 alert('Could not copy link, please copy it manually: ' + postUrl);
             });
         });
+    });
+}
+
+// Search dropdown
+/* As the user types in the search bar we send a request to the backend
+and display matching athletes and coaches in a dropdown below the search bar.
+We use a debounce so we dont send a request on every single keypress 
+we wait until the user stops typing for 300ms before sending. 
+https://www.geeksforgeeks.org/javascript/debouncing-in-javascript/
+https://www.w3schools.com/howto/howto_js_filter_lists.asp */
+const searchInput = document.querySelector('#sl-search-input');
+const searchDropdown = document.querySelector('#sl-search-dropdown');
+
+if (searchInput && searchDropdown) {
+    let searchTimeout = null;
+
+    searchInput.addEventListener('input', function() {
+        const query = searchInput.value.trim();
+
+//clear previous timeout so we dont spam the API
+        clearTimeout(searchTimeout);
+
+//hide dropdown if search is empty
+        if (!query) {
+            searchDropdown.style.display = 'none';
+            searchDropdown.innerHTML = '';
+            return;
+        }
+
+//wait 300ms after user stops typing before sending request
+        searchTimeout = setTimeout(function() {
+            const token = localStorage.getItem('access_token');
+
+            fetch(`https://sportslink.tynan.pro/api/search/?name=${encodeURIComponent(query)}`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                searchDropdown.innerHTML = '';
+
+//set athlete and coach result vars
+                const athletes = data.athletes.results;
+                const coaches = data.coaches.results;
+
+//if no results show a message
+                if (athletes.length === 0 && coaches.length === 0) {
+                    searchDropdown.innerHTML = `
+                        <div class="p-3 text-muted small">No results found for "${query}"</div>`;
+                    searchDropdown.style.display = 'block';
+                    return;
+                }
+
+//show athlete results
+                if (athletes.length > 0) {
+                    searchDropdown.innerHTML += `
+                        <div class="px-3 py-2 border-bottom">
+                            <small class="text-muted fw-semibold">ATHLETES</small>
+                        </div>`;
+                    athletes.forEach(function(athlete) {
+//find the initials of the athlete to put as profile avatar
+                        const initials = (athlete.first_name ? athlete.first_name[0] : '') +
+                                         (athlete.last_name ? athlete.last_name[0] : '');
+                        searchDropdown.innerHTML += `
+                            <a href="profile.html?id=${athlete.id}" 
+                               class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-dark sl-search-result">
+                                <div class="sl-post-avatar sl-avatar-player" 
+                                     style="width:36px;height:36px;font-size:12px;flex-shrink:0">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold small">
+                                        ${athlete.first_name} ${athlete.last_name}
+                                    </div>
+                                    <div class="text-muted" style="font-size:11px">
+                                        ${athlete.sport}
+                                    </div>
+                                </div>
+                                <span class="sl-badge-player ms-auto">Athlete</span>
+                            </a>`;
+                    });
+                }
+
+//show coach results
+                if (coaches.length > 0) {
+                    searchDropdown.innerHTML += `
+                        <div class="px-3 py-2 border-bottom border-top">
+                            <small class="text-muted fw-semibold">COACHES</small>
+                        </div>`;
+//get coaches initials for avatar then display their name and team
+                    coaches.forEach(function(coach) {
+                        const initials = (coach.first_name ? coach.first_name[0] : '') +
+                                         (coach.last_name ? coach.last_name[0] : '');
+                        searchDropdown.innerHTML += `
+                            <a href="profile.html?id=${coach.id}" 
+                               class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-dark sl-search-result">
+                                <div class="sl-post-avatar sl-avatar-player" 
+                                     style="width:36px;height:36px;font-size:12px;flex-shrink:0">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold small">
+                                        ${coach.first_name} ${coach.last_name}
+                                    </div>
+                                    <div class="text-muted" style="font-size:11px">
+                                        ${coach.sport||''}
+                                    </div>
+                                </div>
+                                <span class="sl-badge-player ms-auto">Coach</span>
+                            </a>`;
+                    });
+                }
+
+                searchDropdown.style.display = 'block';
+            })
+//Throw error
+            .catch(function() {
+                searchDropdown.innerHTML = `
+                    <div class="p-3 text-muted small">Something went wrong</div>`;
+                searchDropdown.style.display = 'block';
+            });
+        }, 300);
+    });
+
+//hide dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+            searchDropdown.style.display = 'none';
+        }
+    });
+
+//hide dropdown when pressing escape
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            searchDropdown.style.display = 'none';
+            searchInput.value = '';
+        }
+    });
+}
+const notifyObserver = new CustomEvent("notifyObserver", {//custom event to notify observers (like count on post) of change to like count
+    bubbles: true, //bubbles from within listener (subject) for observer to receive data
+});
+
+function likeUpdateObserver() {//function to add event listeners to act as observers to update like count when custome event above is dispatched
+    document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
+        btn.addEventListener('notifyObserver', function() {
+            const postId = btn.getAttribute('data-post-id'); //post id from button to fetch like count
+            const label = btn.querySelector('.sl-like-count');//label for like count tag
+            var postLikes = Number();//number of post likes
+            fetch(`https://sportslink.tynan.pro/api/posts/likes/${postId}/`, {
+                method: 'GET',
+                headers: { 
+                    'Authorization': 'Bearer ' + token 
+                }
+            })//fetch all likes on post
+            .then(function(response) { return response.json(); }) //convert response into javascript object
+            .then(function(likes) {
+                postLikes = likes.length;
+                label.textContent = postLikes;//update label
+            })
+            .catch(function() {
+                alert('Failed to update like count');
+            });
+            } 
+    )});
+}
+
+function likeListeners() {
+    document.querySelectorAll('.sl-like-btn').forEach(function(btn) {
+        btn.dispatchEvent(notifyObserver);//dispatch notify observer function to update all like buttons, trigger this first to load counts initially when page loads
+        btn.addEventListener('click', function() { //add click listener to the like button
+            const postId = btn.getAttribute('data-post-id'); // grab the post id from the button
+            const token = localStorage.getItem('access_token');
+            const icon = btn.querySelector('i');
+            if (btn.classList.contains('liked')) {//check if post is already liked by the user
+                fetch(`https://sportslink.tynan.pro/api/posts/${postId}/like/`, {
+                    method: 'DELETE',
+                    headers: { //delete call since it's already liked, remove the like
+                        'Authorization': 'Bearer ' + token //user info
+                    }
+                })
+                .then(function() {
+                    btn.classList.remove('liked');
+                    icon.classList.remove('bi-heart-fill');//change tag info
+                    icon.classList.add('bi-heart');
+                    btn.dispatchEvent(notifyObserver);//dispatch event to observer that like count needs to be updated
+                })
+                .catch(function() {
+                    alert('Failed to unlike post');
+                });
+            } else {//if not already liked
+                fetch(`https://sportslink.tynan.pro/api/posts/${postId}/like/`, {//when the post is not liked, send request to backend to like post.
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token 
+                    }
+                })
+                .then(function(response) { return response.json(); }) //convert response into javascript object
+                .then(function(result) {
+                    if (result.message) {
+                        //show button is in liked state
+                        btn.classList.add('liked');
+                        icon.classList.remove('bi-heart');
+                        icon.classList.add('bi-heart-fill');
+                        btn.dispatchEvent(notifyObserver);//dispatch event to observer that like count needs to be updated
+                    }
+                })
+                .catch(function() {
+                    alert('Failed to like post');
+                });
+            }
+        });
+    });    
+}
+
+
+// Load followers count
+const followersCount = document.querySelector('.sl-followers-count');
+const followingCount = document.querySelector('.sl-following-count');
+
+if (followersCount || followingCount) {
+    const token = localStorage.getItem('access_token');
+
+    fetch('https://sportslink.tynan.pro/api/connections/?status=accepted', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(connections) {
+        // Get current user id first
+        fetch('https://sportslink.tynan.pro/api/auth/me/', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(me) {
+	    const profileOwnerId = userId || me.id; //whoever we are looking at
+            // Followers are accepted connections where you are the receiver
+            const followers = connections.filter(function(conn) {
+                return conn.receiver.id === profileOwnerId;
+            });
+            if (followersCount) followersCount.textContent = followers.length;
+
+            // Following are accepted connections where you are the initiator
+            const following = connections.filter(function(conn) {
+                return conn.initiator.id === profileOwnerId;
+            });
+            if (followingCount) followingCount.textContent = following.length;
+        });
+    })
+    .catch(function() {
+        if (followersCount) followersCount.textContent = '0';
+        if (followingCount) followingCount.textContent = '0';
     });
 }
