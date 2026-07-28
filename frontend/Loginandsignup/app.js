@@ -19,7 +19,7 @@ if (loginForm) {
             if (data.access) {
                 localStorage.setItem('access_token', data.access);
                 localStorage.setItem('refresh_token', data.refresh);
-                window.location.href = '../frontend/home.html';
+                window.location.href = '../fronte/home.html';
             } else {
                 alert('Invalid email or password');
             }
@@ -146,7 +146,7 @@ if (bioSubmit) {
                 localStorage.removeItem('signup_role');
                 localStorage.removeItem('signup_bio');
                 localStorage.removeItem('signup_sport');
-                window.location.href = '../frontend/home.html';
+                window.location.href = '../fronte/home.html';
             }
         })
         .catch(function() {
