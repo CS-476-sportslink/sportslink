@@ -103,8 +103,8 @@ if (bioSubmit) {
         const email = localStorage.getItem('signup_email');
         const password = localStorage.getItem('signup_password');
         const role = localStorage.getItem('signup_role');
-        const bio = localStorage.getItem('signup_bio');
-        const sport = localStorage.getItem('signup_sport');
+        const bio = localStorage.getItem('signup_bio') || '';
+        const sport = localStorage.getItem('signup_sport') || '';
 
         // send all the information we just collected to the backend so we can sign the user up
         fetch('https://sportslink.tynan.pro/api/auth/register/', {
