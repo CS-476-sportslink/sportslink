@@ -1,13 +1,14 @@
 //Redirect to login if not logged in, need to speak with team on this one. Do we want a user to be able to access
 // the website even if they are not signed in? I know some pages probably not but homepage?
 if (!localStorage.getItem('access_token') && (
+    window.location.pathname === '/' || 
     window.location.pathname.includes('home.html') || 
     window.location.pathname.includes('post.html') || 
     window.location.pathname.includes('profile.html') || 
     window.location.pathname.includes('editprofile.html') || 
     window.location.pathname.includes('settings.html'))
 ){
-    window.location.href = 'login.html';
+    window.location.href = '/login.html';
 }
 
 //like button change class and increment like count
@@ -258,11 +259,11 @@ if (logoutBtn) {
         // We need to clear it so the frontend doesnt hold any of that logged in information from the user
         .then(function() {
             localStorage.clear();
-            window.location.href = 'login.html';
+            window.location.href = '/login.html';
         })
         .catch(function() {
             localStorage.clear();
-            window.location.href = 'login.html';
+            window.location.href = '/login.html';
         });
     });
 }
