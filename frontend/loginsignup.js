@@ -7,7 +7,7 @@ if (loginForm) {
         const email = document.querySelector('#email').value;
         const password = document.querySelector('#pswd').value;
 
-        fetch('http://127.0.0.1:8000/api/token/', {
+        fetch('https://sportslink.tynan.pro/api/token/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ if (loginForm) {
             if (data.access) {
                 localStorage.setItem('access_token', data.access);
                 localStorage.setItem('refresh_token', data.refresh);
-                window.location.href = '../frontend/home.html';
+                window.location.href = '..//home.html';
             } else {
                 alert('Invalid email or password');
             }
@@ -103,11 +103,11 @@ if (bioSubmit) {
         const email = localStorage.getItem('signup_email');
         const password = localStorage.getItem('signup_password');
         const role = localStorage.getItem('signup_role');
-        const bio = localStorage.getItem('signup_bio');
-        const sport = localStorage.getItem('signup_sport');
+        const bio = localStorage.getItem('signup_bio') || '';
+        const sport = localStorage.getItem('signup_sport') || '';
 
         // send all the information we just collected to the backend so we can sign the user up
-        fetch('http://127.0.0.1:8000/api/auth/register/', {
+        fetch('https://sportslink.tynan.pro/api/auth/register/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -124,7 +124,7 @@ if (bioSubmit) {
         .then(function(data) {
             if (data.id) {
                 // registration worked so now we can log them in
-                return fetch('http://127.0.0.1:8000/api/token/', {
+                return fetch('https://sportslink.tynan.pro/api/token/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: password })
@@ -147,7 +147,7 @@ if (bioSubmit) {
                 localStorage.removeItem('signup_role');
                 localStorage.removeItem('signup_bio');
                 localStorage.removeItem('signup_sport');
-                window.location.href = '../frontend/home.html';
+                window.location.href = '..//home.html';
             }
         })
         .catch(function() {

@@ -33,7 +33,7 @@ if(forgotPasswordForm) {
         }
 
         //fetch network request
-        fetch('http://127.0.0.1:8000/api/auth/forgot-password/',{
+        fetch('https://sportslink.tynan.pro/api/auth/forgot-password/',{
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -60,7 +60,7 @@ const btnBackToLogin = document.querySelector('#btnBackToLogin');
 if (btnBackToLogin) {
     btnBackToLogin.addEventListener('click', function() {
         //redirect to login page 
-        window.location.href = 'login.html';
+        window.location.href = '/login.html';
     });
 }
 
@@ -99,7 +99,7 @@ if(resetPasswordForm){
             return;
         }
 
-        const response = await fetch('http://127.0.0.1:8000/api/auth/reset-password/', {
+        const response = await fetch('https://sportslink.tynan.pro/api/auth/reset-password/', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -110,7 +110,7 @@ if(resetPasswordForm){
         })
         .then(function(response){
             if(response.ok){
-                window.location.href = 'login.html';
+                window.location.href = '/login.html';
             } else {
                 message.style.color = 'red';
                 message.textContent = "Password can't be updated, please try again later.";
