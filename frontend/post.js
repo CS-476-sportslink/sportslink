@@ -18,7 +18,7 @@ if (postDetail) {
     const likedPostIds = [];//array to check for liked post ids
 
     //
-    fetch('http://127.0.0.1:8000/api/posts/saved/', {//check posts that are saved
+    fetch('https://sportslink.tynan.pro/api/posts/saved/', {//check posts that are saved
         headers: {
             'Authorization': 'Bearer ' + token //who am i
         }
@@ -29,7 +29,7 @@ if (postDetail) {
             savedPostIds.push(saved.post.id); //array to keep track of saved post ids
         });
     })
-    fetch('http://127.0.0.1:8000/api/posts/liked/', {//check posts that are liked
+    fetch('https://sportslink.tynan.pro/api/posts/liked/', {//check posts that are liked
         headers: {
             'Authorization': 'Bearer ' + token //who am i
         }
@@ -39,7 +39,7 @@ if (postDetail) {
         postsLiked.forEach(function(liked) {
             likedPostIds.push(liked.post.id); //array for liked post ids
         });
-        return fetch(`http://127.0.0.1:8000/api/posts/${postId}/`, {//retrieve post for page, post id in get request
+        return fetch(`https://sportslink.tynan.pro/api/posts/${postId}/`, {//retrieve post for page, post id in get request
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -93,7 +93,7 @@ if (postDetail) {
             likeListeners();
         // send request to backend to retrieve comments tied to this specific post id
         // Django will route this to CommentListCreateView which will query PostgreSQL for the comments tied to this postid
-        fetch(`http://127.0.0.1:8000/api/posts/${postId}/comments/`, {
+        fetch(`https://sportslink.tynan.pro/api/posts/${postId}/comments/`, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -155,7 +155,7 @@ if (postCommentBtn) {
         if (!body) return;
 
         //send a request to the backend of type POST because we want to create a new comment at the specific postid.
-        fetch(`http://127.0.0.1:8000/api/posts/${postId}/comments/`, {
+        fetch(`https://sportslink.tynan.pro/api/posts/${postId}/comments/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', //sending json text

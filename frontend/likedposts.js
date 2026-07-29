@@ -8,7 +8,7 @@ if (likedPostFeed) {
     const likedPostIds = [];//arrays for liked posts and saved post ids
 
     //
-    fetch('http://127.0.0.1:8000/api/posts/saved/', {//fetch saved posts
+    fetch('https://sportslink.tynan.pro/api/posts/saved/', {//fetch saved posts
         headers: {
             'Authorization': 'Bearer ' + token //who am i
         }
@@ -19,7 +19,7 @@ if (likedPostFeed) {
             savedPostIds.push(saved.post.id); //push id into array
         });
     })
-    fetch('http://127.0.0.1:8000/api/posts/liked/', {//fetch liked posts
+    fetch('https://sportslink.tynan.pro/api/posts/liked/', {//fetch liked posts
         headers: {
             'Authorization': 'Bearer ' + token
         }
@@ -29,7 +29,7 @@ if (likedPostFeed) {
         postsLiked.forEach(function(liked) {
             likedPostIds.push(liked.post.id); //push id into array
         });
-        return fetch('http://127.0.0.1:8000/api/posts/', {//fetch all posts
+        return fetch('https://sportslink.tynan.pro/api/posts/', {//fetch all posts
             headers: {
                 'Authorization': 'Bearer ' + token //who am i
             }

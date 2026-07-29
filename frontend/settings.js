@@ -6,7 +6,7 @@ if (saveProfileBtn) {
     const token = localStorage.getItem('access_token');
 
     // fetch the logged in users information
-    fetch('http://127.0.0.1:8000/api/auth/me/', {
+    fetch('https://sportslink.tynan.pro/api/auth/me/', {
         headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(function(response) { return response.json(); }) //convert response into javascript object
@@ -21,7 +21,7 @@ if (saveProfileBtn) {
 
     saveProfileBtn.addEventListener('click', function() { //add a click listener to the save button
         //send a patch request to backend to update users first name last name and bio
-        fetch('http://127.0.0.1:8000/api/auth/me/update/', {
+        fetch('https://sportslink.tynan.pro/api/auth/me/update/', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ if (savePasswordBtn) {
         // send a POST request to the backend to change the users password
         // we cant use PATCH as we aren't just updated a field on user model. We need the backend to verify the old password before setting the new one.
         // The ChangePasswordView handles the old password verification
-        fetch('http://127.0.0.1:8000/api/auth/change-password/', {
+        fetch('https://sportslink.tynan.pro/api/auth/change-password/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,13 +1,14 @@
 //Redirect to login if not logged in, need to speak with team on this one. Do we want a user to be able to access
 // the website even if they are not signed in? I know some pages probably not but homepage?
 if (!localStorage.getItem('access_token') && (
+    window.location.pathname === '/' || 
     window.location.pathname.includes('home.html') || 
     window.location.pathname.includes('post.html') || 
     window.location.pathname.includes('profile.html') || 
     window.location.pathname.includes('editprofile.html') || 
     window.location.pathname.includes('settings.html'))
 ){
-    window.location.href = '../Loginandsignup/login.html';
+    window.location.href = '/login.html';
 }
 
 //like button change class and increment like count
@@ -61,7 +62,7 @@ document.addEventListener('click', function(e) {
 
 //check the state and if its empty then POST the follow and set the connection to following then increase the following count 
     if (state === 'none') {
-        fetch('http://127.0.0.1:8000/api/connections/send/', {
+        fetch('https://sportslink.tynan.pro/api/connections/send/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ document.addEventListener('click', function(e) {
         });
 //If the state is already set to following accepted then the click will change it to unfollow and reduce the following count
     } else if (state === 'accepted') {
-        fetch(`http://127.0.0.1:8000/api/connections/${connectionId}/withdraw/`, {
+        fetch(`https://sportslink.tynan.pro/api/connections/${connectionId}/withdraw/`, {
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + token }
         })
@@ -167,10 +168,10 @@ const params = new URLSearchParams(window.location.search);
 const userId = params.get('id');
 
 //if user id in the url then we fetch that user. If there userId is null then there is no id in the search bar and we fetch the logged in user instead
-let profileUrl = 'http://127.0.0.1:8000/api/auth/me/'; //fetch logged in user
+let profileUrl = 'https://sportslink.tynan.pro/api/auth/me/'; //fetch logged in user
 //the null check to see if theres an id in search bar and make sure we are on profile page.
 if (userId && window.location.pathname.includes('profile.html')) {
-    profileUrl = `http://127.0.0.1:8000/api/auth/users/${userId}/`; //fetch the user using the user id instead of logged in user
+    profileUrl = `https://sportslink.tynan.pro/api/auth/users/${userId}/`; //fetch the user using the user id instead of logged in user
 }
 //null check to prevent crashing
 if (token) {
@@ -181,11 +182,6 @@ if (token) {
     })
     .then(function(response) { return response.json(); })
     .then(function(user) {
-        // to avoid issues in the future regarding id showing or not showing in url depending on how you accessed the profile.
-        // set the id in our own profile url
-        document.querySelectorAll('#sl-my-profile, #sl-my-profile-sidebar').forEach(function(link) {
-            link.setAttribute('href', 'profile.html?id=' + user.id);
-        });
         // gets the users initials by taking index 0 of their first and last name
         const initials = user.first_name[0] + user.last_name[0]
 
@@ -232,6 +228,22 @@ if (token) {
     .catch(function() {
         console.error('failed to do so');
     });
+    if (token) {
+        fetch('https://sportslink.tynan.pro/api/auth/me/', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(me) {
+            document.querySelectorAll('#sl-my-profile, #sl-my-profile-sidebar').forEach(function(link) {
+                link.setAttribute('href', 'profile.html?id=' + me.id);
+            });
+        })
+        .catch(function() {
+            console.error('failed to fetch logged in user for nav link');
+        });
+    }
 }
 
 // Logout
@@ -246,7 +258,7 @@ if (logoutBtn) {
         const refreshToken = localStorage.getItem('refresh_token');
 
         // we are sending the logout request to the backend via POST. Have to use POST because we are asking server to do something, not just retrieve something
-        fetch('http://127.0.0.1:8000/api/auth/logout/', {
+        fetch('https://sportslink.tynan.pro/api/auth/logout/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', //tells server request body is json
@@ -258,11 +270,11 @@ if (logoutBtn) {
         // We need to clear it so the frontend doesnt hold any of that logged in information from the user
         .then(function() {
             localStorage.clear();
-            window.location.href = '../Loginandsignup/login.html';
+            window.location.href = '/login.html';
         })
         .catch(function() {
             localStorage.clear();
-            window.location.href = '../Loginandsignup/login.html';
+            window.location.href = '/login.html';
         });
     });
 }
@@ -281,7 +293,7 @@ function saveListeners() {
             const label = btn.querySelector('.sl-save-label') // Saved and saved text
             if (btn.classList.contains('saved')) {
                 //this is for when a post is already saved. If clicked again we need to send delete request to backend to remove it from saved posts page.
-                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                fetch(`https://sportslink.tynan.pro/api/posts/${postId}/save/`, {
                     method: 'DELETE',
                     headers: { 
                         'Authorization': 'Bearer ' + token 
@@ -299,7 +311,7 @@ function saveListeners() {
                 });
             } else {
                 //when the post is not saved, send request to backend to save post.
-                fetch(`http://127.0.0.1:8000/api/posts/${postId}/save/`, {
+                fetch(`https://sportslink.tynan.pro/api/posts/${postId}/save/`, {
                     method: 'POST',
                     headers: { 
                         'Authorization': 'Bearer ' + token 
@@ -378,7 +390,7 @@ if (searchInput && searchDropdown) {
         searchTimeout = setTimeout(function() {
             const token = localStorage.getItem('access_token');
 
-            fetch(`http://127.0.0.1:8000/api/search/?name=${encodeURIComponent(query)}`, {
+            fetch(`https://sportslink.tynan.pro/api/search/?name=${encodeURIComponent(query)}`, {
                 headers: { 'Authorization': 'Bearer ' + token }
             })
             .then(function(res) { return res.json(); })
@@ -493,7 +505,7 @@ function likeUpdateObserver() {//function to add event listeners to act as obser
             const postId = btn.getAttribute('data-post-id'); //post id from button to fetch like count
             const label = btn.querySelector('.sl-like-count');//label for like count tag
             var postLikes = Number();//number of post likes
-            fetch(`http://127.0.0.1:8000/api/posts/likes/${postId}/`, {
+            fetch(`https://sportslink.tynan.pro/api/posts/likes/${postId}/`, {
                 method: 'GET',
                 headers: { 
                     'Authorization': 'Bearer ' + token 
@@ -519,7 +531,7 @@ function likeListeners() {
             const token = localStorage.getItem('access_token');
             const icon = btn.querySelector('i');
             if (btn.classList.contains('liked')) {//check if post is already liked by the user
-                fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {
+                fetch(`https://sportslink.tynan.pro/api/posts/${postId}/like/`, {
                     method: 'DELETE',
                     headers: { //delete call since it's already liked, remove the like
                         'Authorization': 'Bearer ' + token //user info
@@ -535,7 +547,7 @@ function likeListeners() {
                     alert('Failed to unlike post');
                 });
             } else {//if not already liked
-                fetch(`http://127.0.0.1:8000/api/posts/${postId}/like/`, {//when the post is not liked, send request to backend to like post.
+                fetch(`https://sportslink.tynan.pro/api/posts/${postId}/like/`, {//when the post is not liked, send request to backend to like post.
                     method: 'POST',
                     headers: { 
                         'Authorization': 'Bearer ' + token 
@@ -567,13 +579,13 @@ const followingCount = document.querySelector('.sl-following-count');
 if (followersCount || followingCount) {
     const token = localStorage.getItem('access_token');
 
-    fetch('http://127.0.0.1:8000/api/connections/?status=accepted', {
+    fetch('https://sportslink.tynan.pro/api/connections/?status=accepted', {
         headers: { 'Authorization': 'Bearer ' + token }
     })
     .then(function(res) { return res.json(); })
     .then(function(connections) {
         // Get current user id first
-        fetch('http://127.0.0.1:8000/api/auth/me/', {
+        fetch('https://sportslink.tynan.pro/api/auth/me/', {
             headers: { 'Authorization': 'Bearer ' + token }
         })
         .then(function(res) { return res.json(); })
