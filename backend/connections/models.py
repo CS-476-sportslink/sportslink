@@ -2,7 +2,9 @@ import uuid
 from django.db import models
 from users.models import User
 
-
+#this model stores connections between two users
+#it keeps track of who started the connection, who received it,
+#the current status of the connection, and when it was created
 class Connection(models.Model):
 
     STATUS_PENDING = 'pending'
