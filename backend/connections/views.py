@@ -7,6 +7,12 @@ from .serializers import ConnectionSerializer
 from users.models import User
 
 #GET /api/connections/
+#this function is a GET function that retrieves all of the logged in users connections
+#it checks if a status filter was included in the request and only returns connections
+#with that status if one was provided
+#then it orders the connections by the date they were created and returns them to the frontend
+#the status was the plan for requesting connections but we will have to implement that in
+#the future with notifications
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_connections(request):
@@ -26,6 +32,10 @@ def list_connections(request):
     return Response(serializer.data)
 
 #POST /api/connections/
+#this function is a POST function that creates a connection between two users
+#it checks that a receiver id was provided and that the user is not trying to connect with themselves
+#then it checks that the receiver exists and that a connection has not already been created
+#if all of the checks pass it creates the connection and returns the new connection data
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def send_connection(request):
@@ -59,6 +69,11 @@ def send_connection(request):
 
 
 #PUT /api/connections/:id/
+#this function is a PUT function that updates the status of a connection
+#it first checks if the connection exists and if the logged in user is allowed
+#to respond to the connection request
+#then it checks that the new status is valid before saving the updated connection
+#if the connection does not exist it returns a 404 connection not found error
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def respond_to_connection(request, pk):
@@ -82,6 +97,10 @@ def respond_to_connection(request, pk):
     return Response(serializer.data)
 
 #DELETE /api/connections/:id/
+#this function is a DELETE function that removes an existing connection
+#it first checks if the connection exists before deleting it from the database
+#if the connection does not exist it returns a 404 connection not found error
+#after the connection is deleted it returns a successful response with no content
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def withdraw_connection(request, pk):

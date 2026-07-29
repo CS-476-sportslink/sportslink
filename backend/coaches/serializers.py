@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import CoachProfile
 
-
+#this serializer converts coach profile data between python objects and JSON data
+#it allows the frontend to view and send coach profile information through the API
 class CoachProfileSerializer(serializers.ModelSerializer):
 # pull the first and last name from the user model
     first_name = serializers.CharField(source='user.first_name', read_only=True)
