@@ -148,6 +148,7 @@ activemq-data/
 *.sage.py
 
 # Environments
+*.pyc
 .env
 .envrc
 .venv
@@ -216,3 +217,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+.DS_Store
+frontend/firebase-tools-instant-win.exe
+firebase-tools-instant-win.exe
+**/.DS_Store
