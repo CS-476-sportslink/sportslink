@@ -182,11 +182,6 @@ if (token) {
     })
     .then(function(response) { return response.json(); })
     .then(function(user) {
-        // to avoid issues in the future regarding id showing or not showing in url depending on how you accessed the profile.
-        // set the id in our own profile url
-        document.querySelectorAll('#sl-my-profile, #sl-my-profile-sidebar').forEach(function(link) {
-            link.setAttribute('href', 'profile.html?id=' + user.id);
-        });
         // gets the users initials by taking index 0 of their first and last name
         const initials = user.first_name[0] + user.last_name[0]
 
@@ -233,6 +228,22 @@ if (token) {
     .catch(function() {
         console.error('failed to do so');
     });
+    if (token) {
+        fetch('https://sportslink.tynan.pro/api/auth/me/', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(me) {
+            document.querySelectorAll('#sl-my-profile, #sl-my-profile-sidebar').forEach(function(link) {
+                link.setAttribute('href', 'profile.html?id=' + me.id);
+            });
+        })
+        .catch(function() {
+            console.error('failed to fetch logged in user for nav link');
+        });
+    }
 }
 
 // Logout
